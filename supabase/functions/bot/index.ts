@@ -1,0 +1,555 @@
+// Yopiq kanalga to'lov orqali kirish boti.
+// Supabase Edge Function (Telegram webhook) + Postgres. Sirlar: faqat BOT_TOKEN.
+import { createClient } from "npm:@supabase/supabase-js@2";
+
+// ----------------------------------------------------------------- SOZLAMALAR
+const BOT_TOKEN = Deno.env.get("BOT_TOKEN") ?? "";
+const ADMIN_ID = Number(Deno.env.get("ADMIN_ID") ?? "5306954983");
+const CHANNEL_ID = Number(Deno.env.get("CHANNEL_ID") ?? "-1004330179807");
+const CARD_NUMBER = (Deno.env.get("CARD_NUMBER") ?? "5614681804902595").replace(/\D/g, "");
+const CARD_OWNER = Deno.env.get("CARD_OWNER") ?? "Akbarov Shovkatjon";
+const PRICE = Number(Deno.env.get("PRICE") ?? "100000");
+const REF_BONUS = Number(Deno.env.get("REF_BONUS") ?? "10000");
+const MIN_WITHDRAW = Number(Deno.env.get("MIN_WITHDRAW") ?? "50000");
+const WITHDRAW_DAYS = Number(Deno.env.get("WITHDRAW_DAYS") ?? "15");
+
+const BTN_BUY = "💳 Kanalga kirish";
+const BTN_BAL = "💰 Balans";
+const BTN_REF = "👥 Referal havolam";
+const BTN_WD = "💸 Pul yechish";
+const BTN_CANCEL = "❌ Bekor qilish";
+
+const REASONS: Record<string, [string, string]> = {
+  fake: ["🚫 Soxta chek", "Yuborgan chekingiz soxta yoki haqiqiy emas deb topildi."],
+  amount: ["💵 Summa kam", `Chekdagi summa ${money(PRICE)} dan kam.`],
+  unclear: ["🔍 Chek o'qilmayapti", "Chek rasmi aniq emas, o'qib bo'lmadi. Aniqroq rasm yuboring."],
+  other: ["❓ Boshqa sabab", "To'lovingiz tasdiqlanmadi. Savollaringiz bo'lsa, admin bilan bog'laning."],
+};
+
+// deno-lint-ignore no-explicit-any
+type A = any;
+
+const sb = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  { auth: { persistSession: false } },
+);
+
+// ------------------------------------------------------------------ YORDAMCHILAR
+function money(n: number): string {
+  return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " so'm";
+}
+const esc = (s: unknown) =>
+  String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const fmtCard = (n: string) => n.replace(/\D/g, "").replace(/(.{4})/g, "$1 ").trim();
+const fmtDate = (d: Date) =>
+  new Intl.DateTimeFormat("ru-RU", { timeZone: "Asia/Tashkent", day: "2-digit", month: "2-digit", year: "numeric" })
+    .format(d);
+
+async function webhookSecret(): Promise<string> {
+  const hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("wh:" + BOT_TOKEN));
+  return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function tg(method: string, body: Record<string, unknown> = {}): Promise<A> {
+  const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/${method}`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const j = await r.json();
+  if (!j.ok) throw new Error(`${method}: ${j.description}`);
+  return j.result;
+}
+
+const send = (chat_id: number, text: string, extra: Record<string, unknown> = {}) =>
+  tg("sendMessage", { chat_id, text, parse_mode: "HTML", link_preview_options: { is_disabled: true }, ...extra });
+
+async function safeSend(chat_id: number, text: string, extra: Record<string, unknown> = {}) {
+  try {
+    return await send(chat_id, text, extra);
+  } catch (e) {
+    console.error("safeSend", chat_id, String(e));
+  }
+}
+
+const menuKb = {
+  keyboard: [[{ text: BTN_BUY }], [{ text: BTN_BAL }, { text: BTN_REF }], [{ text: BTN_WD }]],
+  resize_keyboard: true,
+};
+const cancelKb = { keyboard: [[{ text: BTN_CANCEL }]], resize_keyboard: true };
+
+let botUsername = "";
+async function getBotUsername(): Promise<string> {
+  if (!botUsername) botUsername = (await tg("getMe")).username;
+  return botUsername;
+}
+
+// ----------------------------------------------------------------- BAZA
+async function getUser(uid: number): Promise<A> {
+  const { data, error } = await sb.from("users").select("*").eq("user_id", uid).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+function who(u: A): string {
+  if (!u) return "noma'lum";
+  let n = esc(u.full_name || "Ismsiz");
+  if (u.username) n += ` (@${esc(u.username)})`;
+  return n;
+}
+
+async function upsertUser(from: A, refId: number | null): Promise<A> {
+  const full = [from.first_name, from.last_name].filter(Boolean).join(" ");
+  const uname = from.username ?? null;
+  const u = await getUser(from.id);
+  if (u) {
+    if (u.username !== uname || u.full_name !== full) {
+      await sb.from("users").update({ username: uname, full_name: full }).eq("user_id", from.id);
+    }
+    return u;
+  }
+  let referrer: number | null = null;
+  if (refId && refId !== from.id && (await getUser(refId))) referrer = refId;
+  const { data, error } = await sb.from("users")
+    .insert({ user_id: from.id, username: uname, full_name: full, referrer_id: referrer })
+    .select().single();
+  if (error) {
+    const again = await getUser(from.id);
+    if (again) return again;
+    throw error;
+  }
+  return data;
+}
+
+const setState = (uid: number, state: string, data: A = null) =>
+  sb.from("users").update({ state, state_data: data }).eq("user_id", uid);
+
+// ----------------------------------------------------------------- MIJOZ QISMI
+function welcomeText(): string {
+  return "👋 <b>Xush kelibsiz!</b>\n\n" +
+    `Yopiq kanalga kirish narxi: <b>${money(PRICE)}</b> (bir martalik to'lov).\n\n` +
+    `👥 Do'stlaringizni taklif qilib ham pul ishlashingiz mumkin: har bir to'lov qilgan ` +
+    `do'stingiz uchun <b>${money(REF_BONUS)}</b>. Kursni sotib olmasangiz ham bo'ladi.\n\n` +
+    "Quyidagi menyudan tanlang 👇";
+}
+
+async function hasPending(table: "payments" | "withdrawals", uid: number): Promise<boolean> {
+  const { data } = await sb.from(table).select("id").eq("user_id", uid).eq("status", "pending").limit(1);
+  return !!data?.length;
+}
+
+async function showBuy(u: A) {
+  const uid = u.user_id;
+  if (u.paid) {
+    return send(uid, "✅ Siz to'lov qilgansiz va kanal havolasi sizga yuborilgan. Muammo bo'lsa, admin bilan bog'laning.", { reply_markup: menuKb });
+  }
+  if (await hasPending("payments", uid)) {
+    return send(uid, "⏳ Chekingiz tekshirilmoqda. Javob 24 soat ichida keladi.");
+  }
+  return send(
+    uid,
+    "💳 <b>To'lov ma'lumotlari</b>\n\n" +
+      `Narxi: <b>${money(PRICE)}</b> (bir martalik)\n` +
+      `Karta: <code>${fmtCard(CARD_NUMBER)}</code>\n` +
+      `Karta egasi: <b>${esc(CARD_OWNER)}</b>\n\n` +
+      "To'lovni qilgach, <b>chek rasmini</b> shu yerga yuboring.\n" +
+      "To'lov 24 soat ichida tekshiriladi.",
+  );
+}
+
+async function receipt(u: A, m: A) {
+  const uid = u.user_id;
+  if (u.paid) return send(uid, "✅ Siz allaqachon to'lov qilgansiz.");
+  if (await hasPending("payments", uid)) {
+    return send(uid, "⏳ Oldingi chekingiz hali tekshirilmoqda. Iltimos, kuting.");
+  }
+  const kind = m.photo ? "photo" : "document";
+  const file = m.photo ? m.photo[m.photo.length - 1] : m.document;
+
+  const { data: pay, error } = await sb.from("payments")
+    .insert({ user_id: uid, file_id: file.file_id, file_unique_id: file.file_unique_id, kind })
+    .select().single();
+  if (error) {
+    if (error.code === "23505") return send(uid, "⏳ Oldingi chekingiz hali tekshirilmoqda. Iltimos, kuting.");
+    throw error;
+  }
+
+  const { count: dup } = await sb.from("payments").select("id", { count: "exact", head: true })
+    .eq("file_unique_id", file.file_unique_id).neq("id", pay.id);
+
+  let caption = `🧾 <b>Yangi chek #${pay.id}</b>\n👤 ${who(u)}\n🆔 <code>${uid}</code>\n💵 Kutilayotgan summa: ${money(PRICE)}`;
+  if (u.referrer_id && !u.bonus_given) {
+    caption += `\n👥 Taklif qilgan: ${who(await getUser(u.referrer_id))} (tasdiqlansa +${money(REF_BONUS)})`;
+  }
+  if (dup) caption += "\n\n⚠️ <b>Diqqat:</b> bu rasm oldin ham yuborilgan!";
+
+  try {
+    await tg(kind === "photo" ? "sendPhoto" : "sendDocument", {
+      chat_id: ADMIN_ID,
+      [kind]: file.file_id,
+      caption,
+      parse_mode: "HTML",
+      reply_markup: {
+        inline_keyboard: [[
+          { text: "✅ Tasdiqlash", callback_data: `pok:${pay.id}` },
+          { text: "❌ Rad etish", callback_data: `pno:${pay.id}` },
+        ]],
+      },
+    });
+  } catch (e) {
+    console.error("adminga chek yuborilmadi", String(e));
+    await sb.from("payments").delete().eq("id", pay.id);
+    return send(uid, "⚠️ Texnik xatolik. Birozdan keyin qayta urinib ko'ring.");
+  }
+  return send(uid, "✅ Chek qabul qilindi. To'lovingiz 24 soat ichida tekshiriladi, natija shu yerga keladi.");
+}
+
+async function showBalance(u: A) {
+  const uid = u.user_id;
+  const inv = await sb.from("users").select("user_id", { count: "exact", head: true }).eq("referrer_id", uid);
+  const paidRef = await sb.from("users").select("user_id", { count: "exact", head: true })
+    .eq("referrer_id", uid).eq("bonus_given", true);
+  return send(
+    uid,
+    `💰 <b>Balansingiz: ${money(u.balance)}</b>\n\n` +
+      `👥 Taklif qilganlar: ${inv.count ?? 0} ta\n` +
+      `✅ To'lov qilganlar: ${paidRef.count ?? 0} ta\n` +
+      `💵 Jami ishlagan: ${money(u.earned)}\n\n` +
+      `Pul yechish: kamida ${money(MIN_WITHDRAW)}, har ${WITHDRAW_DAYS} kunda 1 marta.`,
+    { reply_markup: menuKb },
+  );
+}
+
+async function showReferral(u: A) {
+  const link = `https://t.me/${await getBotUsername()}?start=${u.user_id}`;
+  const share = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent("Yopiq kanalga qo'shiling:")}`;
+  return send(
+    u.user_id,
+    "👥 <b>Sizning referal havolangiz:</b>\n\n" + link + "\n\n" +
+      `Havola orqali kelgan har bir odam to'lov qilib, to'lovi tasdiqlansa, sizga <b>${money(REF_BONUS)}</b> tushadi. ` +
+      "Kursni sotib olmagan bo'lsangiz ham ishlay olasiz.",
+    { reply_markup: { inline_keyboard: [[{ text: "📤 Do'stlarga ulashish", url: share }]] } },
+  );
+}
+
+// ------------------------------------------------------------------ PUL YECHISH
+async function startWithdraw(u: A) {
+  const uid = u.user_id;
+  if (await hasPending("withdrawals", uid)) {
+    return send(uid, "⏳ Oldingi so'rovingiz ko'rib chiqilmoqda. Iltimos, kuting.");
+  }
+  const { data: last } = await sb.from("withdrawals").select("decided_at")
+    .eq("user_id", uid).eq("status", "paid").order("id", { ascending: false }).limit(1);
+  if (last?.length) {
+    const next = new Date(new Date(last[0].decided_at).getTime() + WITHDRAW_DAYS * 86400000);
+    const left = next.getTime() - Date.now();
+    if (left > 0) {
+      return send(
+        uid,
+        `⏳ Pul yechish har ${WITHDRAW_DAYS} kunda 1 marta mumkin.\n` +
+          `Keyingi imkoniyat: ${Math.ceil(left / 86400000)} kundan keyin (${fmtDate(next)}).`,
+      );
+    }
+  }
+  if (u.balance < MIN_WITHDRAW) {
+    return send(
+      uid,
+      `❗ Pul yechish uchun balans kamida ${money(MIN_WITHDRAW)} bo'lishi kerak.\nSizda hozir: ${money(u.balance)}`,
+    );
+  }
+  await setState(uid, "wd_card");
+  return send(
+    uid,
+    `💳 Pul tushirilishi kerak bo'lgan <b>karta raqamini</b> yuboring (16 xonali).\nBalansingiz: ${money(u.balance)}`,
+    { reply_markup: cancelKb },
+  );
+}
+
+async function withdrawCard(u: A, text: string) {
+  const digits = text.replace(/\D/g, "");
+  if (digits.length !== 16) {
+    return send(u.user_id, "❗ Karta raqami 16 ta raqamdan iborat bo'lishi kerak. Qayta yuboring.");
+  }
+  await setState(u.user_id, "wd_amount", { card: digits });
+  return send(
+    u.user_id,
+    `💵 Qancha yechmoqchisiz?\nKamida: ${money(MIN_WITHDRAW)}\nEng ko'pi: ${money(u.balance)}\n\nSummani raqam bilan yozing.`,
+  );
+}
+
+async function withdrawAmount(u: A, text: string) {
+  const uid = u.user_id;
+  const digits = text.replace(/\D/g, "");
+  if (!digits) return send(uid, "❗ Summani raqam bilan yozing. Masalan: 50000");
+  const amount = Number(digits);
+  if (amount < MIN_WITHDRAW) return send(uid, `❗ Minimal summa: ${money(MIN_WITHDRAW)}`);
+  if (amount > u.balance) return send(uid, `❗ Balansingizda yetarli mablag' yo'q. Mavjud: ${money(u.balance)}`);
+
+  const card: string = u.state_data?.card ?? "";
+  if (card.length !== 16) {
+    await setState(uid, "");
+    return send(uid, "⚠️ Xatolik. Iltimos, «💸 Pul yechish» ni qaytadan bosing.", { reply_markup: menuKb });
+  }
+  const { data: w, error } = await sb.from("withdrawals").insert({ user_id: uid, card, amount }).select().single();
+  if (error) {
+    await setState(uid, "");
+    if (error.code === "23505") return send(uid, "⏳ Oldingi so'rovingiz ko'rib chiqilmoqda.", { reply_markup: menuKb });
+    throw error;
+  }
+  await setState(uid, "");
+  try {
+    await send(
+      ADMIN_ID,
+      `💸 <b>Pul yechish so'rovi #${w.id}</b>\n👤 ${who(u)}\n🆔 <code>${uid}</code>\n` +
+        `💳 Karta: <code>${fmtCard(card)}</code>\n💵 Summa: <b>${money(amount)}</b>\n💰 Balans: ${money(u.balance)}`,
+      {
+        reply_markup: {
+          inline_keyboard: [[
+            { text: "✅ To'landi", callback_data: `wok:${w.id}` },
+            { text: "❌ Rad etish", callback_data: `wno:${w.id}` },
+          ]],
+        },
+      },
+    );
+  } catch (e) {
+    console.error("adminga yechish yuborilmadi", String(e));
+    await sb.from("withdrawals").delete().eq("id", w.id);
+    return send(uid, "⚠️ Texnik xatolik. Birozdan keyin qayta urinib ko'ring.", { reply_markup: menuKb });
+  }
+  return send(uid, "✅ So'rovingiz yuborildi. Admin to'lovni amalga oshirgach, sizga xabar keladi.", { reply_markup: menuKb });
+}
+
+// ----------------------------------------------------------------- XABARLAR
+async function cmdStats(uid: number) {
+  const { data, error } = await sb.rpc("bot_stats");
+  if (error) throw error;
+  return send(
+    uid,
+    "📊 <b>Statistika</b>\n\n" +
+      `Foydalanuvchilar: ${data.users}\n` +
+      `To'lov qilganlar: ${data.paid}\n` +
+      `Kutilayotgan cheklar: ${data.pending_payments}\n` +
+      `Kutilayotgan yechishlar: ${data.pending_withdrawals}\n` +
+      `Mijozlar balansi jami (qarzingiz): ${money(Number(data.owed))}\n` +
+      `Chiqarib berilgan jami: ${money(Number(data.paid_out))}`,
+  );
+}
+
+async function handleMessage(m: A) {
+  if (!m.from || m.chat?.type !== "private") return;
+  const uid: number = m.from.id;
+  const text: string = (m.text ?? "").trim();
+
+  let ref: number | null = null;
+  if (text.startsWith("/start")) {
+    const arg = text.split(/\s+/)[1];
+    if (arg && /^\d+$/.test(arg)) ref = Number(arg);
+  }
+  const u = await upsertUser(m.from, ref);
+
+  if (text.startsWith("/start")) {
+    await setState(uid, "");
+    return send(uid, welcomeText(), { reply_markup: menuKb });
+  }
+  if (text === "/stats" && uid === ADMIN_ID) return cmdStats(uid);
+  if (text === BTN_CANCEL) {
+    await setState(uid, "");
+    return send(uid, "Bekor qilindi.", { reply_markup: menuKb });
+  }
+  if (text === BTN_BUY) { await setState(uid, ""); return showBuy(u); }
+  if (text === BTN_BAL) { await setState(uid, ""); return showBalance(u); }
+  if (text === BTN_REF) { await setState(uid, ""); return showReferral(u); }
+  if (text === BTN_WD) { await setState(uid, ""); return startWithdraw(u); }
+
+  if (u.state === "wd_card" && text) return withdrawCard(u, text);
+  if (u.state === "wd_amount" && text) return withdrawAmount(u, text);
+
+  const isImage = m.photo || (m.document?.mime_type ?? "").startsWith("image/");
+  if (isImage && !u.state) return receipt(u, m);
+
+  if (text) return send(uid, "Menyudan tanlang 👇", { reply_markup: menuKb });
+}
+
+// ----------------------------------------------------------------- ADMIN TUGMALARI
+async function handleCallback(q: A) {
+  const answer = (text?: string, alert = false) =>
+    tg("answerCallbackQuery", { callback_query_id: q.id, text, show_alert: alert }).catch(() => {});
+  if (q.from.id !== ADMIN_ID) return answer("Ruxsat yo'q", true);
+
+  const [kind, a, b] = String(q.data ?? "").split(":");
+  const chat = q.message.chat.id;
+  const mid = q.message.message_id;
+  const editKb = (inline_keyboard: A[]) =>
+    tg("editMessageReplyMarkup", { chat_id: chat, message_id: mid, reply_markup: { inline_keyboard } }).catch(() => {});
+  const note = (t: string) => safeSend(chat, t, { reply_parameters: { message_id: mid } });
+  const id = Number(a);
+
+  if (kind === "pok") {
+    const { data: pay } = await sb.from("payments")
+      .update({ status: "approved", decided_at: new Date().toISOString() })
+      .eq("id", id).eq("status", "pending").select().maybeSingle();
+    if (!pay) return answer("Bu chek allaqachon ko'rib chiqilgan.", true);
+    const uid: number = pay.user_id;
+
+    let link: string;
+    try {
+      link = (await tg("createChatInviteLink", { chat_id: CHANNEL_ID, name: `user ${uid}`, member_limit: 1 })).invite_link;
+    } catch (e) {
+      await sb.from("payments").update({ status: "pending", decided_at: null }).eq("id", id);
+      await note(`⚠️ Chek #${id} uchun havola yaratilmadi:\n<code>${esc(String(e))}</code>\nBot kanalda admin ekanini tekshiring.`);
+      return answer("Havola yaratilmadi. Bot kanalda admin bo'lishi kerak.", true);
+    }
+
+    await sb.from("users").update({ paid: true }).eq("user_id", uid);
+
+    let refNote = "";
+    const user = await getUser(uid);
+    if (user?.referrer_id) {
+      const { data: flagged } = await sb.from("users").update({ bonus_given: true })
+        .eq("user_id", uid).eq("bonus_given", false).select().maybeSingle();
+      if (flagged) {
+        await sb.rpc("add_balance", { p_user: user.referrer_id, p_amount: REF_BONUS });
+        const r = await getUser(user.referrer_id);
+        refNote = `\n👥 ${who(r)} ga +${money(REF_BONUS)} qo'shildi.`;
+        await safeSend(
+          user.referrer_id,
+          `🎉 Siz taklif qilgan do'stingiz to'lov qildi!\nBalansingizga <b>+${money(REF_BONUS)}</b> qo'shildi.\n` +
+            `Hozirgi balans: <b>${money(r.balance)}</b>`,
+        );
+      }
+    }
+
+    const sent = await safeSend(
+      uid,
+      "✅ <b>To'lovingiz tasdiqlandi!</b>\n\n" +
+        `Kanalga kirish havolasi:\n${link}\n\n` +
+        "⚠️ Havola <b>bir martalik</b>: faqat 1 kishi kira oladi. Boshqaga bermang.",
+    );
+    await editKb([]);
+    if (sent) await note(`✅ <b>TASDIQLANDI</b> (#${id})${refNote}`);
+    else await note(`✅ Tasdiqlandi (#${id}), lekin mijozga xabar bormadi (botni bloklagan bo'lishi mumkin). Havolani qo'lda yuboring:\n${link}${refNote}`);
+    return answer("Tasdiqlandi");
+  }
+
+  if (kind === "pno") {
+    const rows = Object.entries(REASONS).map(([code, [label]]) => [{ text: label, callback_data: `pr:${id}:${code}` }]);
+    rows.push([{ text: "⬅️ Orqaga", callback_data: `pback:${id}` }]);
+    await editKb(rows);
+    return answer("Rad etish sababini tanlang");
+  }
+
+  if (kind === "pback") {
+    await editKb([[
+      { text: "✅ Tasdiqlash", callback_data: `pok:${id}` },
+      { text: "❌ Rad etish", callback_data: `pno:${id}` },
+    ]]);
+    return answer();
+  }
+
+  if (kind === "pr") {
+    const code = b;
+    if (!REASONS[code]) return answer("Noma'lum sabab", true);
+    const { data: pay } = await sb.from("payments")
+      .update({ status: "rejected", reason: code, decided_at: new Date().toISOString() })
+      .eq("id", id).eq("status", "pending").select().maybeSingle();
+    if (!pay) return answer("Bu chek allaqachon ko'rib chiqilgan.", true);
+    const [label, text] = REASONS[code];
+    await safeSend(
+      pay.user_id,
+      `❌ <b>Chekingiz tasdiqlanmadi</b>\n\nSabab: ${text}\n\nTo'g'ri chek bilan qayta urinish uchun «${BTN_BUY}» tugmasini bosing.`,
+    );
+    await editKb([]);
+    await note(`❌ <b>RAD ETILDI</b> (#${id}): ${label}`);
+    return answer("Rad etildi");
+  }
+
+  if (kind === "wok") {
+    const { data: res, error } = await sb.rpc("pay_withdrawal", { p_id: id });
+    if (error) throw error;
+    if (!res.ok) {
+      return answer(res.reason === "balance" ? "Mijoz balansida yetarli mablag' yo'q!" : "Bu so'rov allaqachon ko'rib chiqilgan.", true);
+    }
+    await safeSend(
+      res.user_id,
+      `✅ <b>${money(Number(res.amount))}</b> kartangizga o'tkazildi!\nYangi balans: <b>${money(Number(res.balance))}</b>`,
+    );
+    await editKb([]);
+    await note(`✅ <b>TO'LANDI</b> (#${id}). Mijoz balansi: ${money(Number(res.balance))}`);
+    return answer("Balansdan yechildi");
+  }
+
+  if (kind === "wno") {
+    const { data: w } = await sb.from("withdrawals")
+      .update({ status: "rejected", decided_at: new Date().toISOString() })
+      .eq("id", id).eq("status", "pending").select().maybeSingle();
+    if (!w) return answer("Bu so'rov allaqachon ko'rib chiqilgan.", true);
+    await safeSend(
+      w.user_id,
+      "❌ Pul yechish so'rovingiz rad etildi. Balansingiz o'zgarmadi. Savollar bo'lsa, admin bilan bog'laning.",
+    );
+    await editKb([]);
+    await note(`❌ <b>RAD ETILDI</b> (#${id})`);
+    return answer("Rad etildi");
+  }
+
+  return answer();
+}
+
+// ----------------------------------------------------------------- WEBHOOKNI O'RNATISH
+async function setup(): Promise<Response> {
+  if (!BOT_TOKEN) {
+    return new Response("❌ BOT_TOKEN sozlanmagan. Supabase → Edge Functions → Secrets ga BOT_TOKEN qo'shing.", { status: 500 });
+  }
+  const webhookUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/bot`;
+  const info = await tg("getWebhookInfo");
+  const changed = info.url !== webhookUrl;
+  await tg("setWebhook", {
+    url: webhookUrl,
+    secret_token: await webhookSecret(),
+    allowed_updates: ["message", "callback_query"],
+  });
+
+  let channel = "✅ Kanal: bot admin va havola yarata oladi.";
+  try {
+    const me = await tg("getMe");
+    const member = await tg("getChatMember", { chat_id: CHANNEL_ID, user_id: me.id });
+    if (!["administrator", "creator"].includes(member.status)) {
+      channel = "⚠️ Bot kanalda admin emas! Botni kanalga admin qiling.";
+    } else if (member.status === "administrator" && !member.can_invite_users) {
+      channel = "⚠️ Botga «Foydalanuvchilarni taklif qilish» huquqini bering.";
+    }
+  } catch (e) {
+    channel = `⚠️ Kanalni tekshirib bo'lmadi: ${String(e)}`;
+  }
+
+  if (changed) await safeSend(ADMIN_ID, `✅ Bot ishga tushdi.\n${channel}`);
+  return new Response(`✅ Webhook o'rnatildi.\n${channel}\n(Admin ID: ${ADMIN_ID}. Agar xabar kelmasa, botga avval /start bosing.)`, {
+    headers: { "content-type": "text/plain; charset=utf-8" },
+  });
+}
+
+Deno.serve(async (req: Request) => {
+  const url = new URL(req.url);
+  try {
+    if (url.pathname.endsWith("/setup")) return await setup();
+    if (req.method !== "POST") return new Response("ok");
+    if (!BOT_TOKEN) return new Response("BOT_TOKEN yo'q", { status: 500 });
+    if (req.headers.get("x-telegram-bot-api-secret-token") !== (await webhookSecret())) {
+      return new Response("forbidden", { status: 403 });
+    }
+    const update = await req.json();
+    try {
+      if (update.message) await handleMessage(update.message);
+      else if (update.callback_query) await handleCallback(update.callback_query);
+    } catch (e) {
+      console.error("handler error", String(e));
+      const to = update.message?.from?.id;
+      if (to) await safeSend(to, "⚠️ Xatolik yuz berdi. Birozdan keyin qayta urinib ko'ring.");
+    }
+    return new Response("ok");
+  } catch (e) {
+    console.error("fatal", String(e));
+    return new Response("error", { status: 500 });
+  }
+});
