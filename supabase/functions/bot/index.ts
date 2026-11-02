@@ -3,7 +3,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 // ----------------------------------------------------------------- SOZLAMALAR
-const BOT_TOKEN = Deno.env.get("BOT_TOKEN") ?? "";
+let BOT_TOKEN = Deno.env.get("BOT_TOKEN") ?? "";
 const ADMIN_ID = Number(Deno.env.get("ADMIN_ID") ?? "5306954983");
 const CHANNEL_ID = Number(Deno.env.get("CHANNEL_ID") ?? "-1004330179807");
 const CARD_NUMBER = (Deno.env.get("CARD_NUMBER") ?? "5614681804902595").replace(/\D/g, "");
@@ -34,6 +34,13 @@ const sb = createClient(
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   { auth: { persistSession: false } },
 );
+
+// Token Secrets'da bo'lmasa, yopiq bot_config jadvalidan o'qiladi (faqat service_role kira oladi)
+async function loadToken() {
+  if (BOT_TOKEN) return;
+  const { data } = await sb.from("bot_config").select("value").eq("key", "BOT_TOKEN").maybeSingle();
+  BOT_TOKEN = data?.value ?? "";
+}
 
 // ------------------------------------------------------------------ YORDAMCHILAR
 function money(n: number): string {
@@ -324,15 +331,25 @@ async function withdrawAmount(u: A, text: string) {
 async function cmdStats(uid: number) {
   const { data, error } = await sb.rpc("bot_stats");
   if (error) throw error;
+  const revenue = Number(data.approved) * PRICE;
+  const earned = Number(data.earned_total);
+  const paidOut = Number(data.paid_out);
   return send(
     uid,
-    "📊 <b>Statistika</b>\n\n" +
-      `Foydalanuvchilar: ${data.users}\n` +
-      `To'lov qilganlar: ${data.paid}\n` +
-      `Kutilayotgan cheklar: ${data.pending_payments}\n` +
-      `Kutilayotgan yechishlar: ${data.pending_withdrawals}\n` +
-      `Mijozlar balansi jami (qarzingiz): ${money(Number(data.owed))}\n` +
-      `Chiqarib berilgan jami: ${money(Number(data.paid_out))}`,
+    "📊 <b>Daromad hisoboti</b>\n\n" +
+      `✅ Tasdiqlangan to'lovlar: ${data.approved} ta\n` +
+      `💵 <b>Jami tushum: ${money(revenue)}</b>\n` +
+      `📅 Bugun: ${data.approved_today} ta (${money(Number(data.approved_today) * PRICE)})\n` +
+      `🗓 Shu oy: ${data.approved_month} ta (${money(Number(data.approved_month) * PRICE)})\n\n` +
+      `👥 Referal bonuslar (jami hisoblangan): ${money(earned)}\n` +
+      `💸 Mijozlarga to'langan: ${money(paidOut)}\n` +
+      `🧾 Mijozlar balansi (hali to'lanmagan qarz): ${money(Number(data.owed))}\n\n` +
+      `📈 <b>Sof foyda: ${money(revenue - earned)}</b>\n` +
+      "(tushum − referal bonuslar)\n" +
+      `💼 Qo'lingizda qolgan pul: ${money(revenue - paidOut)}\n` +
+      "(tushum − mijozlarga to'langan)\n\n" +
+      `👤 Foydalanuvchilar: ${data.users}, to'lov qilganlar: ${data.paid}\n` +
+      `⏳ Kutilayotgan cheklar: ${data.pending_payments}, yechishlar: ${data.pending_withdrawals}`,
   );
 }
 
@@ -499,7 +516,7 @@ async function handleCallback(q: A) {
 // ----------------------------------------------------------------- WEBHOOKNI O'RNATISH
 async function setup(): Promise<Response> {
   if (!BOT_TOKEN) {
-    return new Response("❌ BOT_TOKEN sozlanmagan. Supabase → Edge Functions → Secrets ga BOT_TOKEN qo'shing.", { status: 500 });
+    return new Response("❌ BOT_TOKEN topilmadi (Secrets yoki bot_config jadvali).", { status: 500 });
   }
   const webhookUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/bot`;
   const info = await tg("getWebhookInfo");
@@ -532,6 +549,7 @@ async function setup(): Promise<Response> {
 Deno.serve(async (req: Request) => {
   const url = new URL(req.url);
   try {
+    await loadToken();
     if (url.pathname.endsWith("/setup")) return await setup();
     if (req.method !== "POST") return new Response("ok");
     if (!BOT_TOKEN) return new Response("BOT_TOKEN yo'q", { status: 500 });
