@@ -12,6 +12,8 @@ const PRICE = Number(Deno.env.get("PRICE") ?? "100000");
 const REF_BONUS = Number(Deno.env.get("REF_BONUS") ?? "10000");
 const MIN_WITHDRAW = Number(Deno.env.get("MIN_WITHDRAW") ?? "50000");
 const WITHDRAW_DAYS = Number(Deno.env.get("WITHDRAW_DAYS") ?? "15");
+const FREE_CHANNEL_URL = "https://t.me/AIPromptMasters";
+const INSTAGRAM_URL = "https://instagram.com/aibiznes.uz";
 
 const BTN_BUY = "💳 Kanalga kirish";
 const BTN_BAL = "💰 Balans";
@@ -85,6 +87,11 @@ const menuKb = {
   resize_keyboard: true,
 };
 const cancelKb = { keyboard: [[{ text: BTN_CANCEL }]], resize_keyboard: true };
+const socialKb = {
+  inline_keyboard: [
+    [{ text: "🆓 Bepul kanal", url: FREE_CHANNEL_URL }, { text: "📸 Instagram", url: INSTAGRAM_URL }],
+  ],
+};
 
 let botUsername = "";
 async function getBotUsername(): Promise<string> {
@@ -135,11 +142,18 @@ const setState = (uid: number, state: string, data: A = null) =>
 // ----------------------------------------------------------------- MIJOZ QISMI
 function welcomeText(): string {
   return "👋 <b>Xush kelibsiz!</b>\n\n" +
-    `Yopiq kanalga kirish narxi: <b>${money(PRICE)}</b> (bir martalik to'lov).\n\n` +
+    `🔒 Yopiq kanalga kirish narxi: <b>${money(PRICE)}</b> (bir martalik to'lov).\n` +
+    "Yopiq kanalda: har kuni yangi promptlar, n8n shablon fayllari, darslar, kod loyihalari va savol-javob.\n" +
+    "Kanal materiallarini ko'chirib yoki boshqaga yuborib bo'lmaydi, ular faqat a'zolar uchun.\n\n" +
     `👥 Do'stlaringizni taklif qilib ham pul ishlashingiz mumkin: har bir to'lov qilgan ` +
     `do'stingiz uchun <b>${money(REF_BONUS)}</b>. Kursni sotib olmasangiz ham bo'ladi.\n\n` +
     "Quyidagi menyudan tanlang 👇";
 }
+
+const socialText =
+  "💡 <b>Tavsiya:</b> obuna bo'lib turing, har kuni foydali narsalar chiqadi:\n" +
+  "🆓 Bepul kanal: namunaviy promptlar va maslahatlar\n" +
+  "📸 Instagram @aibiznes.uz: qisqa videolar";
 
 async function hasPending(table: "payments" | "withdrawals", uid: number): Promise<boolean> {
   const { data } = await sb.from(table).select("id").eq("user_id", uid).eq("status", "pending").limit(1);
@@ -367,7 +381,8 @@ async function handleMessage(m: A) {
 
   if (text.startsWith("/start")) {
     await setState(uid, "");
-    return send(uid, welcomeText(), { reply_markup: menuKb });
+    await send(uid, welcomeText(), { reply_markup: menuKb });
+    return send(uid, socialText, { reply_markup: socialKb });
   }
   if (text === "/stats" && uid === ADMIN_ID) return cmdStats(uid);
   if (text === BTN_CANCEL) {
