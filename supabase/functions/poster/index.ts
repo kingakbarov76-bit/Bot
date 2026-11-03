@@ -134,8 +134,8 @@ async function extrasText(post: A): Promise<string> {
       "1. n8n.io'da ro'yxatdan o'ting (bepul sinov) yoki o'z serveringizga o'rnating.\n" +
       "2. Workflows → <i>Create workflow</i> → yuqoridagi ⋯ → <i>Import from file</i> → yuklangan .json faylni tanlang.\n" +
       "3. Qizil belgili tugunlarda <i>Credentials</i> tanlab, o'z hisobingizni ulang (yuqoridagi saytlardan kalit/akkaunt oling).\n" +
-      "4. <i>Execute workflow</i> bilan sinab ko'ring.\n" +
-      "5. Ishlasa, o'ng yuqoridagi <i>Active</i> ni yoqing.\n" +
+      "4. Pastdagi sinash tugmasi (<i>Execute/Test workflow</i>) bilan sinab ko'ring.\n" +
+      "5. Ishlasa, o'ng yuqoridagi <i>Active</i> (yangi versiyalarda <i>Publish</i>) ni yoqing.\n" +
       "📖 Rasmiy qo'llanma: https://docs.n8n.io/workflows/export-import/",
   );
   return lines.join("\n\n");

@@ -57,7 +57,7 @@ const LESSONS: { t: string; title: string; src?: string }[] = [
   { t: "freelance", title: "Portfolio yig'ish: birinchi 3 ta ish" },
   { t: "freelance", title: "Birinchi buyurtmani topish yo'llari" },
   { t: "freelance", title: "Ish narxini belgilash va kelishuv" },
-  { t: "n8n", title: "n8n nima va qanday boshlanadi", src: "https://docs.n8n.io/try-it-out/" },
+  { t: "n8n", title: "n8n'da birinchi ish jarayoni (workflow) yaratish", src: "https://docs.n8n.io/try-it-out/" },
   { t: "n8n", title: "Shablonni (JSON fayl) n8n'ga import qilish", src: "https://docs.n8n.io/workflows/export-import/" },
   { t: "n8n", title: "Credentials: hisoblarni n8n'ga ulash", src: "https://docs.n8n.io/credentials/" },
   { t: "n8n", title: "Telegram bot tokenini olish va n8n'ga ulash", src: "https://docs.n8n.io/integrations/builtin/credentials/telegram/" },
@@ -67,6 +67,15 @@ const LESSONS: { t: string; title: string; src?: string }[] = [
   { t: "dasturlash", title: "GitHub nima va undan loyihani qanday yuklab olish", src: "https://docs.github.com/en/get-started/start-your-journey/about-github-and-git" },
   { t: "dasturlash", title: "Zip loyihani kompyuterda ochish va ishga tushirish" },
   { t: "ai", title: "ChatGPT, Gemini, Claude: promptni qayerga yozish va natijani tekshirish" },
+  { t: "dasturlash", title: "Virtual muhit (venv) va paketlar", src: "https://docs.python.org/3/tutorial/venv.html" },
+  { t: "dasturlash", title: "Standart kutubxona bilan tanishuv", src: "https://docs.python.org/3/tutorial/stdlib.html" },
+  { t: "sayt", title: "JavaScript: o'zgaruvchilar", src: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Variables" },
+  { t: "sayt", title: "JavaScript: funksiyalar", src: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Functions" },
+  { t: "sayt", title: "JavaScript: massivlar", src: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Arrays" },
+  { t: "sayt", title: "CSS quti modeli (box model)", src: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Box_model" },
+  { t: "dasturlash", title: "GitHub'da birinchi loyiha (Hello World)", src: "https://docs.github.com/en/get-started/start-your-journey/hello-world" },
+  { t: "bot", title: "Telegram botlar: tez-tez so'raladigan savollar", src: "https://core.telegram.org/bots/faq" },
+  { t: "n8n", title: "Faqat telefon bo'lsa: n8n shablonlari bilan qanday ishlash" },
 ];
 
 async function gemini(prompt: string, key: string, temp = 0.4): Promise<A | null> {
@@ -199,7 +208,7 @@ async function buildRepo(used: Set<string>, key: string, gh: A) {
     `📌 <b>Nima qiladi:</b> ${esc(out.nima)}\n` +
     `👥 <b>Kimga kerak:</b> ${esc(out.kimga ?? "")}\n` +
     `🛠 <b>Til:</b> ${esc(c.language ?? "-")} · ⭐ ${c.stargazers_count} · 📄 Litsenziya: ${esc(c.license.spdx_id)} (ochiq, ishlatish mumkin)\n` +
-    (steps ? `\n⚙️ <b>Ishga tushirish (README bo'yicha):</b>\n${steps}\n` : "") +
+    (steps ? `\n⚙️ <b>Ishga tushirish (README bo'yicha):</b>\n${steps}\n` : `\n⚙️ <b>Ishga tushirish:</b> zip ichidagi README.md faylida yo'riqnoma bor; loyihaga qarab Python, Node yoki Docker kerak bo'lishi mumkin.\n`) +
     `\n📦 Loyiha fayllari (zip) pastda, bu xabarga javob sifatida yuboriladi.\n` +
     `🔗 <a href="${c.html_url}">GitHub sahifasi</a>\n⚠️ Ishlatishdan oldin litsenziya va README'ni o'qing.\n\n#kod #github ${TRACKS[rq.track].tag}`;
   if (body.length > 3900) return null;
