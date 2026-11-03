@@ -129,6 +129,8 @@ function stripHtml(h: string): string {
     .replace(/[ \t]+/g, " ").replace(/\n\s*\n+/g, "\n").trim();
 }
 
+let qaOn = false; // izoh guruhida savol-javob botini yoqilganmi (bot_config.QA_ON)
+
 // ---------------------------------------------------------------- DARS
 async function buildLesson(l: { t: string; title: string; src?: string }, idx: number, total: number, key: string) {
   let material = "";
@@ -154,13 +156,16 @@ async function buildLesson(l: { t: string; title: string; src?: string }, idx: n
   if (!out?.nima || !Array.isArray(out.qadamlar) || out.qadamlar.length < 2 || !out.mashq || !out.prompt) return null;
   const steps = out.qadamlar.slice(0, 5).map((s: string, i: number) => `${i + 1}. ${esc(s)}`).join("\n");
   const body =
-    `🎓 <b>DARS · ${esc(tr.name)} · ${idx}/${total}</b>\n<b>${esc(l.title)}</b>\n\n` +
+    `🎓 <b>DARS · ${esc(tr.name)} · ${idx}-dars</b>\n<b>${esc(l.title)}</b>\n\n` +
     `📌 <b>Nima o'rganasiz:</b> ${esc(out.nima)}\n\n` +
     `🧭 <b>Qadamlar:</b>\n${steps}\n\n` +
-    (out.misol ? `🔎 <b>Misol:</b>\n<pre>${esc(String(out.misol).slice(0, 700))}</pre>\n\n` : "") +
+    (out.misol ? (l.t === "dasturlash" || l.t === "sayt"
+      ? `🔎 <b>Misol:</b>\n<pre>${esc(String(out.misol).slice(0, 700))}</pre>\n\n`
+      : `🔎 <b>Misol:</b> ${esc(String(out.misol).slice(0, 500))}\n\n`) : "") +
     `✍️ <b>Bugungi mashq:</b> ${esc(out.mashq)}\n\n` +
     `🤖 <b>AI bilan mashq (prompt):</b>\n<pre>${esc(String(out.prompt).slice(0, 600))}</pre>` +
     (l.src ? `\n\n📚 <b>Rasmiy manba:</b> <a href="${l.src}">${new URL(l.src).host}</a>` : "") +
+    (qaOn ? `\n\n💬 <b>Savolingiz bormi?</b> Izohda yozing, AI yordamchi dars bo'yicha javob beradi.` : "") +
     `\n\n${tr.tag}`;
   if (body.length > 3900) return null;
   return { body, urls: l.src ? [l.src] : [], title: l.title, track: l.t };
@@ -261,7 +266,7 @@ async function buildTool(used: Set<string>, key: string) {
 // ---------------------------------------------------------------- ASOSIY
 Deno.serve(async (req: Request) => {
   try {
-    const { data: cfg } = await sb.from("bot_config").select("key,value").in("key", ["POSTER_CRON_KEY", "GEMINI_API_KEY", "AUTO_APPROVE", "GITHUB_TOKEN"]);
+    const { data: cfg } = await sb.from("bot_config").select("key,value").in("key", ["POSTER_CRON_KEY", "GEMINI_API_KEY", "AUTO_APPROVE", "GITHUB_TOKEN", "QA_ON"]);
     const get = (k: string) => cfg?.find((r: A) => r.key === k)?.value ?? "";
     if (!get("POSTER_CRON_KEY") || req.headers.get("x-cron-key") !== get("POSTER_CRON_KEY")) return new Response("forbidden", { status: 403 });
     const url = new URL(req.url);
@@ -278,6 +283,7 @@ Deno.serve(async (req: Request) => {
     if (!key) return new Response("no GEMINI_API_KEY");
     const status = get("AUTO_APPROVE") === "true" ? "queued" : "draft";
     const gh = get("GITHUB_TOKEN") ? { authorization: `Bearer ${get("GITHUB_TOKEN")}` } : {};
+    qaOn = get("QA_ON") === "true";
 
     const { count: backlog } = await sb.from("content_posts").select("id", { count: "exact", head: true }).in("status", ["queued", "draft"]).in("kind", ["guide", "repo", "tool"]);
     if ((backlog ?? 0) >= 24) return new Response(`enough (${backlog})`);
@@ -302,8 +308,11 @@ Deno.serve(async (req: Request) => {
     LESSONS.forEach((l) => { (byTrack[l.t] ??= []).push(l); });
     const trackNames = Object.keys(byTrack);
     const start = Math.floor(Date.now() / 3600000) % trackNames.length;
+    // darslar navbatning ~1/6 qismidan oshmasin (boshqa kontent ham chiqib tursin)
+    const { count: guideQ } = await sb.from("content_posts").select("id", { count: "exact", head: true }).in("status", ["queued", "draft"]).eq("kind", "guide");
+    const lessonLimit = Math.max(0, Math.min(3, 6 - (guideQ ?? 0)));
     let lessons = 0;
-    for (let i = 0; i < trackNames.length && lessons < 3; i++) {
+    for (let i = 0; i < trackNames.length && lessons < lessonLimit; i++) {
       const tn = trackNames[(start + i) % trackNames.length];
       const arr = byTrack[tn];
       for (let n = 0; n < arr.length; n++) {
