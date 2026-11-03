@@ -142,11 +142,15 @@ const setState = (uid: number, state: string, data: A = null) =>
 // ----------------------------------------------------------------- MIJOZ QISMI
 function welcomeText(): string {
   return "👋 <b>Xush kelibsiz!</b>\n\n" +
-    `🔒 Yopiq kanalga kirish narxi: <b>${money(PRICE)}</b> (bir martalik to'lov).\n` +
-    "Yopiq kanalda: har kuni yangi promptlar, n8n shablon fayllari, darslar, kod loyihalari va savol-javob.\n" +
+    `🔒 <b>Yopiq kanal</b> narxi: <b>${money(PRICE)}</b> (bir martalik to'lov).\n` +
+    "Ichida: har kuni yangi tayyor promptlar (nusxa olib ishlatasiz), n8n shablon fayllari (import qilasiz), ilova va vosita tavsiyalari, kod loyihalari (zip).\n" +
+    "Nima uchun kerak: har safar noldan yozish yoki izlash o'rniga tayyor narsani olasiz, vaqt tejaladi.\n" +
     "Kanal materiallarini ko'chirib yoki boshqaga yuborib bo'lmaydi, ular faqat a'zolar uchun.\n\n" +
-    `👥 Do'stlaringizni taklif qilib ham pul ishlashingiz mumkin: har bir to'lov qilgan ` +
-    `do'stingiz uchun <b>${money(REF_BONUS)}</b>. Kursni sotib olmasangiz ham bo'ladi.\n\n` +
+    "👥 <b>Bonus dasturi:</b> «Referal havolam» tugmasidan shaxsiy havola olasiz. " +
+    `Do'stingiz shu havola orqali to'lov qilsa va to'lovi tasdiqlansa, balansingizga <b>${money(REF_BONUS)}</b> yoziladi. ` +
+    `Balans ${money(MIN_WITHDRAW)} ga yetsa, kartaga yechib olasiz (har ${WITHDRAW_DAYS} kunda 1 marta). ` +
+    "Kanalga kirmasangiz ham qatnashsa bo'ladi.\n" +
+    "⚠️ Daromad kafolatlanmaydi: u do'stlaringiz qaroriga bog'liq.\n\n" +
     "Quyidagi menyudan tanlang 👇";
 }
 
@@ -539,7 +543,7 @@ async function setup(): Promise<Response> {
   await tg("setWebhook", {
     url: webhookUrl,
     secret_token: await webhookSecret(),
-    allowed_updates: ["message", "callback_query"],
+    allowed_updates: ["message", "callback_query", "my_chat_member"],
   });
 
   let channel = "✅ Kanal: bot admin va havola yarata oladi.";
@@ -575,6 +579,11 @@ Deno.serve(async (req: Request) => {
     try {
       if (update.message) await handleMessage(update.message);
       else if (update.callback_query) await handleCallback(update.callback_query);
+      else if (update.my_chat_member?.chat?.type === "private") {
+        // foydalanuvchi botni bloklagan/qaytarganini yozib boramiz (voronka tahlili uchun)
+        const blocked = update.my_chat_member.new_chat_member?.status === "kicked";
+        await sb.from("users").update({ blocked }).eq("user_id", update.my_chat_member.chat.id);
+      }
     } catch (e) {
       console.error("handler error", String(e));
       const to = update.message?.from?.id;
