@@ -200,6 +200,22 @@ async function sendRepoZip(token: string, post: A, replyTo: number): Promise<boo
 // Dars videosi: GitHub'dagi media/ papkadan, Supabase 'media' funksiyasi orqali (video/mp4) Telegram'ga URL bilan yuboriladi
 async function sendLessonVideo(token: string, post: A, replyTo: number): Promise<boolean> {
   try {
+    const ref = String(post.ref_video_url ?? "");
+    if (/^https:\/\/(www\.)?youtube\.com\/(watch\?v=|playlist\?list=)[A-Za-z0-9_-]{6,40}$/.test(ref)) {
+      if (!(await urlOk(ref))) { console.error("ref video dead", ref); return false; }
+      const t = String(post.title ?? "").replace(/[<>&]/g, "");
+      const r0 = await fetch(TG(token, "sendMessage"), {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          chat_id: CHANNEL_ID, parse_mode: "HTML",
+          text: `📺 <b>Mavzu bo'yicha qo'shimcha video:</b> ${t}\n${ref}\n<i>(Boshqa muallif videosi, ko'pincha inglizcha. Darsning o'zi yuqorida.)</i>`,
+          reply_parameters: { message_id: replyTo, allow_sending_without_reply: true },
+        }),
+      });
+      const j0 = await r0.json();
+      if (!j0.ok) console.error("ref video", JSON.stringify(j0));
+      return !!j0.ok;
+    }
     const f = String(post.video_file ?? "");
     if (!/^[A-Za-z0-9_-]{1,60}\.mp4$/.test(f)) return false;
     const url = `${Deno.env.get("SUPABASE_URL")}/functions/v1/media?f=${f}`;
@@ -234,7 +250,7 @@ Deno.serve(async (req: Request) => {
       let done = 0;
       // dars videolari: video_file bor, lekin hali yuborilmagan, post chiqib bo'lgan
       const { data: vrows } = await sb.from("content_posts").select("*")
-        .eq("status", "posted").eq("video_sent", false).not("video_file", "is", null).not("tg_message_id", "is", null).order("id").limit(2);
+        .eq("status", "posted").eq("video_sent", false).or("video_file.not.is.null,ref_video_url.not.is.null").not("tg_message_id", "is", null).order("id").limit(2);
       for (const p of vrows ?? []) {
         const ok = await sendLessonVideo(token, p, p.tg_message_id);
         if (ok) { await sb.from("content_posts").update({ video_sent: true }).eq("id", p.id); done++; }
@@ -302,10 +318,10 @@ Deno.serve(async (req: Request) => {
           await sb.from("content_posts").update({ file_sent: ok }).eq("id", post.id);
         }
         if (post.kind === "guide") {
-          const { data: vf } = await sb.from("content_posts").select("video_file").eq("id", post.id).single();
-          if (vf?.video_file) {
+          const { data: vf } = await sb.from("content_posts").select("video_file,ref_video_url").eq("id", post.id).single();
+          if (vf?.video_file || vf?.ref_video_url) {
             await new Promise((res) => setTimeout(res, 2000));
-            const ok = await sendLessonVideo(token, { ...post, video_file: vf.video_file }, j.result.message_id);
+            const ok = await sendLessonVideo(token, { ...post, video_file: vf.video_file, ref_video_url: vf.ref_video_url }, j.result.message_id);
             await sb.from("content_posts").update({ video_sent: ok }).eq("id", post.id);
           }
         }
