@@ -68,6 +68,20 @@ const APPS: Record<string, [string, string?]> = {
   "n8n": ["https://n8n.io"],
 };
 
+function tagsFor(post: A): string {
+  if (/(^|\s)#\p{L}/u.test(String(post.body))) return "";
+  const t = new Set<string>();
+  const names: A = { template: "#shablon", prompt: "#prompt", site: "#sayt", app: "#ilova", video: "#video", tip: "#maslahat" };
+  t.add(names[post.kind] ?? "#kontent");
+  if (post.kind === "template") t.add("#n8n");
+  const m = String(post.body).match(/Qaysi ilovalar:<\/b>\s*([^\n]+)/);
+  for (const n of (m?.[1] ?? "").split("+")) {
+    const w = n.trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
+    if (w && w !== "n8n" && w.length < 18 && t.size < 5) t.add("#" + w);
+  }
+  return "\n\n" + [...t].join(" ");
+}
+
 function safeName(t: string): string {
   const base = t.replace(/<[^>]+>/g, "").replace(/^[^:]*:\s*/, "").replace(/[^\p{L}\p{N}]+/gu, "_").replace(/^_+|_+$/g, "").slice(0, 60);
   return (base || "shablon") + ".json";
@@ -133,7 +147,12 @@ async function sendFileAndExtras(token: string, post: A, replyTo: number): Promi
   const form = new FormData();
   form.append("chat_id", String(CHANNEL_ID));
   form.append("document", new Blob([json], { type: "application/json" }), safeName(post.title ?? post.body.slice(0, 60)));
-  form.append("caption", "📥 <b>Shablon fayli (n8n JSON)</b>\nn8n'da: Import from file orqali yuklang.");
+  let level = "";
+  try {
+    const n = JSON.parse(json).nodes.length as number;
+    level = `\n📊 <b>Murakkablik:</b> ${n <= 6 ? "Oddiy" : n <= 14 ? "O'rtacha" : "Murakkab"} (${n} ta tugun)`;
+  } catch { /* ignore */ }
+  form.append("caption", "📥 <b>Shablon fayli (n8n JSON)</b>" + level + "\nn8n'da: Import from file orqali yuklang.");
   form.append("parse_mode", "HTML");
   form.append("reply_parameters", JSON.stringify({ message_id: replyTo, allow_sending_without_reply: true }));
   const r = await fetch(TG(token, "sendDocument"), { method: "POST", body: form });
@@ -196,16 +215,26 @@ Deno.serve(async (req: Request) => {
         }
       }
 
-      const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          chat_id: CHANNEL_ID,
-          text: post.body,
-          parse_mode: "HTML",
-          link_preview_options: { is_disabled: post.kind !== "video" },
-        }),
-      });
+      let r: Response;
+      if (post.kind === "poll") {
+        const pj = JSON.parse(post.body);
+        r = await fetch(TG(token, "sendPoll"), {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ chat_id: CHANNEL_ID, question: pj.q, options: pj.o, is_anonymous: true }),
+        });
+      } else {
+        r = await fetch(TG(token, "sendMessage"), {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            chat_id: CHANNEL_ID,
+            text: post.body + tagsFor(post),
+            parse_mode: "HTML",
+            link_preview_options: { is_disabled: post.kind !== "video" },
+          }),
+        });
+      }
       const j = await r.json();
       if (j.ok) {
         await sb.from("content_posts").update({
