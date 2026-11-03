@@ -1,0 +1,19 @@
+# Zaxira ishga tushirish: docker compose up -d
+# .env faylga SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, POSTER_CRON_KEY yozing (.env.example ga qarang).
+x-fn: &fn
+  build: .
+  restart: always
+  env_file: .env
+services:
+  bot:      { <<: *fn, environment: { FN: bot },      ports: ["8001:8000"] }
+  poster:   { <<: *fn, environment: { FN: poster } }
+  teaser:   { <<: *fn, environment: { FN: teaser } }
+  qa:       { <<: *fn, environment: { FN: qa },       ports: ["8002:8000"] }
+  watchdog: { <<: *fn, environment: { FN: watchdog } }
+  cron:
+    image: alpine:3.20
+    restart: always
+    env_file: .env
+    volumes: ["./docker/cron.sh:/cron.sh:ro"]
+    command: sh -c "apk add --no-cache curl >/dev/null && sh /cron.sh"
+    depends_on: [poster, teaser, watchdog]
