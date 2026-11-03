@@ -1,0 +1,210 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0A0B12;color:#fff;
+ font-family:'Inter','Noto Color Emoji',sans-serif;-webkit-font-smoothing:antialiased}
+:root{--a:#FFD43B;--bg:#0A0B12;--card:#151826;--mut:#9AA3B8}
+.glow{position:absolute;border-radius:50%;filter:blur(140px);pointer-events:none}
+#bar{position:absolute;left:0;top:0;height:10px;background:var(--a);z-index:9}
+#brand{position:absolute;left:80px;top:150px;font-size:30px;font-weight:700;color:var(--mut);letter-spacing:.5px}
+#brand b{color:#fff}
+#head{position:absolute;left:80px;width:920px;transform-origin:0 0}
+.pill{display:inline-block;padding:14px 30px;border-radius:999px;background:var(--a);color:#0A0B12;
+ font-weight:900;font-size:34px;letter-spacing:1.5px;margin-bottom:34px}
+.hook{font-weight:900;font-size:100px;line-height:1.06;letter-spacing:-2px}
+.hl{color:var(--a)}
+.layer{position:absolute;inset:0}
+.card{position:absolute;left:80px;width:920px;background:var(--card);border:2px solid rgba(255,255,255,.09);
+ border-radius:40px;padding:44px 46px}
+.chead{display:flex;justify-content:space-between;align-items:center;font-size:30px;font-weight:700;color:var(--mut);margin-bottom:26px}
+.chead .tag{color:var(--a);font-weight:900;letter-spacing:1px}
+.ptxt{font-size:46px;line-height:1.4;font-weight:500;color:#E9ECF5;white-space:pre-wrap}
+.ptxt .br{color:var(--a);font-weight:700}
+.cur{display:inline-block;width:5px;height:50px;background:var(--a);vertical-align:-8px;margin-left:3px}
+.copy{margin-top:30px;display:inline-block;padding:18px 34px;border-radius:22px;background:rgba(255,255,255,.08);
+ font-size:32px;font-weight:800}
+.copy.done{background:var(--a);color:#0A0B12}
+.res{position:absolute;left:80px;width:920px}
+.res h3{font-size:62px;font-weight:900;margin-bottom:36px}
+.ri{display:flex;align-items:center;gap:26px;font-size:54px;font-weight:800;margin-bottom:30px;
+ background:var(--card);border-radius:30px;padding:30px 34px;border:2px solid rgba(255,255,255,.07)}
+.ri .ck{flex:none;width:64px;height:64px;border-radius:50%;background:var(--a);color:#0A0B12;display:flex;
+ align-items:center;justify-content:center;font-size:40px;font-weight:900}
+#tag{position:absolute;left:0;right:0;top:1488px;text-align:center}
+#tag span{display:inline-block;padding:14px 30px;border-radius:999px;background:rgba(255,255,255,.08);
+ font-size:32px;font-weight:800;color:#fff}
+#tag span b{color:var(--a)}
+/* feed */
+.feed{position:absolute;left:80px;width:920px;top:600px;height:820px;overflow:hidden;
+ -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 60px,#000 calc(100% - 90px),transparent 100%)}
+.fi{position:absolute;left:0;width:920px;height:162px;background:var(--card);border-radius:30px;
+ border:2px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:26px;padding:0 30px}
+.badge{flex:none;padding:12px 20px;border-radius:14px;font-size:29px;font-weight:900;color:#0A0B12;letter-spacing:.5px}
+.fi .tt{font-size:41px;font-weight:700;line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.counter{position:absolute;left:80px;width:920px;top:520px;font-size:44px;font-weight:800;color:var(--mut)}
+.counter b{color:var(--a)}
+/* steps */
+.step{position:absolute;left:80px;width:920px;display:flex;align-items:center;gap:30px;background:var(--card);
+ border-radius:34px;padding:34px 36px;border:2px solid rgba(255,255,255,.07)}
+.step .n{flex:none;width:100px;height:100px;border-radius:50%;background:var(--a);color:#0A0B12;font-size:50px;font-weight:900;
+ display:flex;align-items:center;justify-content:center}
+.step .st{font-size:54px;font-weight:800;line-height:1.15}
+.step .st small{display:block;font-size:37px;font-weight:600;color:var(--mut);margin-top:8px}
+.calc{position:absolute;left:80px;width:920px}
+.cr{display:flex;justify-content:space-between;align-items:center;font-size:60px;font-weight:800;padding:26px 0;
+ border-bottom:2px solid rgba(255,255,255,.08)}
+.cr .v{color:var(--a)}
+.note{position:absolute;left:80px;width:920px;font-size:36px;font-weight:700;color:#FFB4A8;line-height:1.35}
+.rule{font-size:46px;font-weight:700;line-height:1.3;margin-bottom:26px;display:flex;gap:20px}
+/* bad/good */
+.bg{position:absolute;left:80px;width:920px;border-radius:36px;padding:38px 42px;background:var(--card)}
+.bg .lb{font-size:38px;font-weight:900;letter-spacing:1px;margin-bottom:18px}
+.bg .q{font-size:54px;font-weight:600;line-height:1.38}
+.bg .r{margin-top:26px;font-size:40px;font-weight:700;color:var(--mut)}
+.bad{border:3px solid #FF5A6E}
+.bad .lb{color:#FF5A6E}
+.good{border:3px solid #3DDC84}
+.good .lb{color:#3DDC84}
+.good .r{color:#3DDC84}
+/* end */
+#end{position:absolute;left:80px;width:920px;top:0}
+#end .e1{font-size:84px;font-weight:900;line-height:1.08;letter-spacing:-1.5px;margin-bottom:46px}
+.chips{display:flex;flex-wrap:wrap;gap:20px;margin-bottom:60px}
+.chip{padding:20px 30px;border-radius:22px;background:var(--card);border:2px solid rgba(255,255,255,.09);font-size:42px;font-weight:800}
+.cta{display:block;text-align:center;padding:40px 20px;border-radius:34px;background:var(--a);color:#0A0B12;
+ font-size:60px;font-weight:900;letter-spacing:-.5px}
+.cta small{display:block;font-size:32px;font-weight:800;opacity:.75;margin-bottom:6px;letter-spacing:1px}
+.enote{margin-top:36px;text-align:center;font-size:40px;font-weight:700;color:var(--mut)}
+</style></head><body>
+<div class="glow" id="g1"></div><div class="glow" id="g2"></div>
+<div id="bar"></div>
+<div id="brand"><b>AI PromptMaster</b> · Telegram</div>
+<div id="head"></div>
+<div class="layer" id="content"></div>
+<div id="tag"><span>Telegram: <b>@A1Prompt_bot</b></span></div>
+<div id="end"></div>
+<script>
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const eo=x=>{x=cl(x);return 1-Math.pow(1-x,3)};
+const eio=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const back=x=>{x=cl(x);const c1=1.6,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const nb=s=>s.replace(/ 👇/g,'\u00a0👇').replace(/(\d) (\d)/g,'$1\u00a0$2').replace(/(\d) so'm/g,"$1\u00a0so'm");
+const hl=s=>nb(s).replace(/<hl>/g,'<span class="hl">').replace(/<\/hl>/g,'</span>');
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function show(el,t,t0,d=.35,dy=50){const p=eo((t-t0)/d);el.style.opacity=p;el.style.transform=`translateY(${(1-p)*dy}px)`;return p}
+function mk(h,parent){const d=document.createElement('div');d.innerHTML=h.trim();const e=d.firstElementChild;(parent||document.getElementById('content')).appendChild(e);return e}
+let C,T,H,E,R={};
+function hilite(s){ // [..] qismlarni ajratish
+  return esc(s).replace(/\[([^\]]*)\]?/g,(m)=>'<span class="br">'+m+'</span>');
+}
+function init(cfg){
+  C=cfg;T=cfg.T;H=cfg.H;E=cfg.E;
+  document.documentElement.style.setProperty('--a',cfg.accent);
+  const g1=document.getElementById('g1'),g2=document.getElementById('g2');
+  Object.assign(g1.style,{width:'900px',height:'900px',background:cfg.accent,opacity:.22});
+  Object.assign(g2.style,{width:'800px',height:'800px',background:cfg.accent2||'#5B6CFF',opacity:.20});
+  const head=document.getElementById('head');
+  head.innerHTML=`<div class="pill">${cfg.pill}</div><div class="hook">${hl(cfg.hook)}</div>`;
+  R.headH=head.offsetHeight;
+  R.y0=Math.round(820-R.headH/2); R.y1=230; R.s1=cfg.s1||0.6;
+  const f=cfg.fmt;
+  if(f==='A')initA();else if(f==='B')initB();else if(f==='C')initC();else initD();
+  const end=document.getElementById('end');
+  end.innerHTML=`<div class="e1">${hl(cfg.end1)}</div><div class="chips">${cfg.chips.map(c=>`<div class="chip">${c}</div>`).join('')}</div>
+   <div class="cta"><small>TELEGRAM'DA KIRING</small>@A1Prompt_bot</div><div class="enote">${nb(cfg.enote)}</div>`;
+  R.endH=end.offsetHeight; end.style.top=Math.round(820-R.endH/2)+'px';
+  R.endEls=[...end.children];
+}
+function initA(){
+  R.card=mk(`<div class="card" style="top:${R.y1+Math.round(R.headH*R.s1)+50}px"><div class="chead"><span class="tag">💬 PROMPT</span><span>ChatGPT · Claude · Gemini</span></div>
+    <div class="ptxt"></div><div class="copy">📋 Nusxa olish</div></div>`);
+  R.ptxt=R.card.querySelector('.ptxt');R.copy=R.card.querySelector('.copy');
+  R.res=mk(`<div class="res" style="top:${R.y1+Math.round(R.headH*R.s1)+70}px"><h3>${hl(C.resTitle||'AI sizga <hl>tayyorlab beradi:</hl>')}</h3>${C.results.map(r=>`<div class="ri"><div class="ck">✓</div><div>${r}</div></div>`).join('')}</div>`);
+  R.ris=[...R.res.querySelectorAll('.ri')];
+}
+const BC={PROMPT:'#FFD43B','n8n FAYL':'#FF9F43',ILOVA:'#3BE0FF',KOD:'#B18CFF',VIDEO:'#FF6B81',SAYT:'#3DDC84',DARS:'#FFFFFF'};
+function initB(){
+  const top=R.y1+Math.round(R.headH*R.s1)+40;
+  R.counter=mk(`<div class="counter" style="top:${top}px">${hl(C.counter)}</div>`);
+  const ch=R.counter.offsetHeight;
+  R.feed=mk(`<div class="feed" style="top:${top+ch+28}px;height:${1440-top-ch-28}px"></div>`);
+  R.fis=C.items.map((it,i)=>{const e=mk(`<div class="fi"><div class="badge" style="background:${BC[it[0]]||'#fff'}">${it[0]}</div><div class="tt">${esc(it[1])}</div></div>`,R.feed);return e});
+}
+function initC(){
+  const top=R.y1+Math.round(R.headH*R.s1)+50;
+  R.steps=C.steps.map((s,i)=>mk(`<div class="step" style="top:${top+i*235}px"><div class="n">${i+1}</div><div class="st">${nb(s[0])}<small>${nb(s[1])}</small></div></div>`));
+  R.calc=mk(`<div class="calc" style="top:${top}px"><div class="res"><h3 style="font-size:56px;font-weight:900;margin-bottom:20px">${hl(C.calcTitle)}</h3></div></div>`);
+  R.calc.innerHTML=`<h3 style="font-size:56px;font-weight:900;margin-bottom:24px">${hl(C.calcTitle)}</h3>`+C.calc.map(r=>`<div class="cr"><span>${r[0]}</span><span class="v">${nb(r[1])}</span></div>`).join('')+
+    `<div style="margin-top:44px">${C.rules.map(r=>`<div class="rule"><span>${r[0]}</span><span>${nb(r[1])}</span></div>`).join('')}</div>`;
+  R.crs=[...R.calc.querySelectorAll('.cr')];R.rules=[...R.calc.querySelectorAll('.rule')];R.ch3=R.calc.querySelector('h3');
+}
+function initD(){
+  const top=R.y1+Math.round(R.headH*R.s1)+50;
+  R.bad=mk(`<div class="bg bad" style="top:${top}px"><div class="lb">❌ ODDIY SAVOL</div><div class="q">“${esc(C.bad)}”</div><div class="r">→ ${C.badRes}</div></div>`);
+  R.badH=R.bad.offsetHeight;
+  R.good=mk(`<div class="bg good" style="top:${top}px"><div class="lb">✅ TAYYOR PROMPT</div><div class="q ptxt" style="font-size:45px"></div><div class="r">→ ${C.goodRes}</div></div>`);
+  R.gq=R.good.querySelector('.q');R.gr=R.good.querySelector('.r');R.topD=top;
+}
+function typed(el,txt,t,t0,t1){
+  const n=Math.round(txt.length*cl((t-t0)/(t1-t0)));
+  const on=(t>t0&&t<t1+0.6)&&(Math.floor(t*2.5)%2===0||t<t1);
+  el.innerHTML=hilite(txt.slice(0,n))+(on?'<span class="cur"></span>':'');
+}
+function render(t){
+  document.getElementById('bar').style.width=(t/T*1080)+'px';
+  const g1=document.getElementById('g1'),g2=document.getElementById('g2');
+  g1.style.left=(-300+180*Math.sin(t*.6))+'px';g1.style.top=(-250+140*Math.cos(t*.5))+'px';
+  g2.style.left=(500+160*Math.cos(t*.45))+'px';g2.style.top=(1250+150*Math.sin(t*.55))+'px';
+  // head
+  const head=document.getElementById('head');
+  const punch=1+0.04*(1-eo(t/0.45));
+  const m=eio((t-H)/0.5);
+  const y=R.y0+(R.y1-R.y0)*m, s=(1+(R.s1-1)*m)*punch;
+  const fadeEnd=1-eo((t-E)/0.35);
+  head.style.transform=`translateY(${y}px) scale(${s})`;head.style.opacity=fadeEnd;
+  const content=document.getElementById('content');content.style.opacity=fadeEnd;
+  const tag=document.getElementById('tag');tag.style.opacity=cl((t-H-0.3)/0.4)*fadeEnd;
+  // end
+  const end=document.getElementById('end');end.style.visibility=t>=E?'visible':'hidden';
+  R.endEls.forEach((e,i)=>show(e,t,E+0.15+i*0.18,.4,60));
+  const cta=end.querySelector('.cta');
+  if(t>E+0.9){const p=1+0.035*Math.sin((t-E-0.9)*6.5);cta.style.transform=`scale(${p})`;}
+  const f=C.fmt;
+  if(f==='A')renderA(t);else if(f==='B')renderB(t);else if(f==='C')renderC(t);else renderD(t);
+}
+function renderA(t){
+  const t0=H+0.35,t1=C.typeEnd,tc=t1+0.5,tr=C.resAt;
+  show(R.card,t,H+0.1,.4,80);
+  typed(R.ptxt,C.prompt,t,t0,t1);
+  const done=t>tc;R.copy.className='copy'+(done?' done':'');R.copy.textContent=done?'✓ Nusxa olindi':'📋 Nusxa olish';
+  const pc=done?1+0.08*(1-eo((t-tc)/0.3)):1;R.copy.style.transform=`scale(${pc})`;
+  if(t>tr){const p=eo((t-tr)/0.35);R.card.style.opacity=1-p;R.card.style.transform=`translateY(${-80*p}px)`;}
+  R.res.style.visibility=t>tr?'visible':'hidden';
+  show(R.res.querySelector('h3'),t,tr+0.15,.35,40);
+  R.ris.forEach((e,i)=>{const p=back((t-tr-0.45-i*0.32)/0.45);e.style.opacity=cl((t-tr-0.45-i*0.32)/0.2);e.style.transform=`translateX(${(1-p)*-120}px)`});
+}
+function renderB(t){
+  show(R.counter,t,H+0.1,.35,30);
+  const t0=H+0.3, sp=C.speed||330; // px/s
+  const sc=Math.max(0,t-t0-0.6)*sp;
+  R.fis.forEach((e,i)=>{const yy=i*184-sc+20;e.style.top=yy+'px';const p=eo((t-t0-i*0.12)/0.35);e.style.opacity=p;e.style.transform=`translateX(${(1-p)*140}px)`});
+}
+function renderC(t){
+  const tc=C.calcAt;
+  R.steps.forEach((e,i)=>{const p=back((t-H-0.25-i*0.55)/0.45);e.style.opacity=cl((t-H-0.25-i*0.55)/0.2);e.style.transform=`translateX(${(1-p)*-140}px)`;
+    if(t>tc){const q=eo((t-tc)/0.3);e.style.opacity=1-q}});
+  R.calc.style.visibility=t>tc?'visible':'hidden';
+  show(R.ch3,t,tc+0.15,.35,40);
+  R.crs.forEach((e,i)=>show(e,t,tc+0.4+i*0.35,.3,30));
+  R.rules.forEach((e,i)=>show(e,t,tc+0.5+R.crs.length*0.35+i*0.4,.3,30));
+}
+function renderD(t){
+  show(R.bad,t,H+0.1,.35,60);
+  const gb=C.goodAt;
+  show(R.good,t,gb,.4,80);
+  typed(R.gq,C.good,t,gb+0.3,C.typeEnd);
+  R.gr.style.opacity=cl((t-C.typeEnd-0.2)/0.3);
+  // yomon karta xiralashadi
+  if(t>gb-0.35){const p=eio((t-gb+0.35)/0.45);R.bad.style.opacity=1-p;R.bad.style.transform=`translateX(${-1100*p}px) rotate(${-6*p}deg)`}
+}
+</script></body></html>
