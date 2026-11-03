@@ -44,6 +44,117 @@ async function alertAdmin(text: string, get: (k: string) => string) {
   }
 }
 
+
+// ---------------------------------------------------------------- FAYL + QO'SHIMCHA
+const TG = (token: string, m: string) => `https://api.telegram.org/bot${token}/${m}`;
+const GH_RAW = "https://raw.githubusercontent.com/enescingoz/awesome-n8n-templates/main/";
+
+// ilova nomi -> [sayt, Google Play paketi (rasmiy)]
+const APPS: Record<string, [string, string?]> = {
+  "gmail": ["https://mail.google.com", "com.google.android.gm"],
+  "google sheets": ["https://sheets.google.com", "com.google.android.apps.docs.editors.sheets"],
+  "google docs": ["https://docs.google.com", "com.google.android.apps.docs.editors.docs"],
+  "google drive": ["https://drive.google.com", "com.google.android.apps.docs"],
+  "google calendar": ["https://calendar.google.com", "com.google.android.calendar"],
+  "telegram": ["https://telegram.org", "org.telegram.messenger"],
+  "whatsapp": ["https://www.whatsapp.com", "com.whatsapp"],
+  "slack": ["https://slack.com", "com.Slack"],
+  "notion": ["https://www.notion.so", "notion.id"],
+  "trello": ["https://trello.com", "com.trello"],
+  "discord": ["https://discord.com", "com.discord"],
+  "airtable": ["https://airtable.com", "com.formagrid.airtable"],
+  "openai": ["https://platform.openai.com/api-keys"],
+  "gemini": ["https://aistudio.google.com/apikey"],
+  "n8n": ["https://n8n.io"],
+};
+
+function safeName(t: string): string {
+  const base = t.replace(/<[^>]+>/g, "").replace(/^[^:]*:\s*/, "").replace(/[^\p{L}\p{N}]+/gu, "_").replace(/^_+|_+$/g, "").slice(0, 60);
+  return (base || "shablon") + ".json";
+}
+
+async function fetchWorkflowJson(sourceKey: string): Promise<string | null> {
+  try {
+    let url = "";
+    if (sourceKey.startsWith("tpl:")) {
+      url = GH_RAW + sourceKey.slice(4).split("/").map(encodeURIComponent).join("/");
+    } else if (sourceKey.startsWith("n8n:")) {
+      url = `https://api.n8n.io/api/templates/workflows/${sourceKey.slice(4)}`;
+    } else return null;
+    const r = await fetch(url, { signal: AbortSignal.timeout(15000), headers: { "user-agent": UA } });
+    if (!r.ok) return null;
+    const txt = await r.text();
+    if (txt.length > 15 * 1024 * 1024) return null;
+    let j: A = JSON.parse(txt);
+    if (sourceKey.startsWith("n8n:")) j = j?.workflow?.workflow ?? j?.workflow ?? j;
+    if (!j || !Array.isArray(j.nodes) || !j.nodes.length) return null;
+    return JSON.stringify(j, null, 2);
+  } catch (e) {
+    console.error("workflow json", String(e));
+    return null;
+  }
+}
+
+async function extrasText(post: A): Promise<string> {
+  const m = String(post.body).match(/Qaysi ilovalar:<\/b>\s*([^\n]+)/);
+  const names = (m?.[1] ?? "").split("+").map((x: string) => x.trim().toLowerCase());
+  const found: [string, [string, string?]][] = [];
+  for (const [k, v] of Object.entries(APPS)) {
+    if (names.some((n: string) => n === k || n.startsWith(k + " ") || n.includes(k))) found.push([k, v]);
+  }
+  const lines: string[] = [];
+  const sites: string[] = [];
+  const play: string[] = [];
+  for (const [k, v] of found) {
+    const label = k.replace(/\b\w/g, (c) => c.toUpperCase());
+    sites.push(`• ${label}: ${v[0]}`);
+    if (v[1]) play.push(`https://play.google.com/store/apps/details?id=${v[1]}`);
+  }
+  const okPlay: string[] = [];
+  const checks = await Promise.all(play.map(urlOk));
+  play.forEach((u, i) => { if (checks[i]) okPlay.push(u); });
+  if (sites.length) lines.push("🌐 <b>Kerakli saytlar:</b>\n" + sites.join("\n"));
+  if (okPlay.length) lines.push("📲 <b>Telefon uchun ilovalar (rasmiy Google Play):</b>\n" + okPlay.map((u) => `• ${u}`).join("\n"));
+  lines.push(
+    "⚙️ <b>n8n'ga o'rnatish (5 qadam):</b>\n" +
+      "1. n8n.io'da ro'yxatdan o'ting (bepul sinov) yoki o'z serveringizga o'rnating.\n" +
+      "2. Workflows → <i>Create workflow</i> → yuqoridagi ⋯ → <i>Import from file</i> → yuklangan .json faylni tanlang.\n" +
+      "3. Qizil belgili tugunlarda <i>Credentials</i> tanlab, o'z hisobingizni ulang (yuqoridagi saytlardan kalit/akkaunt oling).\n" +
+      "4. <i>Execute workflow</i> bilan sinab ko'ring.\n" +
+      "5. Ishlasa, o'ng yuqoridagi <i>Active</i> ni yoqing.\n" +
+      "📖 Rasmiy qo'llanma: https://docs.n8n.io/workflows/export-import/",
+  );
+  return lines.join("\n\n");
+}
+
+async function sendFileAndExtras(token: string, post: A, replyTo: number): Promise<boolean> {
+  const json = await fetchWorkflowJson(post.source_key);
+  if (!json) return false;
+  const form = new FormData();
+  form.append("chat_id", String(CHANNEL_ID));
+  form.append("document", new Blob([json], { type: "application/json" }), safeName(post.title ?? post.body.slice(0, 60)));
+  form.append("caption", "📥 <b>Shablon fayli (n8n JSON)</b>\nn8n'da: Import from file orqali yuklang.");
+  form.append("parse_mode", "HTML");
+  form.append("reply_parameters", JSON.stringify({ message_id: replyTo, allow_sending_without_reply: true }));
+  const r = await fetch(TG(token, "sendDocument"), { method: "POST", body: form });
+  const j = await r.json();
+  if (!j.ok) { console.error("sendDocument", JSON.stringify(j)); return false; }
+  const extra = await extrasText(post);
+  await new Promise((res) => setTimeout(res, 1500));
+  const r2 = await fetch(TG(token, "sendMessage"), {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      chat_id: CHANNEL_ID, text: extra, parse_mode: "HTML",
+      link_preview_options: { is_disabled: true },
+      reply_parameters: { message_id: replyTo, allow_sending_without_reply: true },
+    }),
+  });
+  const j2 = await r2.json();
+  if (!j2.ok) console.error("extras", JSON.stringify(j2));
+  return true;
+}
+
 Deno.serve(async (req: Request) => {
   try {
     const { data: cfg } = await sb.from("bot_config").select("key,value");
@@ -52,6 +163,20 @@ Deno.serve(async (req: Request) => {
     const cronKey = get("POSTER_CRON_KEY");
     if (!cronKey || req.headers.get("x-cron-key") !== cronKey) return new Response("forbidden", { status: 403 });
     if (!token) return new Response("no POSTER_TOKEN yet");
+
+    if (req.headers.get("x-mode") === "backfill") {
+      const { data: rows } = await sb.from("content_posts").select("*")
+        .eq("status", "posted").eq("file_sent", false).not("tg_message_id", "is", null)
+        .or("source_key.like.tpl:%,source_key.like.n8n:%").order("id").limit(2);
+      let done = 0;
+      for (const p of rows ?? []) {
+        const ok = await sendFileAndExtras(token, p, p.tg_message_id);
+        await sb.from("content_posts").update({ file_sent: true }).eq("id", p.id);
+        if (ok) done++;
+        await new Promise((res) => setTimeout(res, 4000));
+      }
+      return new Response("backfill " + done + "/" + (rows?.length ?? 0));
+    }
 
     for (let attempt = 0; attempt < 5; attempt++) {
       const { data: post, error } = await sb.rpc("claim_next_post");
@@ -88,6 +213,12 @@ Deno.serve(async (req: Request) => {
           posted_at: new Date().toISOString(),
           tg_message_id: j.result.message_id,
         }).eq("id", post.id);
+        if (/^(tpl|n8n):/.test(post.source_key ?? "")) {
+          await new Promise((res) => setTimeout(res, 2000));
+          const ok = await sendFileAndExtras(token, post, j.result.message_id);
+          await sb.from("content_posts").update({ file_sent: true }).eq("id", post.id);
+          if (!ok) await alertAdmin(`post #${post.id}: JSON fayl yuborilmadi (matn chiqdi).`, get);
+        }
         return new Response("posted " + post.id);
       }
       await sb.from("content_posts").update({ status: "failed", error: String(j.description).slice(0, 500) }).eq("id", post.id);
