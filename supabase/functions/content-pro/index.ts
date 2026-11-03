@@ -15,6 +15,7 @@ const TRACKS: Record<string, { tag: string; name: string }> = {
   video: { tag: "#video_yaratish", name: "Video yaratish" },
   biznes: { tag: "#biznes_boshlash", name: "Biznes boshlash" },
   ai: { tag: "#ai_asoslari", name: "Sun'iy intellekt asoslari" },
+  n8n: { tag: "#n8n_dars", name: "n8n: qadamma-qadam" },
   freelance: { tag: "#freelance", name: "Freelance va daromad yo'li" },
 };
 
@@ -56,6 +57,16 @@ const LESSONS: { t: string; title: string; src?: string }[] = [
   { t: "freelance", title: "Portfolio yig'ish: birinchi 3 ta ish" },
   { t: "freelance", title: "Birinchi buyurtmani topish yo'llari" },
   { t: "freelance", title: "Ish narxini belgilash va kelishuv" },
+  { t: "n8n", title: "n8n nima va qanday boshlanadi", src: "https://docs.n8n.io/try-it-out/" },
+  { t: "n8n", title: "Shablonni (JSON fayl) n8n'ga import qilish", src: "https://docs.n8n.io/workflows/export-import/" },
+  { t: "n8n", title: "Credentials: hisoblarni n8n'ga ulash", src: "https://docs.n8n.io/credentials/" },
+  { t: "n8n", title: "Telegram bot tokenini olish va n8n'ga ulash", src: "https://docs.n8n.io/integrations/builtin/credentials/telegram/" },
+  { t: "n8n", title: "Google hisobini (Gmail, Sheets) n8n'ga ulash", src: "https://docs.n8n.io/integrations/builtin/credentials/google/" },
+  { t: "n8n", title: "OpenAI kalitini n8n'ga ulash", src: "https://docs.n8n.io/integrations/builtin/credentials/openai/" },
+  { t: "n8n", title: "Webhook nima va nima uchun kerak", src: "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/" },
+  { t: "dasturlash", title: "GitHub nima va undan loyihani qanday yuklab olish", src: "https://docs.github.com/en/get-started/start-your-journey/about-github-and-git" },
+  { t: "dasturlash", title: "Zip loyihani kompyuterda ochish va ishga tushirish" },
+  { t: "ai", title: "ChatGPT, Gemini, Claude: promptni qayerga yozish va natijani tekshirish" },
 ];
 
 async function gemini(prompt: string, key: string, temp = 0.4): Promise<A | null> {
@@ -90,7 +101,7 @@ async function getText(url: string, ms = 15000, headers: A = {}): Promise<{ stat
   let text = "", total = 0;
   const dec = new TextDecoder();
   if (reader) {
-    while (total < 600_000) {
+    while (total < 1_500_000) {
       const { done, value } = await reader.read();
       if (done) break;
       total += value.length;
@@ -116,7 +127,8 @@ async function buildLesson(l: { t: string; title: string; src?: string }, idx: n
     try {
       const r = await getText(l.src);
       if (r.status !== 200) return null;
-      material = stripHtml(r.text).slice(0, 7000);
+      const ix = r.text.search(/<(article|main)\b/i);
+      material = stripHtml(ix >= 0 ? r.text.slice(ix) : r.text).slice(0, 7000);
       if (material.length < 800) return null;
     } catch { return null; }
   }

@@ -184,7 +184,7 @@ async function sendRepoZip(token: string, post: A, replyTo: number): Promise<boo
     const form = new FormData();
     form.append("chat_id", String(CHANNEL_ID));
     form.append("document", new Blob([buf], { type: "application/zip" }), full.replace("/", "_") + ".zip");
-    form.append("caption", `📦 <b>${full}</b>: loyiha fayllari (zip)\n⚠️ Litsenziya va README'ni o'qing. Ishlatishdan oldin kodni tekshiring.`);
+    form.append("caption", `📦 <b>${full}</b>: loyiha fayllari (zip)\n\n🧭 <b>Qanday ochiladi:</b>\n1. Zip faylni yuklab, arxivdan chiqaring (kompyuterda: o'ng tugma → Extract).\n2. README.md faylini oching, unda ishga tushirish yozilgan.\n3. Oddiy sayt shabloni bo'lsa, index.html ni brauzerda oching.\n⚠️ Litsenziyani o'qing va ishlatishdan oldin kodni tekshiring.`);
     form.append("parse_mode", "HTML");
     form.append("reply_parameters", JSON.stringify({ message_id: replyTo, allow_sending_without_reply: true }));
     const rr = await fetch(TG(token, "sendDocument"), { method: "POST", body: form });
@@ -209,10 +209,12 @@ Deno.serve(async (req: Request) => {
     if (req.headers.get("x-mode") === "backfill") {
       const { data: rows } = await sb.from("content_posts").select("*")
         .eq("status", "posted").eq("file_sent", false).not("tg_message_id", "is", null)
-        .or("source_key.like.tpl:%,source_key.like.n8n:%").order("id").limit(2);
+        .or("source_key.like.tpl:%,source_key.like.n8n:%,source_key.like.repo:%").order("id").limit(2);
       let done = 0;
       for (const p of rows ?? []) {
-        const ok = await sendFileAndExtras(token, p, p.tg_message_id);
+        const ok = String(p.source_key).startsWith("repo:")
+          ? await sendRepoZip(token, p, p.tg_message_id)
+          : await sendFileAndExtras(token, p, p.tg_message_id);
         await sb.from("content_posts").update({ file_sent: true }).eq("id", p.id);
         if (ok) done++;
         await new Promise((res) => setTimeout(res, 4000));
@@ -268,14 +270,12 @@ Deno.serve(async (req: Request) => {
         if (/^(tpl|n8n):/.test(post.source_key ?? "")) {
           await new Promise((res) => setTimeout(res, 2000));
           const ok = await sendFileAndExtras(token, post, j.result.message_id);
-          await sb.from("content_posts").update({ file_sent: true }).eq("id", post.id);
-          if (!ok) await alertAdmin(`post #${post.id}: JSON fayl yuborilmadi (matn chiqdi).`, get);
+          await sb.from("content_posts").update({ file_sent: ok }).eq("id", post.id);
         }
         if (/^repo:/.test(post.source_key ?? "")) {
           await new Promise((res) => setTimeout(res, 2000));
           const ok = await sendRepoZip(token, post, j.result.message_id);
-          await sb.from("content_posts").update({ file_sent: true }).eq("id", post.id);
-          if (!ok) await alertAdmin(`post #${post.id}: zip fayl yuborilmadi (matn chiqdi).`, get);
+          await sb.from("content_posts").update({ file_sent: ok }).eq("id", post.id);
         }
         return new Response("posted " + post.id);
       }
