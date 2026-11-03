@@ -130,11 +130,24 @@ async function templateCandidates(used: Set<string>): Promise<string[]> {
     .filter((n: A) => n.type === "blob" && n.path.endsWith(".json") && n.path.includes("/") && !n.path.startsWith("."))
     .map((n: A) => n.path as string)
     .filter((p: string) => !used.has("tpl:" + p));
+  const BAD = /stor(y|ies|ytelling)|children|kids|fairy|joke|meme|horoscope|poem|recipe|game|fun\b|music|song|tarot|dream|astrolog|anime|cartoon|girlfriend|boyfriend|dating|weather|bible|quran|pirate/i;
+  const GOOD: [RegExp, number][] = [
+    [/lead|crm|sales|customer|client|order|invoice|payment|booking|appointment|reservation|support|ticket|helpdesk/i, 4],
+    [/email|gmail|reply|follow.?up|newsletter|reminder|notification/i, 3],
+    [/sheet|report|summar|extract|classif|qualif|schedul|calendar|form|survey|whatsapp|telegram|chatbot|assistant|faq/i, 2],
+    [/document|pdf|invoice|receipt|hr|resume|cv|recruit|candidate|inventory|product|shopify|ecommerce|e-commerce/i, 2],
+  ];
+  const score = (p: string) => GOOD.reduce((n, [re, w]) => n + (re.test(p.split("/").pop()!) ? w : 0), 0);
   const rank = (p: string) => {
     const i = CAT_PRIORITY.indexOf(p.split("/")[0]);
     return i === -1 ? 999 : i;
   };
-  return paths.map((p, i) => ({ p, i })).sort((a, b) => rank(a.p) - rank(b.p) || a.i - b.i).map((x) => x.p);
+  return paths
+    .filter((p) => !BAD.test(p.split("/").pop()!))
+    .map((p, i) => ({ p, i, sc: score(p) }))
+    .filter((x) => x.sc > 0)
+    .sort((a, b) => b.sc - a.sc || rank(a.p) - rank(b.p) || a.i - b.i)
+    .map((x) => x.p);
 }
 
 async function buildTemplate(path: string, key: string): Promise<{ title: string; body: string; urls: string[] } | null> {
@@ -161,7 +174,7 @@ async function buildTemplate(path: string, key: string): Promise<{ title: string
       continue;
     }
     if (!SKIP_TYPES.has(t)) {
-      const label = TYPE_NAMES[t] ?? words(t.replace(/Trigger$/, ""));
+      const label = TYPE_NAMES[t];
       if (label && !apps.includes(label)) apps.push(label);
     }
     for (const ck of Object.keys(n.credentials ?? {})) {
@@ -180,13 +193,14 @@ Muallifning izohlari (bo'lishi mumkin): ${clip(notes.join(" | "), 1800) || "yo'q
 
 Javobni FAQAT JSON qilib ber (lotin yozuvidagi oddiy o'zbek tilida):
 {"sarlavha": "qisqa o'zbekcha sarlavha, 70 belgigacha", "nima_qiladi": "1-2 gap: qaysi ishni avtomatlashtiradi", "biznes": "qaysi turdagi bizneslarga mos, 1-2 gap", "qadamlar": ["shablonga xos sozlash qadami", "..."]}
-Qoidalar: "qadamlar" 2-4 ta bo'lsin va faqat shablonni sozlashga oid bo'lsin (hisobni ulash, o'z ma'lumotini kiritish, sinash). Narx yoki va'da yozma. Sonlar va xususiyatlarni o'zingdan qo'shma. Texnik atamalarni (workflow, webhook, API) o'zgartirma.`;
+Qoidalar: "qadamlar" 2-3 ta bo'lsin: faqat shablonga xos sozlash (qaysi jadval/papka/chat ID/matn o'zgartiriladi, qanday sinab ko'riladi). Har bir qadam bitta qisqa gap (150 belgigacha) bo'lsin. Import qilish va hisob ulashni YOZMA, ular allaqachon bor. Narx yoki va'da yozma. Sonlar va xususiyatlarni o'zingdan qo'shma. Texnik atamalarni (workflow, webhook, API) o'zgartirma.`;
   const g = await gemini(prompt, key);
   if (!g || !g.sarlavha || !g.nima_qiladi || !g.biznes) return null;
-  const steps: string[] = (Array.isArray(g.qadamlar) ? g.qadamlar : []).map((s: A) => clip(s, 160)).filter(Boolean).slice(0, 4);
+  const steps: string[] = (Array.isArray(g.qadamlar) ? g.qadamlar : []).map((s: A) => clip(s, 260)).filter((s: string) => s && !/import|credential|(kaliti|token).*ulang/i.test(s)).slice(0, 3);
 
   const sites = ["n8n.io", ...shownApps.map((a) => SITE_OF[a]).filter(Boolean)].filter((v, i, a) => a.indexOf(v) === i);
-  const lang = name.match(/\((Italian|Spanish|German|French|Portuguese|Russian|Turkish|Arabic|Japanese|Chinese|Korean|Dutch|Polish)\)/i);
+  const lang = name.match(/\((Italian|Spanish|German|French|Portuguese|Russian|Turkish|Arabic|Hebrew|Hindi|Indonesian|Vietnamese|Thai|Persian|Japanese|Chinese|Korean|Dutch|Polish)\)/i) ||
+    name.match(/\b(Hebrew|Arabic|Italian|Spanish|German|French|Portuguese|Russian|Turkish)\b/i);
   const cost = "n8n'ni o'z serveringizga o'rnatsangiz bepul variant bor." +
     (creds.some((c) => /OpenAI/i.test(c)) ? " OpenAI API pullik (to'lov kartasi kerak)." : "");
 
