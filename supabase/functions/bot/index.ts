@@ -9,9 +9,14 @@ const CHANNEL_ID = Number(Deno.env.get("CHANNEL_ID") ?? "-1004330179807");
 const CARD_NUMBER = (Deno.env.get("CARD_NUMBER") ?? "5614681804902595").replace(/\D/g, "");
 const CARD_OWNER = Deno.env.get("CARD_OWNER") ?? "Akbarov Shovkatjon";
 const PRICE = Number(Deno.env.get("PRICE") ?? "100000");
-const REF_BONUS = Number(Deno.env.get("REF_BONUS") ?? "10000");
+const REF_BONUS_BASE = Number(Deno.env.get("REF_BONUS") ?? "10000");
+const REF_BONUS_PROMO = 20000;
+const PROMO_END = Date.parse("2026-12-04T23:59:59+05:00"); // aksiya: shu vaqtgacha 20 000 so'm
+const promoOn = () => Date.now() < PROMO_END;
+const refBonus = () => (promoOn() ? REF_BONUS_PROMO : REF_BONUS_BASE);
 const MIN_WITHDRAW = Number(Deno.env.get("MIN_WITHDRAW") ?? "50000");
-const WITHDRAW_DAYS = Number(Deno.env.get("WITHDRAW_DAYS") ?? "15");
+const WAIT_DAYS = Number(Deno.env.get("WITHDRAW_DAYS") ?? "15"); // botga kirgandan keyin yechish uchun kutish
+const unlockDate = (u: A) => new Date(new Date(u.created_at).getTime() + WAIT_DAYS * 86400000);
 const FREE_CHANNEL_URL = "https://t.me/AIPromptMasters";
 const INSTAGRAM_URL = "https://instagram.com/aibiznes.uz";
 
@@ -147,8 +152,9 @@ function welcomeText(): string {
     "Nima uchun kerak: har safar noldan yozish yoki izlash o'rniga tayyor narsani olasiz, vaqt tejaladi.\n" +
     "Kanal materiallarini ko'chirib yoki boshqaga yuborib bo'lmaydi, ular faqat a'zolar uchun.\n\n" +
     "👥 <b>Bonus dasturi:</b> «Referal havolam» tugmasidan shaxsiy havola olasiz. " +
-    `Do'stingiz shu havola orqali to'lov qilsa va to'lovi tasdiqlansa, balansingizga <b>${money(REF_BONUS)}</b> yoziladi. ` +
-    `Balans ${money(MIN_WITHDRAW)} ga yetsa, kartaga yechib olasiz (har ${WITHDRAW_DAYS} kunda 1 marta). ` +
+    `Do'stingiz shu havola orqali to'lov qilsa va to'lovi tasdiqlansa, balansingizga <b>${money(refBonus())}</b> yoziladi` +
+    (promoOn() ? ` (🔥 aksiya: 4-dekabrgacha 20 000 so'm, keyin ${money(REF_BONUS_BASE)}). ` : ". ") +
+    `Botga kirganingizdan ${WAIT_DAYS} kun o'tgach, istalgan vaqtda kartaga yechasiz (kamida ${money(MIN_WITHDRAW)}). ` +
     "Kanalga kirmasangiz ham qatnashsa bo'ladi.\n" +
     "⚠️ Daromad kafolatlanmaydi: u do'stlaringiz qaroriga bog'liq.\n\n" +
     "Quyidagi menyudan tanlang 👇";
@@ -205,7 +211,7 @@ async function receipt(u: A, m: A) {
 
   let caption = `🧾 <b>Yangi chek #${pay.id}</b>\n👤 ${who(u)}\n🆔 <code>${uid}</code>\n💵 Kutilayotgan summa: ${money(PRICE)}`;
   if (u.referrer_id && !u.bonus_given) {
-    caption += `\n👥 Taklif qilgan: ${who(await getUser(u.referrer_id))} (tasdiqlansa +${money(REF_BONUS)})`;
+    caption += `\n👥 Taklif qilgan: ${who(await getUser(u.referrer_id))} (tasdiqlansa +${money(refBonus())})`;
   }
   if (dup) caption += "\n\n⚠️ <b>Diqqat:</b> bu rasm oldin ham yuborilgan!";
 
@@ -241,7 +247,11 @@ async function showBalance(u: A) {
       `👥 Taklif qilganlar: ${inv.count ?? 0} ta\n` +
       `✅ To'lov qilganlar: ${paidRef.count ?? 0} ta\n` +
       `💵 Jami ishlagan: ${money(u.earned)}\n\n` +
-      `Pul yechish: kamida ${money(MIN_WITHDRAW)}, har ${WITHDRAW_DAYS} kunda 1 marta.`,
+      (unlockDate(u).getTime() > Date.now()
+        ? `🔓 Yechish ochiladi: <b>${fmtDate(unlockDate(u))}</b> (botga kirganingizdan ${WAIT_DAYS} kun o'tgach)\n`
+        : "🔓 Yechish ochiq: istalgan vaqtda\n") +
+      `Kamida ${money(MIN_WITHDRAW)}.` +
+      (promoOn() ? `\n\n🔥 Aksiya: 4-dekabrgacha har bir do'st uchun ${money(REF_BONUS_PROMO)}.` : ""),
     { reply_markup: menuKb },
   );
 }
@@ -252,8 +262,10 @@ async function showReferral(u: A) {
   return send(
     u.user_id,
     "👥 <b>Sizning referal havolangiz:</b>\n\n" + link + "\n\n" +
-      `Havola orqali kelgan har bir odam to'lov qilib, to'lovi tasdiqlansa, sizga <b>${money(REF_BONUS)}</b> tushadi. ` +
-      "Kursni sotib olmagan bo'lsangiz ham ishlay olasiz.",
+      `Havola orqali kelgan har bir odam to'lov qilib, to'lovi tasdiqlansa, sizga <b>${money(refBonus())}</b> yoziladi` +
+      (promoOn() ? " (🔥 aksiya 4-dekabrgacha)" : "") + ".\n" +
+      `Yechish: botga kirganingizdan ${WAIT_DAYS} kun o'tgach, istalgan vaqtda, kamida ${money(MIN_WITHDRAW)}.\n` +
+      "Kanalni sotib olmagan bo'lsangiz ham qatnashasiz.\n⚠️ Daromad kafolatlanmaydi: u do'stlaringiz qaroriga bog'liq.",
     { reply_markup: { inline_keyboard: [[{ text: "📤 Do'stlarga ulashish", url: share }]] } },
   );
 }
@@ -264,18 +276,13 @@ async function startWithdraw(u: A) {
   if (await hasPending("withdrawals", uid)) {
     return send(uid, "⏳ Oldingi so'rovingiz ko'rib chiqilmoqda. Iltimos, kuting.");
   }
-  const { data: last } = await sb.from("withdrawals").select("decided_at")
-    .eq("user_id", uid).eq("status", "paid").order("id", { ascending: false }).limit(1);
-  if (last?.length) {
-    const next = new Date(new Date(last[0].decided_at).getTime() + WITHDRAW_DAYS * 86400000);
-    const left = next.getTime() - Date.now();
-    if (left > 0) {
-      return send(
-        uid,
-        `⏳ Pul yechish har ${WITHDRAW_DAYS} kunda 1 marta mumkin.\n` +
-          `Keyingi imkoniyat: ${Math.ceil(left / 86400000)} kundan keyin (${fmtDate(next)}).`,
-      );
-    }
+  const left = unlockDate(u).getTime() - Date.now();
+  if (left > 0) {
+    return send(
+      uid,
+      `⏳ Pul yechish botga kirganingizdan ${WAIT_DAYS} kun o'tgach ochiladi.\n` +
+        `Ochilish sanasi: ${fmtDate(unlockDate(u))} (${Math.ceil(left / 86400000)} kun qoldi). Bonuslaringiz balansda saqlanadi.`,
+    );
   }
   if (u.balance < MIN_WITHDRAW) {
     return send(
@@ -445,12 +452,13 @@ async function handleCallback(q: A) {
       const { data: flagged } = await sb.from("users").update({ bonus_given: true })
         .eq("user_id", uid).eq("bonus_given", false).select().maybeSingle();
       if (flagged) {
-        await sb.rpc("add_balance", { p_user: user.referrer_id, p_amount: REF_BONUS });
+        const bonus = refBonus();
+        await sb.rpc("add_balance", { p_user: user.referrer_id, p_amount: bonus });
         const r = await getUser(user.referrer_id);
-        refNote = `\n👥 ${who(r)} ga +${money(REF_BONUS)} qo'shildi.`;
+        refNote = `\n👥 ${who(r)} ga +${money(bonus)} qo'shildi.`;
         await safeSend(
           user.referrer_id,
-          `🎉 Siz taklif qilgan do'stingiz to'lov qildi!\nBalansingizga <b>+${money(REF_BONUS)}</b> qo'shildi.\n` +
+          `🎉 Siz taklif qilgan do'stingiz to'lov qildi!\nBalansingizga <b>+${money(bonus)}</b> qo'shildi.\n` +
             `Hozirgi balans: <b>${money(r.balance)}</b>`,
         );
       }
