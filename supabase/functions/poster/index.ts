@@ -146,6 +146,7 @@ async function sendFileAndExtras(token: string, post: A, replyTo: number): Promi
   if (!json) return false;
   const form = new FormData();
   form.append("chat_id", String(CHANNEL_ID));
+  form.append("protect_content", "true");
   form.append("document", new Blob([json], { type: "application/json" }), safeName(post.title ?? post.body.slice(0, 60)));
   let level = "";
   try {
@@ -164,7 +165,7 @@ async function sendFileAndExtras(token: string, post: A, replyTo: number): Promi
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
-      chat_id: CHANNEL_ID, text: extra, parse_mode: "HTML",
+      chat_id: CHANNEL_ID, protect_content: true, text: extra, parse_mode: "HTML",
       link_preview_options: { is_disabled: true },
       reply_parameters: { message_id: replyTo, allow_sending_without_reply: true },
     }),
@@ -183,6 +184,7 @@ async function sendRepoZip(token: string, post: A, replyTo: number): Promise<boo
     if (buf.length > 19 * 1024 * 1024 || buf.length < 100) return false;
     const form = new FormData();
     form.append("chat_id", String(CHANNEL_ID));
+  form.append("protect_content", "true");
     form.append("document", new Blob([buf], { type: "application/zip" }), full.replace("/", "_") + ".zip");
     form.append("caption", `📦 <b>${full}</b>: loyiha fayllari (zip)\n\n🧭 <b>Qanday ochiladi:</b>\n1. Zip faylni yuklab, arxivdan chiqaring (kompyuterda: o'ng tugma → Extract).\n2. README.md faylini oching, unda ishga tushirish yozilgan.\n3. Oddiy sayt shabloni bo'lsa, index.html ni brauzerda oching.\n⚠️ Litsenziyani o'qing va ishlatishdan oldin kodni tekshiring.`);
     form.append("parse_mode", "HTML");
@@ -207,7 +209,7 @@ async function sendLessonVideo(token: string, post: A, replyTo: number): Promise
       const r0 = await fetch(TG(token, "sendMessage"), {
         method: "POST", headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          chat_id: CHANNEL_ID, parse_mode: "HTML",
+          chat_id: CHANNEL_ID, protect_content: true, parse_mode: "HTML",
           text: `📺 <b>Mavzu bo'yicha qo'shimcha video:</b> ${t}\n${ref}\n<i>(Boshqa muallif videosi, ko'pincha inglizcha. Darsning o'zi yuqorida.)</i>`,
           reply_parameters: { message_id: replyTo, allow_sending_without_reply: true },
         }),
@@ -223,7 +225,7 @@ async function sendLessonVideo(token: string, post: A, replyTo: number): Promise
     const r = await fetch(TG(token, "sendVideo"), {
       method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        chat_id: CHANNEL_ID, video: url, supports_streaming: true, width: 1080, height: 1920,
+        chat_id: CHANNEL_ID, protect_content: true, video: url, supports_streaming: true, width: 1080, height: 1920,
         caption: `🎬 <b>Dars qisqacha (video):</b> ${title}`, parse_mode: "HTML",
         reply_parameters: { message_id: replyTo, allow_sending_without_reply: true },
       }),
@@ -291,14 +293,14 @@ Deno.serve(async (req: Request) => {
         r = await fetch(TG(token, "sendPoll"), {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ chat_id: CHANNEL_ID, question: pj.q, options: pj.o, is_anonymous: true }),
+          body: JSON.stringify({ chat_id: CHANNEL_ID, protect_content: true, question: pj.q, options: pj.o, is_anonymous: true }),
         });
       } else {
         r = await fetch(TG(token, "sendMessage"), {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
-            chat_id: CHANNEL_ID,
+            chat_id: CHANNEL_ID, protect_content: true,
             text: post.body + tagsFor(post),
             parse_mode: "HTML",
             link_preview_options: { is_disabled: post.kind !== "video" },
