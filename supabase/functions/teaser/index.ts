@@ -12,7 +12,7 @@ function plain(h: string): string {
     .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").trim();
 }
 
-const FOOT = "\n\n🔒 Yopiq kanalda har kuni yangi promptlar, n8n shablon fayllari, darslar va kod loyihalari.\n👉 Kirish: @A1Prompt_bot";
+const FOOT = "\n\n🔒 Yopiq kanalda har kuni yangi tayyor promptlar, n8n shablon fayllari, ilovalar va kod loyihalari.\n👉 Kirish: @A1Prompt_bot";
 
 Deno.serve(async (req: Request) => {
   try {
@@ -26,7 +26,7 @@ Deno.serve(async (req: Request) => {
 
     // har 3-chi post: fayl/yo'riqnoma bor mavzulardan qisqa tizer, qolganlari: to'liq namuna (prompt, maslahat)
     const n = Number(get("TEASER_N") || "0");
-    // 6 ta kunlik postdan 2 tasi dars (guide), 2 tasi prompt/maslahat, 2 tasi shablon/ilova/sayt tizeri
+    // 6 ta kunlik postdan 2 tasi dars (guide, to'liq), 2 tasi prompt/maslahat, 2 tasi shablon/ilova/sayt tizeri
     const slot = n % 3; // 0: dars, 1: prompt/tip, 2: tizer
     const teaserTurn = slot === 2;
     const kinds = slot === 0 ? ["guide"] : slot === 1 ? ["prompt", "tip"] : ["template", "app", "site", "tool"];
@@ -41,8 +41,8 @@ Deno.serve(async (req: Request) => {
 
     let text = plain(String(p.body));
     if (p.kind === "guide") {
-      text = text.length > 1200 ? text.slice(0, 1200).replace(/\s+\S*$/, "") + "…" : text;
-      text += "\n\n(Darsning davomi, video va savol-javob yopiq kanalda.)";
+      // darslar bepul kanalda to'liq chiqadi
+      text = text.length > 3300 ? text.slice(0, 3300).replace(/\s+\S*$/, "") + "…" : text;
     } else if (teaserTurn || ["template", "app", "site", "tool"].includes(p.kind)) {
       text = text.length > 320 ? text.slice(0, 320).replace(/\s+\S*$/, "") + "…" : text;
       text += "\n\n(To'liq matn, fayl va yo'riqnoma yopiq kanalda.)";
