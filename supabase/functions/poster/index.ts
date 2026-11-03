@@ -174,6 +174,29 @@ async function sendFileAndExtras(token: string, post: A, replyTo: number): Promi
   return true;
 }
 
+async function sendRepoZip(token: string, post: A, replyTo: number): Promise<boolean> {
+  try {
+    const full = String(post.source_key).slice(5);
+    const r = await fetch(`https://codeload.github.com/${full}/zip/HEAD`, { redirect: "follow", signal: AbortSignal.timeout(40000), headers: { "user-agent": UA } });
+    if (!r.ok) { await r.body?.cancel(); return false; }
+    const buf = new Uint8Array(await r.arrayBuffer());
+    if (buf.length > 19 * 1024 * 1024 || buf.length < 100) return false;
+    const form = new FormData();
+    form.append("chat_id", String(CHANNEL_ID));
+    form.append("document", new Blob([buf], { type: "application/zip" }), full.replace("/", "_") + ".zip");
+    form.append("caption", `📦 <b>${full}</b>: loyiha fayllari (zip)\n⚠️ Litsenziya va README'ni o'qing. Ishlatishdan oldin kodni tekshiring.`);
+    form.append("parse_mode", "HTML");
+    form.append("reply_parameters", JSON.stringify({ message_id: replyTo, allow_sending_without_reply: true }));
+    const rr = await fetch(TG(token, "sendDocument"), { method: "POST", body: form });
+    const j = await rr.json();
+    if (!j.ok) console.error("sendRepoZip", JSON.stringify(j));
+    return !!j.ok;
+  } catch (e) {
+    console.error("repo zip", String(e));
+    return false;
+  }
+}
+
 Deno.serve(async (req: Request) => {
   try {
     const { data: cfg } = await sb.from("bot_config").select("key,value");
@@ -247,6 +270,12 @@ Deno.serve(async (req: Request) => {
           const ok = await sendFileAndExtras(token, post, j.result.message_id);
           await sb.from("content_posts").update({ file_sent: true }).eq("id", post.id);
           if (!ok) await alertAdmin(`post #${post.id}: JSON fayl yuborilmadi (matn chiqdi).`, get);
+        }
+        if (/^repo:/.test(post.source_key ?? "")) {
+          await new Promise((res) => setTimeout(res, 2000));
+          const ok = await sendRepoZip(token, post, j.result.message_id);
+          await sb.from("content_posts").update({ file_sent: true }).eq("id", post.id);
+          if (!ok) await alertAdmin(`post #${post.id}: zip fayl yuborilmadi (matn chiqdi).`, get);
         }
         return new Response("posted " + post.id);
       }
