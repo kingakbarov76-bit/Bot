@@ -418,6 +418,12 @@ async function handleMessage(m: A) {
   if (text === BTN_REF) { await setState(uid, ""); return showReferral(u); }
   if (text === BTN_WD) { await setState(uid, ""); return startWithdraw(u); }
 
+  if (u.state === "fb_text" && text) {
+    await setState(uid, "");
+    await sb.from("feedback").insert({ user_id: uid, answer: "boshqa", text: text.slice(0, 1000) });
+    await safeSend(ADMIN_ID, `💬 <b>Mijoz fikri</b>\n👤 ${who(u)}\n\n${esc(text.slice(0, 1000))}`);
+    return send(uid, "🙏 Rahmat! Fikringiz adminga yetkazildi.", { reply_markup: menuKb });
+  }
   if (u.state === "wd_card" && text) return withdrawCard(u, text);
   if (u.state === "wd_amount" && text) return withdrawAmount(u, text);
 
@@ -427,6 +433,38 @@ async function handleMessage(m: A) {
   if (text) return send(uid, "Menyudan tanlang 👇", { reply_markup: menuKb });
 }
 
+// ----------------------------------------------------------------- MIJOZ FIKRI
+const FB_LABEL: Record<string, string> = {
+  narx: "Narx qimmat", ishonch: "Hali ishonmayapman", kerakmas: "Hozir kerak emas", tushunmadim: "Tushunmadim", boshqa: "Boshqa sabab",
+};
+
+async function handleFeedback(u: A, code: string) {
+  if (!FB_LABEL[code]) return;
+  const uid = u.user_id;
+  if (code === "boshqa") {
+    await setState(uid, "fb_text");
+    return send(uid, "✍️ Rahmat! Sababini bitta xabar bilan yozib yuboring. Fikringizni admin o'qiydi.", { reply_markup: cancelKb });
+  }
+  await sb.from("feedback").insert({ user_id: uid, answer: code });
+  if (code === "narx") {
+    return send(uid,
+      "🙏 Rahmat! Narx haqidagi fikringizni albatta hisobga olamiz.\n\n" +
+        `Hozircha kanalni sotib olmasdan ham bonus dasturida qatnashishingiz mumkin: do'stingiz to'lasa, sizga <b>${money(refBonus())}</b> yoziladi.`,
+      { reply_markup: { inline_keyboard: [[{ text: "👥 Bonus: havolamni olish", callback_data: "u:ref" }]] } });
+  }
+  if (code === "ishonch") {
+    return send(uid,
+      "🙏 Rahmat, ochiq aytganingiz uchun! Avval bepul kanalda namunalarni ko'ring: u yerda yopiq kanaldagi postlardan namunalar chiqadi. " +
+        `Ishonch hosil qilsangiz, keyin qaror qilasiz.\n🆓 ${FREE_CHANNEL_URL}`);
+  }
+  if (code === "tushunmadim") {
+    return send(uid, welcomeText(), {
+      reply_markup: { inline_keyboard: [[{ text: "💳 To'lov ma'lumotlari", callback_data: "u:pay" }], [{ text: "👥 Bonus: havolamni olish", callback_data: "u:ref" }]] },
+    });
+  }
+  return send(uid, "🙏 Rahmat, tushunarli! Kerak bo'lganda menyu shu yerda turadi.", { reply_markup: menuKb });
+}
+
 // ----------------------------------------------------------------- ADMIN TUGMALARI
 async function handleCallback(q: A) {
   const answer = (text?: string, alert = false) =>
@@ -434,6 +472,7 @@ async function handleCallback(q: A) {
   if (String(q.data ?? "").startsWith("u:")) {
     await answer();
     const u = await upsertUser(q.from, null);
+    if (String(q.data).startsWith("u:fb:")) return handleFeedback(u, String(q.data).slice(5));
     if (q.data === "u:ref") return showReferral(u);
     if (q.data === "u:pay") return showBuy(u);
     if (q.data === "u:info") {
