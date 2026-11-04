@@ -12,11 +12,13 @@ const PRICE = Number(Deno.env.get("PRICE") ?? "100000");
 // Boshlang'ich narx: birinchi LAUNCH_MAX ta to'lov (tasdiqlangan + kutilayotgan) uchun. Sozlamalar bot_config da.
 let CUR_PRICE = PRICE;
 let LAUNCH_LEFT = 0;
+let EXTRA_CARDS: { label: string; number: string }[] = [];
 async function loadPrice() {
   try {
-    const { data } = await sb.from("bot_config").select("key,value").in("key", ["LAUNCH_FROM_ID", "LAUNCH_PRICE", "LAUNCH_MAX"]);
+    const { data } = await sb.from("bot_config").select("key,value").in("key", ["LAUNCH_FROM_ID", "LAUNCH_PRICE", "LAUNCH_MAX", "EXTRA_CARDS"]);
     const c: Record<string, string> = {};
     for (const r of data ?? []) c[r.key] = r.value;
+    try { const x = JSON.parse(c.EXTRA_CARDS ?? "[]"); EXTRA_CARDS = Array.isArray(x) ? x.filter((k: A) => /^\d{16}$/.test(String(k?.number))) : []; } catch (_) { EXTRA_CARDS = []; }
     const from = Number(c.LAUNCH_FROM_ID ?? NaN), lp = Number(c.LAUNCH_PRICE ?? NaN), mx = Number(c.LAUNCH_MAX ?? NaN);
     if (!isFinite(from) || !isFinite(lp) || !isFinite(mx) || mx <= 0) { CUR_PRICE = PRICE; LAUNCH_LEFT = 0; return; }
     const { count } = await sb.from("payments").select("id", { count: "exact", head: true })
@@ -307,7 +309,9 @@ async function showBuy(u: A) {
       "💳 <b>To'lov ma'lumotlari</b>\n" +
       `Narxi: ${priceLine()}. Oylik to'lov yo'q.\n` +
       `Karta: <code>${fmtCard(CARD_NUMBER)}</code>\n` +
-      `Karta egasi: <b>${esc(CARD_OWNER)}</b>\n\n` +
+      EXTRA_CARDS.map((k) => `${esc(k.label || "Karta")}: <code>${fmtCard(k.number)}</code>\n`).join("") +
+      `Karta egasi: <b>${esc(CARD_OWNER)}</b>\n` +
+      (EXTRA_CARDS.length ? "<i>Istalgan bittasiga to'lashingiz mumkin.</i>\n" : "") + "\n" +
       "<b>Qanday ishlaydi:</b>\n" +
       "1) Kartaga to'laysiz\n2) Chek rasmini shu yerga yuborasiz\n3) Admin tekshirib tasdiqlaydi va kanal havolasi shu botga keladi\n" +
       "Tasdiqlash 24 soat ichida bo'ladi, natija shu botga keladi.",
