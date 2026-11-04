@@ -180,6 +180,67 @@ async function logEv(uid: number, ev: string) {
   try { await sb.from("events").insert({ user_id: uid, event: ev }); } catch (_) { /* jurnal xatosi botni to'xtatmasin */ }
 }
 
+// ----------------------------------------------------------------- KANAL FAYLLARI (drop_items)
+// Kanalda "saqlashni cheklash" yoqilgan, shuning uchun fayllar a'zoga bot orqali oddiy fayl bo'lib yuboriladi.
+const GH_RAW = "https://raw.githubusercontent.com/kingakbarov76-bit/bot/main/";
+
+async function isMember(uid: number): Promise<boolean> {
+  if (uid === ADMIN_ID) return true;
+  try {
+    const m = await tg("getChatMember", { chat_id: CHANNEL_ID, user_id: uid });
+    return ["member", "administrator", "creator"].includes(m.status) || (m.status === "restricted" && m.is_member);
+  } catch {
+    return false;
+  }
+}
+
+async function deliverFile(chat: number, it: A): Promise<A> {
+  const caption = `📥 <b>${esc(it.title)}</b>\n🔒 Faqat shaxsiy foydalanish uchun.`;
+  if (it.file_id) {
+    try {
+      return await tg("sendDocument", { chat_id: chat, document: it.file_id, caption, parse_mode: "HTML" });
+    } catch (e) {
+      console.error("file_id eskirgan", String(e));
+    }
+  }
+  tg("sendChatAction", { chat_id: chat, action: "upload_document" }).catch(() => {});
+  const src = String(it.file_src);
+  const url = src.startsWith("gh:") ? GH_RAW + src.slice(3) : src.slice(4);
+  const r = await fetch(url, { redirect: "follow", signal: AbortSignal.timeout(90000), headers: { "user-agent": "A1PromptBot/1.0" } });
+  if (!r.ok) { await r.body?.cancel(); throw new Error(`yuklab bo'lmadi: ${r.status}`); }
+  const buf = new Uint8Array(await r.arrayBuffer());
+  if (buf.length > 49 * 1024 * 1024) throw new Error("fayl 49 MB dan katta");
+  const form = new FormData();
+  form.append("chat_id", String(chat));
+  form.append("document", new Blob([buf]), it.file_name || "fayl");
+  form.append("caption", caption);
+  form.append("parse_mode", "HTML");
+  const j = await (await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, { method: "POST", body: form })).json();
+  if (!j.ok) throw new Error(`sendDocument: ${j.description}`);
+  const fid = j.result.document?.file_id;
+  if (fid) await sb.from("drop_items").update({ file_id: fid }).eq("id", it.id);
+  return j.result;
+}
+
+async function sendDropFile(uid: number, id: number) {
+  await logEv(uid, "file");
+  if (!(await isMember(uid))) {
+    return send(uid,
+      "🔒 Bu fayl faqat <b>yopiq kanal a'zolari</b> uchun.\n\nKanalda har kuni tayyor promptlar, kodlar, saytlar, shablonlar va fayllar chiqadi.",
+      { reply_markup: { inline_keyboard: [[{ text: "🔒 Yopiq kanal haqida", callback_data: "u:info" }], [{ text: "💳 To'lov ma'lumotlari", callback_data: "u:pay" }]] } });
+  }
+  const { data: it } = await sb.from("drop_items").select("id,title,file_src,file_name,file_id").eq("id", id).maybeSingle();
+  if (!it?.file_src) return send(uid, "⚠️ Fayl topilmadi. Admin bilan bog'laning.");
+  try {
+    await deliverFile(uid, it);
+    await sb.rpc("drop_dl", { p_id: id });
+  } catch (e) {
+    console.error("deliver", id, String(e));
+    await safeSend(ADMIN_ID, `⚠️ Fayl #${id} yuborilmadi: <code>${esc(String(e))}</code>`);
+    return send(uid, "⚠️ Faylni yuborishda xatolik bo'ldi. Admin xabardor qilindi, tez orada tuzatiladi.");
+  }
+}
+
 function welcomeText(): string {
   return "👋 <b>Xush kelibsiz!</b>\n\n" +
     `🔒 <b>Yopiq kanal</b> narxi: <b>${money(PRICE)}</b> (bir martalik to'lov).\n` +
@@ -431,6 +492,11 @@ async function handleMessage(m: A) {
   if (text.startsWith("/start")) {
     const arg = text.split(/\s+/)[1];
     if (arg && /^\d+$/.test(arg)) ref = Number(arg);
+    const fm = arg?.match(/^f_(\d{1,9})$/);
+    if (fm) {
+      await upsertUser(m.from, null);
+      return sendDropFile(uid, Number(fm[1]));
+    }
   }
   const u = await upsertUser(m.from, ref);
 
@@ -693,6 +759,22 @@ Deno.serve(async (req: Request) => {
   try {
     await loadToken();
     if (url.pathname.endsWith("/setup")) return await setup();
+    if (url.pathname.endsWith("/prewarm")) {
+      // Faylni oldindan sinash: adminga yuborib file_id ni saqlaydi va xabarni o'chiradi
+      const { data: ck } = await sb.from("bot_config").select("value").eq("key", "POSTER_CRON_KEY").maybeSingle();
+      if (!ck?.value || req.headers.get("x-cron-key") !== ck.value) return new Response("forbidden", { status: 403 });
+      const id = Number(url.searchParams.get("id"));
+      const { data: it } = await sb.from("drop_items").select("id,title,file_src,file_name,file_id").eq("id", id).maybeSingle();
+      if (!it?.file_src) return new Response("no item");
+      try {
+        const msg = await deliverFile(ADMIN_ID, { ...it, file_id: null });
+        await tg("deleteMessage", { chat_id: ADMIN_ID, message_id: msg.message_id }).catch(() => {});
+        return new Response(`ok ${id} ${msg.document?.file_size ?? 0}`);
+      } catch (e) {
+        await sb.from("drop_items").update({ error: String(e).slice(0, 300) }).eq("id", id);
+        return new Response(`fail ${id} ${String(e)}`, { status: 500 });
+      }
+    }
     if (req.method !== "POST") return new Response("ok");
     if (!BOT_TOKEN) return new Response("BOT_TOKEN yo'q", { status: 500 });
     if (req.headers.get("x-telegram-bot-api-secret-token") !== (await webhookSecret())) {
