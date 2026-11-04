@@ -51,11 +51,11 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#0A0B12;color:#f
 .step .st{font-size:54px;font-weight:800;line-height:1.15}
 .step .st small{display:block;font-size:37px;font-weight:600;color:var(--mut);margin-top:8px}
 .calc{position:absolute;left:80px;width:920px}
-.cr{display:flex;justify-content:space-between;align-items:center;font-size:60px;font-weight:800;padding:26px 0;
+.cr{display:flex;justify-content:space-between;align-items:center;font-size:56px;font-weight:800;padding:18px 0;
  border-bottom:2px solid rgba(255,255,255,.08)}
 .cr .v{color:var(--a)}
 .note{position:absolute;left:80px;width:920px;font-size:36px;font-weight:700;color:#FFB4A8;line-height:1.35}
-.rule{font-size:46px;font-weight:700;line-height:1.3;margin-bottom:26px;display:flex;gap:20px}
+.rule{font-size:42px;font-weight:700;line-height:1.25;margin-bottom:18px;display:flex;gap:20px}
 /* bad/good */
 .bg{position:absolute;left:80px;width:920px;border-radius:36px;padding:38px 42px;background:var(--card)}
 .bg .lb{font-size:38px;font-weight:900;letter-spacing:1px;margin-bottom:18px}
@@ -88,7 +88,7 @@ const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
 const eo=x=>{x=cl(x);return 1-Math.pow(1-x,3)};
 const eio=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
 const back=x=>{x=cl(x);const c1=1.6,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
-const nb=s=>s.replace(/ 👇/g,'\u00a0👇').replace(/(\d) (\d)/g,'$1\u00a0$2').replace(/(\d) so'm/g,"$1\u00a0so'm");
+const nb=s=>s.replace(/4-dekabr/g,'4\u2011dekabr').replace(/ 👇/g,'\u00a0👇').replace(/(\d) (\d)/g,'$1\u00a0$2').replace(/(\d) so'm/g,"$1\u00a0so'm");
 const hl=s=>nb(s).replace(/<hl>/g,'<span class="hl">').replace(/<\/hl>/g,'</span>');
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function show(el,t,t0,d=.35,dy=50){const p=eo((t-t0)/d);el.style.opacity=p;el.style.transform=`translateY(${(1-p)*dy}px)`;return p}
