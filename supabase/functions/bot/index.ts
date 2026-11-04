@@ -275,12 +275,23 @@ async function showBuy(u: A) {
   }
   return send(
     uid,
-    "💳 <b>To'lov ma'lumotlari</b>\n\n" +
-      `Narxi: <b>${money(PRICE)}</b> (bir martalik)\n` +
+    "🔒 <b>Yopiq kanalda nima bor (hozirning o'zida 60 ta material):</b>\n" +
+      "• 10 ta tayyor prompt (nusxa olib ishlatasiz)\n" +
+      "• 10 ta kod loyihasi (zip, ishlashi tekshirilgan)\n" +
+      "• 5 ta tayyor sayt kodi, 5 ta dizayn shablon\n" +
+      "• 10 ta fayl: Excel, Word, PDF shablonlar\n" +
+      "• 5 ta n8n avtomatlashtirish shabloni\n" +
+      "• 10 ta ilova/APK (rasmiy manbadan) va foydali havolalar\n" +
+      "Har kuni yangilari qo'shiladi. Promptlar va kodlar tarjima qilinmagan, tushuntirish o'zbekcha.\n\n" +
+      "🔎 <b>Avval ko'ring:</b> bepul kanalda namuna bor, to'lashdan oldin sifatini o'zingiz baholang.\n\n" +
+      "💳 <b>To'lov ma'lumotlari</b>\n" +
+      `Narxi: <b>${money(PRICE)}</b> (bir martalik, oylik to'lov yo'q)\n` +
       `Karta: <code>${fmtCard(CARD_NUMBER)}</code>\n` +
       `Karta egasi: <b>${esc(CARD_OWNER)}</b>\n\n` +
-      "To'lovni qilgach, <b>chek rasmini</b> shu yerga yuboring.\n" +
-      "To'lov 24 soat ichida tekshiriladi.",
+      "<b>Qanday ishlaydi:</b>\n" +
+      "1) Kartaga to'laysiz\n2) Chek rasmini shu yerga yuborasiz\n3) Admin tekshirib tasdiqlaydi va kanal havolasi shu botga keladi\n" +
+      "Tasdiqlash 24 soat ichida bo'ladi, natija shu botga keladi.",
+    { reply_markup: { inline_keyboard: [[{ text: "🆓 Bepul namunani ko'rish", url: FREE_CHANNEL_URL }], [{ text: "👥 Do'st taklif qilib topish", callback_data: "u:ref" }]] } },
   );
 }
 
