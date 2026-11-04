@@ -14,6 +14,12 @@ const REF_BONUS_PROMO = 20000;
 const PROMO_END = Date.parse("2026-12-04T23:59:59+05:00"); // aksiya: shu vaqtgacha 20 000 so'm
 const promoOn = () => Date.now() < PROMO_END;
 const refBonus = () => (promoOn() ? REF_BONUS_PROMO : REF_BONUS_BASE);
+// Aksiya ichida: bir kishi 1000+ xaridor olib kelsa, har biri uchun 40 000 (bazada give_ref_bonus hisoblaydi)
+const TIER_GOAL = 1000;
+const TIER_BONUS = 40000;
+const tierLine = () =>
+  `🏆 Aksiya davomida ${TIER_GOAL} va undan ko'p xaridor olib kelsangiz, <b>har biri uchun ${money(TIER_BONUS)}</b> ` +
+  "(avvalgilari ham qayta hisoblanadi).";
 const MIN_WITHDRAW = Number(Deno.env.get("MIN_WITHDRAW") ?? "50000");
 const WAIT_DAYS = Number(Deno.env.get("WITHDRAW_DAYS") ?? "15"); // botga kirgandan keyin yechish uchun kutish
 const unlockDate = (u: A) => new Date(new Date(u.created_at).getTime() + WAIT_DAYS * 86400000);
@@ -148,7 +154,8 @@ const setState = (uid: number, state: string, data: A = null) =>
 function welcomeShort(): string {
   return "👋 <b>Xush kelibsiz!</b> Bu yerda 2 ta imkoniyat bor:\n\n" +
     `👥 <b>Bonus dasturi:</b> do'stingiz yopiq kanalga obuna bo'lsa, sizga <b>${money(refBonus())}</b>` +
-    (promoOn() ? " (🔥 aksiya 4-dekabrgacha)" : "") + ". Kanalni sotib olish shart emas.\n\n" +
+    (promoOn() ? " (🔥 aksiya 4-dekabrgacha)" : "") + ". Kanalni sotib olish shart emas.\n" +
+    (promoOn() ? tierLine() + "\n" : "") + "\n" +
     "🔒 <b>Yopiq kanal:</b> har kuni tayyor promptlar, n8n fayllari, ilovalar va kod loyihalari.\n\n" +
     "Qaysi biri qiziq? 👇";
 }
@@ -181,7 +188,7 @@ function welcomeText(): string {
     "Kanal materiallarini ko'chirib yoki boshqaga yuborib bo'lmaydi, ular faqat a'zolar uchun.\n\n" +
     "👥 <b>Bonus dasturi:</b> «Referal havolam» tugmasidan shaxsiy havola olasiz. " +
     `Do'stingiz shu havola orqali to'lov qilsa va to'lovi tasdiqlansa, balansingizga <b>${money(refBonus())}</b> yoziladi` +
-    (promoOn() ? ` (🔥 aksiya: 4-dekabrgacha 20 000 so'm, keyin ${money(REF_BONUS_BASE)}). ` : ". ") +
+    (promoOn() ? ` (🔥 aksiya: 4-dekabrgacha 20 000 so'm, keyin ${money(REF_BONUS_BASE)}). ` + tierLine() + " " : ". ") +
     `Botga kirganingizdan ${WAIT_DAYS} kun o'tgach, istalgan vaqtda kartaga yechasiz (kamida ${money(MIN_WITHDRAW)}). ` +
     "Kanalga kirmasangiz ham qatnashsa bo'ladi.\n" +
     "⚠️ Daromad kafolatlanmaydi: u do'stlaringiz qaroriga bog'liq.";
@@ -268,6 +275,14 @@ async function showBalance(u: A) {
   const inv = await sb.from("users").select("user_id", { count: "exact", head: true }).eq("referrer_id", uid);
   const paidRef = await sb.from("users").select("user_id", { count: "exact", head: true })
     .eq("referrer_id", uid).eq("bonus_given", true);
+  let tier = "";
+  if (promoOn()) {
+    const { data: ps } = await sb.rpc("promo_sales", { p_referrer: uid });
+    const n = Number(ps ?? 0);
+    tier = n >= TIER_GOAL
+      ? `\n🏆 Aksiyadagi xaridorlaringiz: <b>${n}</b>. Siz ${TIER_GOAL} ga yetgansiz, har biri uchun ${money(TIER_BONUS)}.`
+      : `\n🏆 Aksiyadagi xaridorlaringiz: <b>${n} / ${TIER_GOAL}</b>\n${TIER_GOAL} ga yetsangiz, hammasi ${money(TIER_BONUS)} dan qayta hisoblanadi.`;
+  }
   return send(
     uid,
     `💰 <b>Balansingiz: ${money(u.balance)}</b>\n\n` +
@@ -278,7 +293,7 @@ async function showBalance(u: A) {
         ? `🔓 Yechish ochiladi: <b>${fmtDate(unlockDate(u))}</b> (botga kirganingizdan ${WAIT_DAYS} kun o'tgach)\n`
         : "🔓 Yechish ochiq: istalgan vaqtda\n") +
       `Kamida ${money(MIN_WITHDRAW)}.` +
-      (promoOn() ? `\n\n🔥 Aksiya: 4-dekabrgacha har bir do'st uchun ${money(REF_BONUS_PROMO)}.` : ""),
+      (promoOn() ? `\n\n🔥 Aksiya: 4-dekabrgacha har bir do'st uchun ${money(REF_BONUS_PROMO)}.` + tier : ""),
     { reply_markup: menuKb },
   );
 }
@@ -291,6 +306,7 @@ async function showReferral(u: A) {
     "👥 <b>Sizning referal havolangiz:</b>\n\n" + link + "\n\n" +
       `Havola orqali kelgan har bir odam to'lov qilib, to'lovi tasdiqlansa, sizga <b>${money(refBonus())}</b> yoziladi` +
       (promoOn() ? " (🔥 aksiya 4-dekabrgacha)" : "") + ".\n" +
+      (promoOn() ? tierLine() + "\n" : "") +
       `Yechish: botga kirganingizdan ${WAIT_DAYS} kun o'tgach, istalgan vaqtda, kamida ${money(MIN_WITHDRAW)}.\n` +
       "Kanalni sotib olmagan bo'lsangiz ham qatnashasiz.\n⚠️ Daromad kafolatlanmaydi: u do'stlaringiz qaroriga bog'liq.\n\n" +
       "💡 Maslahat: do'stlaringizga bepul kanaldagi foydali postlarni ham yuboring. Ular kanal qanday ekanini ko'rib, ishonch bilan qaror qiladi.",
@@ -538,15 +554,28 @@ async function handleCallback(q: A) {
       const { data: flagged } = await sb.from("users").update({ bonus_given: true })
         .eq("user_id", uid).eq("bonus_given", false).select().maybeSingle();
       if (flagged) {
-        const bonus = refBonus();
-        await sb.rpc("add_balance", { p_user: user.referrer_id, p_amount: bonus });
-        const r = await getUser(user.referrer_id);
-        refNote = `\n👥 ${who(r)} ga +${money(bonus)} qo'shildi.`;
-        await safeSend(
-          user.referrer_id,
-          `🎉 Siz taklif qilgan do'stingiz to'lov qildi!\nBalansingizga <b>+${money(bonus)}</b> qo'shildi.\n` +
-            `Hozirgi balans: <b>${money(r.balance)}</b>`,
-        );
+        const { data: rb, error: rbErr } = await sb.rpc("give_ref_bonus", {
+          p_referrer: user.referrer_id, p_buyer: uid, p_base: REF_BONUS_BASE,
+        });
+        if (rbErr) {
+          await note(`⚠️ Referal bonusi yozilmadi (#${id}): <code>${esc(rbErr.message)}</code>`);
+        } else if (rb) {
+          const bonus = Number(rb.amount), topup = Number(rb.topup ?? 0), cnt = Number(rb.count ?? 0);
+          const r = await getUser(user.referrer_id);
+          refNote = `\n👥 ${who(r)} ga +${money(bonus + topup)} qo'shildi.` +
+            (rb.promo ? ` (aksiyadagi xaridorlari: ${cnt})` : "") +
+            (topup > 0 ? `\n🏆 1000-xaridor! Avvalgilari 40 000 ga qayta hisoblandi: +${money(topup)}` : "");
+          let msg = `🎉 Siz taklif qilgan do'stingiz to'lov qildi!\nBalansingizga <b>+${money(bonus)}</b> qo'shildi.\n`;
+          if (topup > 0) {
+            msg += `\n🏆 <b>Tabriklaymiz! Siz 1000-xaridorga yetdingiz.</b>\n` +
+              `Avvalgi xaridorlaringiz ham 40 000 so'mdan qayta hisoblandi: <b>+${money(topup)}</b>\n` +
+              "Endi har bir yangi xaridor uchun 40 000 so'm.\n";
+          } else if (rb.promo && cnt < TIER_GOAL) {
+            msg += `🏆 Aksiyadagi xaridorlaringiz: <b>${cnt} / ${TIER_GOAL}</b>\n`;
+          }
+          msg += `\nHozirgi balans: <b>${money(r.balance)}</b>`;
+          await safeSend(user.referrer_id, msg);
+        }
       }
     }
 
