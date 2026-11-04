@@ -145,6 +145,20 @@ const setState = (uid: number, state: string, data: A = null) =>
   sb.from("users").update({ state, state_data: data }).eq("user_id", uid);
 
 // ----------------------------------------------------------------- MIJOZ QISMI
+function welcomeShort(): string {
+  return "👋 <b>Xush kelibsiz!</b> Bu yerda 2 ta imkoniyat bor:\n\n" +
+    `👥 <b>Bonus dasturi:</b> do'stingiz yopiq kanalga obuna bo'lsa, sizga <b>${money(refBonus())}</b>` +
+    (promoOn() ? " (🔥 aksiya 4-dekabrgacha)" : "") + ". Kanalni sotib olish shart emas.\n\n" +
+    "🔒 <b>Yopiq kanal:</b> har kuni tayyor promptlar, n8n fayllari, ilovalar va kod loyihalari.\n\n" +
+    "Qaysi biri qiziq? 👇";
+}
+const welcomeKb = {
+  inline_keyboard: [
+    [{ text: "👥 Bonus: havolamni olish", callback_data: "u:ref" }],
+    [{ text: "🔒 Yopiq kanal haqida", callback_data: "u:info" }],
+  ],
+};
+
 function welcomeText(): string {
   return "👋 <b>Xush kelibsiz!</b>\n\n" +
     `🔒 <b>Yopiq kanal</b> narxi: <b>${money(PRICE)}</b> (bir martalik to'lov).\n` +
@@ -156,8 +170,7 @@ function welcomeText(): string {
     (promoOn() ? ` (🔥 aksiya: 4-dekabrgacha 20 000 so'm, keyin ${money(REF_BONUS_BASE)}). ` : ". ") +
     `Botga kirganingizdan ${WAIT_DAYS} kun o'tgach, istalgan vaqtda kartaga yechasiz (kamida ${money(MIN_WITHDRAW)}). ` +
     "Kanalga kirmasangiz ham qatnashsa bo'ladi.\n" +
-    "⚠️ Daromad kafolatlanmaydi: u do'stlaringiz qaroriga bog'liq.\n\n" +
-    "Quyidagi menyudan tanlang 👇";
+    "⚠️ Daromad kafolatlanmaydi: u do'stlaringiz qaroriga bog'liq.";
 }
 
 const socialText =
@@ -392,8 +405,8 @@ async function handleMessage(m: A) {
 
   if (text.startsWith("/start")) {
     await setState(uid, "");
-    await send(uid, welcomeText(), { reply_markup: menuKb });
-    return send(uid, socialText, { reply_markup: socialKb });
+    await send(uid, welcomeShort(), { reply_markup: welcomeKb });
+    return send(uid, `🆓 Avval bepul namunalarni ko'ring: ${FREE_CHANNEL_URL}\nMenyu pastda 👇`, { reply_markup: menuKb });
   }
   if (text === "/stats" && uid === ADMIN_ID) return cmdStats(uid);
   if (text === BTN_CANCEL) {
@@ -418,6 +431,18 @@ async function handleMessage(m: A) {
 async function handleCallback(q: A) {
   const answer = (text?: string, alert = false) =>
     tg("answerCallbackQuery", { callback_query_id: q.id, text, show_alert: alert }).catch(() => {});
+  if (String(q.data ?? "").startsWith("u:")) {
+    await answer();
+    const u = await upsertUser(q.from, null);
+    if (q.data === "u:ref") return showReferral(u);
+    if (q.data === "u:pay") return showBuy(u);
+    if (q.data === "u:info") {
+      return send(u.user_id, welcomeText(), {
+        reply_markup: { inline_keyboard: [[{ text: "💳 To'lov ma'lumotlari", callback_data: "u:pay" }], [{ text: "👥 Bonus: havolamni olish", callback_data: "u:ref" }]] },
+      });
+    }
+    return;
+  }
   if (q.from.id !== ADMIN_ID) return answer("Ruxsat yo'q", true);
 
   const [kind, a, b] = String(q.data ?? "").split(":");
