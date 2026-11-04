@@ -1,0 +1,508 @@
+[
+ {
+  "cat": "prompt",
+  "title": "Biznes g'oyani 10 daqiqada tekshirish",
+  "body": "💬 <b>Prompt: Biznes g'oyani 10 daqiqada tekshirish</b>\n\n<b>Nima qiladi:</b> G'oyangizni talab, raqobat, foyda, xarajat bo'yicha baholaydi, 5 ta asosiy xavfni va ularni 7 kunda arzon sinash yo'lini, 14 kunda ishga tushadigan kichik versiyani va oddiy hisob-kitobni beradi. Oxirida aniq xulosa: boshlash, o'zgartirish yoki to'xtatish.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are a pragmatic startup advisor who has evaluated 500+ small businesses in Central Asia.\n\nMy idea: [describe your business idea in 2-3 sentences]\nCity/market: [e.g., Tashkent]\nBudget: [e.g., $2,000]\nMy skills: [e.g., sales, design, no coding]\nTarget monthly income: [e.g., $1,000]\n\nDo the following:\n1. Restate the idea in one sentence: the exact customer and their pain.\n2. Score it 1-10 on demand, competition, profit margin, startup cost and my fit. One line of reasoning per score.\n3. List the 5 biggest risks and how to test each one in under 7 days for under $50.\n4. Design a minimum version I can launch in 14 days: what to sell, the price, where to find the first 10 customers.\n5. Unit economics table: price, cost per unit, margin, customers needed per month to reach my target income.\n6. Verdict: GO / CHANGE / STOP, plus the single most important next step.\n\nBe honest and specific. If information is missing, state your assumptions.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt",
+  "ord": 10
+ },
+ {
+  "cat": "site",
+  "title": "Kafe / restoran sayti: onlayn menyu va savat",
+  "body": "🌐 <b>Tayyor sayt: Kafe / restoran sayti: onlayn menyu va savat</b>\n\nToifali menyu, savat, miqdorni o'zgartirish va buyurtmani bir tugma bilan Telegram yoki WhatsApp'ga yuborish. Manzil, ish vaqti, yetkazib berish bloklari.\n\n✅ Telefon va kompyuterga moslashgan\n✅ Kutubxona va internet kerak emas: oddiy HTML, CSS, JS\n✅ Matn, narx va ranglar bitta joydan o'zgaradi\n✅ Netlify yoki GitHub Pages'ga <b>bepul</b> joylash yo'riqnomasi bilan\n🧪 Barcha tugmalar brauzerda sinab ko'rilgan.\n\n💼 <b>Pul ishlash g'oyasi:</b> shu shablonni mahalladagi kafe, salon yoki do'konga moslab, sayt qilib bering.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#sayt",
+  "photo": "paid/img/sayt-kafe.jpg",
+  "file_src": "gh:paid/zip/sayt-kafe.zip",
+  "file_name": "sayt-kafe.zip",
+  "ord": 20
+ },
+ {
+  "cat": "apk",
+  "title": "Aegis Authenticator",
+  "body": "📲 <b>Ilova (APK): Aegis Authenticator</b>\n\nIkki bosqichli himoya (2FA) kodlari uchun: Instagram, Telegram, Google, birja va bank akkauntlaringizni o'g'irlikdan himoyalaydi. Kodlar shifrlangan, zaxira nusxa olish mumkin.\n\n📦 Versiya: v3.4.3 · Hajmi: 6,9 MB\n🔓 Bepul, ochiq kodli, reklamasiz\n🔗 Rasmiy manba: https://github.com/beemdevelopment/Aegis\n\n<b>O'rnatish:</b>\n1. Pastdagi tugma orqali APK'ni botdan oling.\n2. Faylni bosing → «Noma'lum manbalardan o'rnatishga ruxsat» so'ralsa, shu safar uchun ruxsat bering.\n3. «O'rnatish» ni bosing.\n🛡 Fayl dasturchining rasmiy GitHub relizidan olingan, o'zgartirilmagan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#ilova #apk",
+  "file_src": "url:https://github.com/beemdevelopment/Aegis/releases/download/v3.4.3/aegis-v3.4.3.apk",
+  "file_name": "aegis-v3.4.3.apk",
+  "check_urls": [
+   "https://github.com/beemdevelopment/Aegis"
+  ],
+  "ord": 30
+ },
+ {
+  "cat": "file",
+  "title": "Oylik oilaviy byudjet (Excel)",
+  "body": "📄 <b>Fayl: Oylik oilaviy byudjet (Excel)</b>\n\nDaromad va 11 ta xarajat toifasi: reja va fakt, farq qizil rangda, qoldiq, jamg'arma ulushi va xarajatlar diagrammasi avtomatik hisoblanadi.\n\n💡 Sariq kataklarni to'ldirasiz, qolgani formulalar bilan o'zi chiqadi.\n🧪 Formulalar tekshirilgan, xatosiz hisoblaydi.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#fayl #excel",
+  "photo": "paid/img/file_Oylik_byudjet.jpg",
+  "file_src": "gh:paid/files/Oylik_byudjet.xlsx",
+  "file_name": "Oylik_byudjet.xlsx",
+  "ord": 40
+ },
+ {
+  "cat": "code",
+  "title": "Telegram buyurtma bot (Python, kutubxonasiz)",
+  "body": "💻 <b>Kod: Telegram buyurtma bot (Python, kutubxonasiz)</b>\n\nKafe, do'kon yoki xizmat uchun tayyor bot: menyu → savat → ism, telefon, manzil → buyurtma bazaga yoziladi va sizga keladi.\n\n<b>Ichida:</b>\n✅ Python 3.9+, hech qanday pip o'rnatish kerak emas\n✅ Buyurtmalar SQLite bazada saqlanadi\n✅ Telefon raqami tekshiriladi\n✅ Internetsiz test fayli bor: <code>python test_bot.py</code>\n\n🛠 <b>Til:</b> Python. Kod va izohlar asl (inglizcha) holida, yo'riqnoma (README.md) o'zbekcha.\n▶️ <b>Ishga tushirish:</b> Mahsulotlaringizni <code>bot.py</code> dagi PRODUCTS ro'yxatiga yozing, @BotFather'dan token oling va ishga tushiring. Batafsil README.md'da.\n🧪 Kanalga qo'yishdan oldin sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#kod",
+  "photo": null,
+  "file_src": "gh:paid/zip/telegram-buyurtma-bot.zip",
+  "file_name": "telegram-buyurtma-bot.zip",
+  "ord": 50
+ },
+ {
+  "cat": "link",
+  "title": "Google AI Studio: Gemini'ning eng kuchli modellari bepul",
+  "body": "🌐 <b>Foydali sayt: Google AI Studio: Gemini'ning eng kuchli modellari bepul</b>\n\nGoogle'ning rasmiy sayti. Gemini'ning eng yangi modellari bilan bepul ishlash, uzun PDF va videolarni tahlil qilish, rasm yaratish, hamda o'z dasturingiz uchun bepul API kalit olish mumkin.\n\n🔗 https://aistudio.google.com\n\n<b>Qanday ishlatiladi:</b>\n1. Google akkaunt bilan kiring.\n2. Chapdagi «Chat» bo'limida savol yozing yoki fayl yuklang (PDF, rasm, video).\n3. O'ng tomonda modelni tanlang; kod yozadiganlar uchun «Get API key» tugmasi bor.\n\n💡 n8n, bot yoki sayt uchun bepul AI kerak bo'lsa, API kalitni shu yerdan olasiz.\n#sayt #ai",
+  "check_urls": [
+   "https://aistudio.google.com"
+  ],
+  "ord": 60
+ },
+ {
+  "cat": "design",
+  "title": "Instagram aksiya posti (1080×1080)",
+  "body": "🎨 <b>Dizayn shabloni: Instagram aksiya posti (1080×1080)</b>\n\nChegirma, aksiya va yangi mahsulot e'loni uchun tayyor post. Matn va ranglarni o'zgartirib, bir tugma bilan PNG yuklab olasiz.\n\n✅ Dastur o'rnatish shart emas: <code>index.html</code> ni brauzerda ochasiz\n✅ Chapda maydonlar, o'ngda tayyor dizayn darhol o'zgaradi\n✅ PNG yuklab olish, SVG esa Figma, Canva yoki Inkscape'da erkin tahrirlash uchun\n🧪 PNG va SVG yuklab olish sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#shablon #dizayn",
+  "photo": "paid/img/dizayn-instagram-aksiya.jpg",
+  "file_src": "gh:paid/zip/dizayn-instagram-aksiya.zip",
+  "file_name": "dizayn-instagram-aksiya.zip",
+  "ord": 70
+ },
+ {
+  "cat": "n8n",
+  "slot": true,
+  "ord": 80
+ },
+ {
+  "cat": "prompt",
+  "title": "Reels/TikTok uchun 3 xil ssenariy",
+  "body": "💬 <b>Prompt: Reels/TikTok uchun 3 xil ssenariy</b>\n\n<b>Nima qiladi:</b> Mavzuingiz bo'yicha 3 xil qisqa video ssenariysini yozadi: birinchi 2 soniyadagi «ilmoq», sahna-sahna jadval (nima ko'rinadi, nima aytiladi, ekrandagi yozuv), tomoshabinni ushlab turadigan burilish nuqtasi, chaqiriq, izoh matni va heshteglar.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>Act as a short-form video strategist who writes high-retention Instagram Reels and TikTok scripts.\n\nTopic: [your topic or product]\nAudience: [who watches: age, interests]\nGoal: [followers / sales / DMs]\nLength: [15 / 30 / 60] seconds\n\nWrite 3 different script options. For each one:\n- Hook (first 2 seconds): one spoken line that stops the scroll + the on-screen text.\n- Scene-by-scene table: time | what we see | what is said | on-screen text.\n- One pattern-interrupt moment to keep people watching.\n- A call to action that matches the goal.\n- Caption (max 300 characters) and 5 relevant hashtags.\n\nRules: simple spoken language, no clichés like \"In today's video\", every line must earn its place, nothing that cannot be filmed with a phone.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt",
+  "ord": 90
+ },
+ {
+  "cat": "file",
+  "title": "Mini CRM: mijozlar va sotuvlar (Excel)",
+  "body": "📄 <b>Fayl: Mini CRM: mijozlar va sotuvlar (Excel)</b>\n\nMijozlar bazasi: manba va holat ro'yxatdan tanlanadi, «keyingi qadam» sanasi o'tib ketsa qator qizaradi. Hisobot varag'ida konversiya, o'rtacha chek va manbalar grafigi.\n\n💡 300 tagacha mijoz uchun tayyor. Telefonda Excel yoki Google Sheets'da ham ishlaydi.\n🧪 Formulalar tekshirilgan, xatosiz hisoblaydi.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#fayl #excel",
+  "photo": "paid/img/file_Mini_CRM.jpg",
+  "file_src": "gh:paid/files/Mini_CRM.xlsx",
+  "file_name": "Mini_CRM.xlsx",
+  "ord": 100
+ },
+ {
+  "cat": "apklink",
+  "title": "ChatGPT",
+  "body": "📲 <b>Rasmiy ilova: ChatGPT</b>\n\nOpenAI'ning rasmiy ilovasi. Ovozli suhbat, rasmni tahlil qilish, fayl bilan ishlash va rasm yaratish bor. Bepul versiyasi ham kuchli.\n\n🤖 Android (Google Play, rasmiy): https://play.google.com/store/apps/details?id=com.openai.chatgpt\n🍏 iPhone: App Store'da «ChatGPT» deb qidiring\n🌐 Sayt: https://chatgpt.com\n\n⚠️ AI ilovalarini faqat rasmiy do'kondan o'rnating. Noma'lum saytlardagi «Pro/Mod» APK'lar ko'pincha virus yoki akkaunt o'g'irlaydigan dastur bo'ladi.\n#ilova #ai",
+  "check_urls": [
+   "https://play.google.com/store/apps/details?id=com.openai.chatgpt",
+   "https://chatgpt.com"
+  ],
+  "ord": 110
+ },
+ {
+  "cat": "code",
+  "title": "CSV → chiroyli Excel hisobot (grafik bilan)",
+  "body": "💻 <b>Kod: CSV → chiroyli Excel hisobot (grafik bilan)</b>\n\nSotuv ro'yxatini (CSV) 1 soniyada formulali, grafikli Excel hisobotga aylantiradi: mahsulotlar bo'yicha tushum, oyma-oy dinamika.\n\n<b>Ichida:</b>\n✅ 3 varaq: ma'lumot, mahsulotlar + grafik, oylar\n✅ Namuna CSV fayl bilan\n✅ Kassa, marketpleys yoki Google Sheets eksporti bilan ishlaydi\n\n🛠 <b>Til:</b> Python. Kod va izohlar asl (inglizcha) holida, yo'riqnoma (README.md) o'zbekcha.\n▶️ <b>Ishga tushirish:</b> <code>pip install openpyxl</code>, keyin <code>python report.py sales.csv report.xlsx</code>.\n🧪 Kanalga qo'yishdan oldin sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#kod",
+  "photo": "paid/img/code_excel.jpg",
+  "file_src": "gh:paid/zip/excel-hisobot.zip",
+  "file_name": "excel-hisobot.zip",
+  "ord": 120
+ },
+ {
+  "cat": "site",
+  "title": "O'quv markazi sayti: kurslar va yozilish",
+  "body": "🌐 <b>Tayyor sayt: O'quv markazi sayti: kurslar va yozilish</b>\n\nKurslar kartochkalari (narx, davomiylik, mavzular), «Qanday o'qitamiz» bloki va sinov darsiga yozilish formasi (ma'lumot Telegram'ga).\n\n✅ Telefon va kompyuterga moslashgan\n✅ Kutubxona va internet kerak emas: oddiy HTML, CSS, JS\n✅ Matn, narx va ranglar bitta joydan o'zgaradi\n✅ Netlify yoki GitHub Pages'ga <b>bepul</b> joylash yo'riqnomasi bilan\n🧪 Barcha tugmalar brauzerda sinab ko'rilgan.\n\n💼 <b>Pul ishlash g'oyasi:</b> shu shablonni mahalladagi kafe, salon yoki do'konga moslab, sayt qilib bering.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#sayt",
+  "photo": "paid/img/sayt-oquv-markaz.jpg",
+  "file_src": "gh:paid/zip/sayt-oquv-markaz.zip",
+  "file_name": "sayt-oquv-markaz.zip",
+  "ord": 130
+ },
+ {
+  "cat": "apk",
+  "title": "KeePassDX: parollar menejeri",
+  "body": "📲 <b>Ilova (APK): KeePassDX: parollar menejeri</b>\n\nBarcha parollaringizni bitta shifrlangan faylda saqlaydi. Internetga ulanmaydi, reklama yo'q. Avtomatik to'ldirish va barmoq izi bilan ochish bor.\n\n📦 Versiya: 4.5.8 · Hajmi: 16,8 MB\n🔓 Bepul, ochiq kodli, reklamasiz\n🔗 Rasmiy manba: https://github.com/Kunzisoft/KeePassDX\n\n<b>O'rnatish:</b>\n1. Pastdagi tugma orqali APK'ni botdan oling.\n2. Faylni bosing → «Noma'lum manbalardan o'rnatishga ruxsat» so'ralsa, shu safar uchun ruxsat bering.\n3. «O'rnatish» ni bosing.\n🛡 Fayl dasturchining rasmiy GitHub relizidan olingan, o'zgartirilmagan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#ilova #apk",
+  "file_src": "url:https://github.com/Kunzisoft/KeePassDX/releases/download/4.5.8/KeePassDX-4.5.8-free.apk",
+  "file_name": "KeePassDX-4.5.8.apk",
+  "check_urls": [
+   "https://github.com/Kunzisoft/KeePassDX"
+  ],
+  "ord": 140
+ },
+ {
+  "cat": "prompt",
+  "title": "Ideal mijoz portreti (persona)",
+  "body": "💬 <b>Prompt: Ideal mijoz portreti (persona)</b>\n\n<b>Nima qiladi:</b> Mahsulotingizni kim, nima uchun va qanday holatda sotib olishini aniqlaydi: 3 ta mijoz turi, ularning og'riqlari, e'tirozlari, qayerda vaqt o'tkazishi va har biriga mos reklama gaplari. Reklama sozlash va post yozishdan oldin juda foydali.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are a senior marketing researcher.\n\nProduct/service: [what you sell]\nPrice: [price]\nWhere I sell: [Instagram / Telegram / shop / marketplace]\nWhat I know about my current customers: [anything you know]\n\nCreate 3 distinct customer personas. For each persona give:\n1. Name, age, job, income level, city type.\n2. The moment they start looking for a product like mine (trigger situation).\n3. Top 3 pains and top 3 desired outcomes, in their own words.\n4. Top 3 objections before buying and the best honest answer to each.\n5. Where they spend time online and offline; which content formats they trust.\n6. 3 ad headlines and 1 short ad text written specifically for them.\n\nFinish with: which persona to target first and why, and 3 questions I should ask real customers to verify these personas.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt",
+  "ord": 150
+ },
+ {
+  "cat": "file",
+  "title": "30 kunlik kontent reja (Excel)",
+  "body": "📄 <b>Fayl: 30 kunlik kontent reja (Excel)</b>\n\nBoshlanish sanasini yozasiz, 30 kunning sanasi va hafta kuni o'zi chiqadi. Format, mavzu, maqsad, chaqiriq va holat ustunlari, bajarilish foizi.\n\n💡 Har kuni holatni «Chiqdi» qilib belgilang, rang avtomatik o'zgaradi.\n🧪 Formulalar tekshirilgan, xatosiz hisoblaydi.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#fayl #excel",
+  "photo": "paid/img/file_Kontent_reja_30_kun.jpg",
+  "file_src": "gh:paid/files/Kontent_reja_30_kun.xlsx",
+  "file_name": "Kontent_reja_30_kun.xlsx",
+  "ord": 160
+ },
+ {
+  "cat": "design",
+  "title": "Vizitka (90×50 mm, chop etishga tayyor)",
+  "body": "🎨 <b>Dizayn shabloni: Vizitka (90×50 mm, chop etishga tayyor)</b>\n\nIsm, lavozim, telefon, Telegram, manzil va rangni kiritasiz: chop etish uchun PNG yoki PDF tayyor. Bosmaxonaga to'g'ridan-to'g'ri berasiz.\n\n✅ Dastur o'rnatish shart emas: <code>index.html</code> ni brauzerda ochasiz\n✅ Chapda maydonlar, o'ngda tayyor dizayn darhol o'zgaradi\n✅ PNG yuklab olish, SVG esa Figma, Canva yoki Inkscape'da erkin tahrirlash uchun\n🧪 PNG va SVG yuklab olish sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#shablon #dizayn",
+  "photo": "paid/img/dizayn-vizitka.jpg",
+  "file_src": "gh:paid/zip/dizayn-vizitka.zip",
+  "file_name": "dizayn-vizitka.zip",
+  "ord": 170
+ },
+ {
+  "cat": "link",
+  "title": "NotebookLM: hujjatlaringizdan shaxsiy AI yordamchi",
+  "body": "🌐 <b>Foydali sayt: NotebookLM: hujjatlaringizdan shaxsiy AI yordamchi</b>\n\nGoogle'ning bepul vositasi. PDF, Word, sayt havolasi yoki YouTube videoni yuklaysiz, u faqat shu manbalar asosida javob beradi, xulosa, test savollari va hatto audio-podkast tayyorlaydi.\n\n🔗 https://notebooklm.google.com\n\n<b>Qanday ishlatiladi:</b>\n1. Google akkaunt bilan kiring, «New notebook» ni bosing.\n2. Kitob, ma'ruza, shartnoma yoki video havolasini qo'shing.\n3. Savol bering yoki «Audio Overview» bilan audio xulosa yarating.\n\n💡 O'qish, imtihonga tayyorlanish va katta hujjatlarni tez tushunish uchun eng yaxshi vositalardan biri.\n#sayt #ai",
+  "check_urls": [
+   "https://notebooklm.google.com"
+  ],
+  "ord": 180
+ },
+ {
+  "cat": "code",
+  "title": "Yuzlab rasmni bir buyruqda kichraytirish + logo yozuvi",
+  "body": "💻 <b>Kod: Yuzlab rasmni bir buyruqda kichraytirish + logo yozuvi</b>\n\nMahsulot rasmlarini Instagram yoki sayt uchun bir zumda tayyorlaydi: o'lchamni kichraytiradi, burchagiga brend yozuvini qo'yadi, JPG/PNG/WEBP ga o'giradi.\n\n<b>Ichida:</b>\n✅ Asl rasmlar o'zgarmaydi\n✅ Telefon rasmining burilishini avtomatik to'g'rilaydi\n✅ WEBP: sayt uchun 3 baravar yengil\n\n🛠 <b>Til:</b> Python. Kod va izohlar asl (inglizcha) holida, yo'riqnoma (README.md) o'zbekcha.\n▶️ <b>Ishga tushirish:</b> <code>pip install pillow</code>, keyin <code>python images.py rasmlar natija --width 1080 --watermark \"@dokonim\"</code>\n🧪 Kanalga qo'yishdan oldin sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#kod",
+  "photo": null,
+  "file_src": "gh:paid/zip/rasm-ommaviy.zip",
+  "file_name": "rasm-ommaviy.zip",
+  "ord": 190
+ },
+ {
+  "cat": "n8n",
+  "slot": true,
+  "ord": 200
+ },
+ {
+  "cat": "prompt",
+  "title": "Sotadigan sayt (landing) matni",
+  "body": "💬 <b>Prompt: Sotadigan sayt (landing) matni</b>\n\n<b>Nima qiladi:</b> Mahsulot yoki xizmatingiz uchun bir sahifali saytning to'liq matnini yozadi: sarlavha, muammo, yechim, foydalar, ishonch bloki, savol-javob, chaqiriq tugmalari. 2 xil variant beradi: biri qisqa, biri batafsil.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are a conversion copywriter. Write landing page copy for:\n\nOffer: [product/service]\nCustomer: [who it is for]\nMain result the customer gets: [result]\nPrice and terms: [price, delivery, guarantee if any]\nProof I have: [reviews, numbers, experience; write \"none\" if none]\n\nDeliver two versions:\nA) Short page (for mobile ads)\nB) Long page (for warm traffic)\n\nEach version must include: headline + subheadline, problem section, solution, 5 benefits (outcome-focused, not features), how it works in 3 steps, trust section, FAQ with 6 real objections, and 3 call-to-action button texts.\n\nRules: no fake reviews, no invented numbers, no exaggerated promises. If I gave no proof, suggest what proof I could collect.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt",
+  "ord": 210
+ },
+ {
+  "cat": "site",
+  "title": "Barbershop / salon sayti: onlayn yozilish",
+  "body": "🌐 <b>Tayyor sayt: Barbershop / salon sayti: onlayn yozilish</b>\n\nXizmatlar va narxlar, ishlar galereyasi, kun va vaqtni tanlab yozilish (o'tib ketgan vaqtlar ko'rinmaydi). Qorong'i premium dizayn.\n\n✅ Telefon va kompyuterga moslashgan\n✅ Kutubxona va internet kerak emas: oddiy HTML, CSS, JS\n✅ Matn, narx va ranglar bitta joydan o'zgaradi\n✅ Netlify yoki GitHub Pages'ga <b>bepul</b> joylash yo'riqnomasi bilan\n🧪 Barcha tugmalar brauzerda sinab ko'rilgan.\n\n💼 <b>Pul ishlash g'oyasi:</b> shu shablonni mahalladagi kafe, salon yoki do'konga moslab, sayt qilib bering.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#sayt",
+  "photo": "paid/img/sayt-barbershop.jpg",
+  "file_src": "gh:paid/zip/sayt-barbershop.zip",
+  "file_name": "sayt-barbershop.zip",
+  "ord": 220
+ },
+ {
+  "cat": "apk",
+  "title": "LocalSend: fayllarni internetsiz uzatish",
+  "body": "📲 <b>Ilova (APK): LocalSend: fayllarni internetsiz uzatish</b>\n\nTelefon ↔ kompyuter ↔ telefon o'rtasida rasm, video va fayllarni bir xil Wi-Fi orqali tez uzatadi (AirDrop kabi). Internet trafigi sarflanmaydi, sifat pasaymaydi. Windows, Mac, iPhone versiyalari ham bor.\n\n📦 Versiya: 1.18.2 · Hajmi: 46,6 MB\n🔓 Bepul, ochiq kodli, reklamasiz\n🔗 Rasmiy manba: https://github.com/localsend/localsend\n\n<b>O'rnatish:</b>\n1. Pastdagi tugma orqali APK'ni botdan oling.\n2. Faylni bosing → «Noma'lum manbalardan o'rnatishga ruxsat» so'ralsa, shu safar uchun ruxsat bering.\n3. «O'rnatish» ni bosing.\n🛡 Fayl dasturchining rasmiy GitHub relizidan olingan, o'zgartirilmagan.\n⚠️ Bu versiya zamonaviy (arm64) telefonlar uchun.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#ilova #apk",
+  "file_src": "url:https://github.com/localsend/localsend/releases/download/v1.18.2/LocalSend-1.18.2-android-arm64v8.apk",
+  "file_name": "LocalSend-1.18.2-arm64.apk",
+  "check_urls": [
+   "https://github.com/localsend/localsend"
+  ],
+  "ord": 230
+ },
+ {
+  "cat": "file",
+  "title": "Ombor hisobi: kirim, chiqim, qoldiq (Excel)",
+  "body": "📄 <b>Fayl: Ombor hisobi: kirim, chiqim, qoldiq (Excel)</b>\n\nMahsulot kodi bilan kirim va chiqim yozasiz, qoldiq, ombor qiymati va holat («Yetarli», «Buyurtma bering», «Tugagan») avtomatik chiqadi.\n\n💡 Do'kon, ombor va kichik ishlab chiqarish uchun.\n🧪 Formulalar tekshirilgan, xatosiz hisoblaydi.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#fayl #excel",
+  "photo": "paid/img/file_Ombor_hisobi.jpg",
+  "file_src": "gh:paid/files/Ombor_hisobi.xlsx",
+  "file_name": "Ombor_hisobi.xlsx",
+  "ord": 240
+ },
+ {
+  "cat": "code",
+  "title": "PDF vositalari: birlashtirish, bo'lish, parol qo'yish",
+  "body": "💻 <b>Kod: PDF vositalari: birlashtirish, bo'lish, parol qo'yish</b>\n\nHujjatlarni onlayn saytlarga yuklamasdan (maxfiylik!) o'z kompyuteringizda PDF bilan ishlash: birlashtirish, sahifalarga bo'lish, kerakli sahifalarni ajratish, aylantirish, parol qo'yish.\n\n<b>Ichida:</b>\n✅ 6 ta buyruq, bitta fayl\n✅ AES-256 parol himoyasi\n✅ Sahifa raqamini xato yozsangiz, tushunarli xabar beradi\n\n🛠 <b>Til:</b> Python. Kod va izohlar asl (inglizcha) holida, yo'riqnoma (README.md) o'zbekcha.\n▶️ <b>Ishga tushirish:</b> <code>pip install pypdf cryptography</code>, buyruqlar jadvali README.md'da.\n🧪 Kanalga qo'yishdan oldin sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#kod",
+  "photo": null,
+  "file_src": "gh:paid/zip/pdf-vositalar.zip",
+  "file_name": "pdf-vositalar.zip",
+  "ord": 250
+ },
+ {
+  "cat": "link",
+  "title": "Gamma: taqdimotni 1 daqiqada yaratish",
+  "body": "🌐 <b>Foydali sayt: Gamma: taqdimotni 1 daqiqada yaratish</b>\n\nMavzuni yozasiz, AI tayyor dizaynli taqdimot, hujjat yoki bir sahifali sayt yaratadi. Matn va rasmlarni keyin o'zingiz tahrirlaysiz, PDF yoki PowerPoint qilib yuklab olasiz.\n\n🔗 https://gamma.app\n\n<b>Qanday ishlatiladi:</b>\n1. Ro'yxatdan o'ting (bepul limit bor).\n2. «Create new» → «Generate» → mavzu va slaydlar sonini yozing.\n3. Tayyor bo'lgach, matnni tahrirlang va «Export» orqali PDF/PPTX yuklang.\n\n💡 Mijozga taklif, o'quv taqdimoti yoki biznes reja slaydlari uchun juda tez yechim.\n#sayt #ai",
+  "check_urls": [
+   "https://gamma.app"
+  ],
+  "ord": 260
+ },
+ {
+  "cat": "design",
+  "title": "Sertifikat / diplom (A4)",
+  "body": "🎨 <b>Dizayn shabloni: Sertifikat / diplom (A4)</b>\n\nO'quv markazlari, kurslar va tadbirlar uchun. Ismni almashtirib, har bir o'quvchiga alohida sertifikat chiqarasiz (PNG yoki PDF).\n\n✅ Dastur o'rnatish shart emas: <code>index.html</code> ni brauzerda ochasiz\n✅ Chapda maydonlar, o'ngda tayyor dizayn darhol o'zgaradi\n✅ PNG yuklab olish, SVG esa Figma, Canva yoki Inkscape'da erkin tahrirlash uchun\n🧪 PNG va SVG yuklab olish sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#shablon #dizayn",
+  "photo": "paid/img/dizayn-sertifikat.jpg",
+  "file_src": "gh:paid/zip/dizayn-sertifikat.zip",
+  "file_name": "dizayn-sertifikat.zip",
+  "ord": 270
+ },
+ {
+  "cat": "n8n",
+  "slot": true,
+  "ord": 280
+ },
+ {
+  "cat": "prompt",
+  "title": "Har qanday mavzuni tez o'rganish (shaxsiy ustoz)",
+  "body": "💬 <b>Prompt: Har qanday mavzuni tez o'rganish (shaxsiy ustoz)</b>\n\n<b>Nima qiladi:</b> AI'ni shaxsiy ustozga aylantiradi: darajangizni aniqlaydi, 14 kunlik reja tuzadi, har mavzuni oddiy misol bilan tushuntiradi va savollar bilan tekshiradi. Dasturlash, til, marketing, matematika, istalgan narsa uchun.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>Be my personal tutor for: [topic, e.g., Excel / Python / English grammar / digital marketing]\nMy current level: [beginner / intermediate]\nTime per day: [e.g., 40 minutes]\nMy goal in 14 days: [concrete goal]\n\nProcess:\n1. First ask me 5 short diagnostic questions to check my real level. Wait for my answers.\n2. Then build a 14-day plan: daily topic, 20-minute explanation, 15-minute practice task, 5-minute self-check.\n3. When I say \"start day N\", teach that day: explain simply with an everyday analogy, give one worked example, then give me a practice task and wait for my answer.\n4. Check my answer, point out mistakes kindly, and give one harder follow-up.\n5. Every 3 days give a short mixed quiz on previous days.\n\nNever give the answer to a practice task before I try. Keep explanations short.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt",
+  "ord": 290
+ },
+ {
+  "cat": "file",
+  "title": "Hisob-faktura shabloni (Excel)",
+  "body": "📄 <b>Fayl: Hisob-faktura shabloni (Excel)</b>\n\nMahsulot, soni va narxini yozasiz: summa, jami, QQS va to'lovga summa avtomatik hisoblanadi. A4 chop etishga sozlangan.\n\n💡 Rasmiy elektron hisob-faktura uchun soliq tizimi (didox va h.k.) ishlatiladi; bu tijorat hujjati namunasi.\n🧪 Formulalar tekshirilgan, xatosiz hisoblaydi.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#fayl #excel",
+  "photo": "paid/img/file_Hisob_faktura.jpg",
+  "file_src": "gh:paid/files/Hisob_faktura.xlsx",
+  "file_name": "Hisob_faktura.xlsx",
+  "ord": 300
+ },
+ {
+  "cat": "apklink",
+  "title": "Gemini",
+  "body": "📲 <b>Rasmiy ilova: Gemini</b>\n\nGoogle'ning rasmiy AI yordamchisi. Gmail, Drive, YouTube bilan bog'lanadi, kamera orqali atrofni tushuntiradi.\n\n🤖 Android (Google Play, rasmiy): https://play.google.com/store/apps/details?id=com.google.android.apps.bard\n🍏 iPhone: App Store'da «Gemini» deb qidiring\n🌐 Sayt: https://gemini.google.com\n\n⚠️ AI ilovalarini faqat rasmiy do'kondan o'rnating. Noma'lum saytlardagi «Pro/Mod» APK'lar ko'pincha virus yoki akkaunt o'g'irlaydigan dastur bo'ladi.\n#ilova #ai",
+  "check_urls": [
+   "https://play.google.com/store/apps/details?id=com.google.android.apps.bard",
+   "https://gemini.google.com"
+  ],
+  "ord": 310
+ },
+ {
+  "cat": "code",
+  "title": "Hisob-faktura (invoice) PDF generatori",
+  "body": "💻 <b>Kod: Hisob-faktura (invoice) PDF generatori</b>\n\nJSON fayldagi ma'lumotdan chiroyli PDF hisob-faktura yasaydi: sotuvchi, xaridor, mahsulotlar jadvali, jami, QQS, imzo joyi.\n\n<b>Ichida:</b>\n✅ O'zbekcha harflar to'g'ri chiqadi\n✅ QQS foizi va valyuta sozlanadi\n✅ Mijozlarga yuborishga tayyor PDF\n\n🛠 <b>Til:</b> Python. Kod va izohlar asl (inglizcha) holida, yo'riqnoma (README.md) o'zbekcha.\n▶️ <b>Ishga tushirish:</b> <code>pip install reportlab</code>, <code>invoice.json</code> ni to'ldiring va <code>python invoice.py invoice.json hisob.pdf</code>.\n🧪 Kanalga qo'yishdan oldin sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#kod",
+  "photo": "paid/img/file_Hisob_faktura.jpg",
+  "file_src": "gh:paid/zip/hisob-faktura-pdf.zip",
+  "file_name": "hisob-faktura-pdf.zip",
+  "ord": 320
+ },
+ {
+  "cat": "site",
+  "title": "Shaxsiy portfolio sayti",
+  "body": "🌐 <b>Tayyor sayt: Shaxsiy portfolio sayti</b>\n\nDasturchi, dizayner yoki SMM mutaxassisi uchun: ishlar ro'yxati toifa filtri bilan, ko'nikmalar, tajriba va aloqa bloki.\n\n✅ Telefon va kompyuterga moslashgan\n✅ Kutubxona va internet kerak emas: oddiy HTML, CSS, JS\n✅ Matn, narx va ranglar bitta joydan o'zgaradi\n✅ Netlify yoki GitHub Pages'ga <b>bepul</b> joylash yo'riqnomasi bilan\n🧪 Barcha tugmalar brauzerda sinab ko'rilgan.\n\n💼 <b>Pul ishlash g'oyasi:</b> shu shablonni mahalladagi kafe, salon yoki do'konga moslab, sayt qilib bering.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#sayt",
+  "photo": "paid/img/sayt-portfolio.jpg",
+  "file_src": "gh:paid/zip/sayt-portfolio.zip",
+  "file_name": "sayt-portfolio.zip",
+  "ord": 330
+ },
+ {
+  "cat": "apk",
+  "title": "Fossify Gallery: reklamasiz galereya",
+  "body": "📲 <b>Ilova (APK): Fossify Gallery: reklamasiz galereya</b>\n\nTez va reklamasiz galereya: rasmlarni yashirish, parol bilan qulflash, oddiy tahrirlash, tiklash uchun «savat». Kuchsiz telefonlarda ham tez ishlaydi.\n\n📦 Versiya: 1.14.1 · Hajmi: 38,5 MB\n🔓 Bepul, ochiq kodli, reklamasiz\n🔗 Rasmiy manba: https://github.com/FossifyOrg/Gallery\n\n<b>O'rnatish:</b>\n1. Pastdagi tugma orqali APK'ni botdan oling.\n2. Faylni bosing → «Noma'lum manbalardan o'rnatishga ruxsat» so'ralsa, shu safar uchun ruxsat bering.\n3. «O'rnatish» ni bosing.\n🛡 Fayl dasturchining rasmiy GitHub relizidan olingan, o'zgartirilmagan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#ilova #apk",
+  "file_src": "url:https://github.com/FossifyOrg/Gallery/releases/download/1.14.1/gallery-30-foss-release.apk",
+  "file_name": "Fossify-Gallery-1.14.1.apk",
+  "check_urls": [
+   "https://github.com/FossifyOrg/Gallery"
+  ],
+  "ord": 340
+ },
+ {
+  "cat": "prompt",
+  "title": "Kod xatosini topish va tuzatish",
+  "body": "💬 <b>Prompt: Kod xatosini topish va tuzatish</b>\n\n<b>Nima qiladi:</b> Ishlamayotgan kodingizni tajribali dasturchi kabi ko'rib chiqadi: xato sababini, tuzatilgan kodni, nima uchun shunday ekanini tushuntiradi va kelajakda shu xato qaytarilmasligi uchun maslahat beradi. Python, JavaScript, PHP va boshqa tillar uchun.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are a senior software engineer and patient mentor.\n\nLanguage/framework: [e.g., Python 3.12, aiogram 3 / JavaScript, React]\nWhat the code should do: [expected behavior]\nWhat happens instead: [actual behavior]\nError message (full): [paste error or write \"no error\"]\nCode:\n[paste your code here]\n\nPlease:\n1. Explain the root cause in 2-3 simple sentences.\n2. Give the corrected code (full function or file, not fragments), with comments only where something changed.\n3. Explain why the fix works.\n4. Point out any other bugs, security issues or bad practices you see, ranked by importance.\n5. Suggest one small test I can run to confirm it works.\n\nIf something is unclear, ask me before guessing.\nReply in Uzbek (Latin script), but keep the code and code comments in English.</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt",
+  "ord": 350
+ },
+ {
+  "cat": "file",
+  "title": "Target reklama kalkulyatori (Excel)",
+  "body": "📄 <b>Fayl: Target reklama kalkulyatori (Excel)</b>\n\nByudjet, CPM, CTR, konversiya va o'rtacha chekni kiritasiz: lid narxi, mijoz narxi (CAC), sof foyda, ROMI va zararsizlik nuqtasi chiqadi.\n\n💡 Reklamaga pul tikishdan oldin foydami yoki yo'qmi, 1 daqiqada ko'rasiz.\n🧪 Formulalar tekshirilgan, xatosiz hisoblaydi.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#fayl #excel",
+  "photo": "paid/img/file_Reklama_ROI_kalkulyator.jpg",
+  "file_src": "gh:paid/files/Reklama_ROI_kalkulyator.xlsx",
+  "file_name": "Reklama_ROI_kalkulyator.xlsx",
+  "ord": 360
+ },
+ {
+  "cat": "design",
+  "title": "Narxlar ro'yxati / menyu (A4)",
+  "body": "🎨 <b>Dizayn shabloni: Narxlar ro'yxati / menyu (A4)</b>\n\nSalon, kafe yoki xizmatlar uchun devorga osiladigan narxlar varag'i. 8 ta qator, ranglar va nomi o'zgaradi, A4 chop etiladi.\n\n✅ Dastur o'rnatish shart emas: <code>index.html</code> ni brauzerda ochasiz\n✅ Chapda maydonlar, o'ngda tayyor dizayn darhol o'zgaradi\n✅ PNG yuklab olish, SVG esa Figma, Canva yoki Inkscape'da erkin tahrirlash uchun\n🧪 PNG va SVG yuklab olish sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#shablon #dizayn",
+  "photo": "paid/img/dizayn-narxlar.jpg",
+  "file_src": "gh:paid/zip/dizayn-narxlar.zip",
+  "file_name": "dizayn-narxlar.zip",
+  "ord": 370
+ },
+ {
+  "cat": "link",
+  "title": "Photopea: brauzerdagi bepul «Photoshop»",
+  "body": "🌐 <b>Foydali sayt: Photopea: brauzerdagi bepul «Photoshop»</b>\n\nO'rnatmasdan ishlaydigan professional rasm muharriri. PSD fayllarni ochadi, qatlamlar, maska, filtrlar bor. Kuchsiz kompyuterda ham ishlaydi.\n\n🔗 https://www.photopea.com\n\n<b>Qanday ishlatiladi:</b>\n1. Saytni oching, ro'yxatdan o'tish shart emas.\n2. File → Open orqali rasm yoki PSD shablonni oching.\n3. Tayyor ishni File → Export as → PNG/JPG qilib saqlang.\n\n💡 Instagram post, banner va vizitka shablonlarini tahrirlash uchun qulay.\n#sayt #ai",
+  "check_urls": [
+   "https://www.photopea.com"
+  ],
+  "ord": 380
+ },
+ {
+  "cat": "code",
+  "title": "Saytdagi ariza formasi → to'g'ridan-to'g'ri Telegramingizga",
+  "body": "💻 <b>Kod: Saytdagi ariza formasi → to'g'ridan-to'g'ri Telegramingizga</b>\n\nMijoz saytda ism, telefon, izoh qoldiradi, sizga Telegram'da darhol xabar keladi. Bot token sayt kodida ko'rinmaydi: xabar bepul Cloudflare Worker orqali o'tadi.\n\n<b>Ichida:</b>\n✅ Tayyor chiroyli forma (mobilga mos)\n✅ Spam-botlardan himoya\n✅ Cloudflare Worker kodi + 15 daqiqalik sozlash yo'riqnomasi\n\n🛠 <b>Til:</b> HTML + JavaScript. Kod va izohlar asl (inglizcha) holida, yo'riqnoma (README.md) o'zbekcha.\n▶️ <b>Ishga tushirish:</b> README.md'dagi 6 qadamni bajaring: bot yarating, worker'ni joylang, manzilni formaga yozing.\n🧪 Kanalga qo'yishdan oldin sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#kod",
+  "photo": "paid/img/code_forma.jpg",
+  "file_src": "gh:paid/zip/forma-telegramga.zip",
+  "file_name": "forma-telegramga.zip",
+  "ord": 390
+ },
+ {
+  "cat": "n8n",
+  "slot": true,
+  "ord": 400
+ },
+ {
+  "cat": "prompt",
+  "title": "Excel va Google Sheets formulalari ustasi",
+  "body": "💬 <b>Prompt: Excel va Google Sheets formulalari ustasi</b>\n\n<b>Nima qiladi:</b> Jadval bilan ishlaganda kerakli formulani yozib beradi va qadamma-qadam tushuntiradi: VLOOKUP/XLOOKUP, SUMIFS, sana bilan ishlash, takrorlarni topish, avtomatik hisobotlar. Xato chiqqan formulani ham tuzatadi.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are an Excel and Google Sheets expert.\n\nProgram: [Excel 365 / Excel 2016 / Google Sheets]\nMy table: [describe columns, e.g., A: date, B: product, C: quantity, D: price; data in rows 2-500]\nWhat I want: [e.g., total sales per product per month / find duplicates / auto status if overdue]\n\nGive me:\n1. The exact formula ready to paste (tell me which cell to put it in).\n2. A step-by-step explanation of each part of the formula.\n3. An alternative formula for older Excel versions if needed.\n4. Common mistakes that cause errors (#N/A, #VALUE!) with this formula and how to fix them.\n5. If a pivot table, conditional formatting or a chart would be better, explain how to do it in 5 steps.\n\nUse comma or semicolon separators as appropriate and tell me which one my program likely needs.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt",
+  "ord": 410
+ },
+ {
+  "cat": "site",
+  "title": "Internet do'kon katalogi: savat va buyurtma",
+  "body": "🌐 <b>Tayyor sayt: Internet do'kon katalogi: savat va buyurtma</b>\n\nQidiruv, toifa filtri, narx bo'yicha saralash, chegirma belgisi, savat va buyurtmani Telegram/WhatsApp orqali qabul qilish.\n\n✅ Telefon va kompyuterga moslashgan\n✅ Kutubxona va internet kerak emas: oddiy HTML, CSS, JS\n✅ Matn, narx va ranglar bitta joydan o'zgaradi\n✅ Netlify yoki GitHub Pages'ga <b>bepul</b> joylash yo'riqnomasi bilan\n🧪 Barcha tugmalar brauzerda sinab ko'rilgan.\n\n💼 <b>Pul ishlash g'oyasi:</b> shu shablonni mahalladagi kafe, salon yoki do'konga moslab, sayt qilib bering.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#sayt",
+  "photo": "paid/img/sayt-dokon.jpg",
+  "file_src": "gh:paid/zip/sayt-dokon.zip",
+  "file_name": "sayt-dokon.zip",
+  "ord": 420
+ },
+ {
+  "cat": "apk",
+  "title": "Markor: eslatmalar va ro'yxatlar",
+  "body": "📲 <b>Ilova (APK): Markor: eslatmalar va ro'yxatlar</b>\n\nOddiy matnli eslatmalar, kundalik, vazifalar ro'yxati (todo.txt) va Markdown hujjatlar. Hammasi telefoningizda, reklama va kuzatuv yo'q.\n\n📦 Versiya: 2026.10.0 · Hajmi: 11,9 MB\n🔓 Bepul, ochiq kodli, reklamasiz\n🔗 Rasmiy manba: https://github.com/gsantner/markor\n\n<b>O'rnatish:</b>\n1. Pastdagi tugma orqali APK'ni botdan oling.\n2. Faylni bosing → «Noma'lum manbalardan o'rnatishga ruxsat» so'ralsa, shu safar uchun ruxsat bering.\n3. «O'rnatish» ni bosing.\n🛡 Fayl dasturchining rasmiy GitHub relizidan olingan, o'zgartirilmagan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#ilova #apk",
+  "file_src": "url:https://github.com/gsantner/markor/releases/download/v2026.10.0/net.gsantner.markor-v164-2026.10.0-flavorDefault-release.apk",
+  "file_name": "Markor-2026.10.0.apk",
+  "check_urls": [
+   "https://github.com/gsantner/markor"
+  ],
+  "ord": 430
+ },
+ {
+  "cat": "file",
+  "title": "Tijorat taklifi shabloni (Word)",
+  "body": "📄 <b>Fayl: Tijorat taklifi shabloni (Word)</b>\n\nMijozga yuboriladigan professional taklif: muammo, yechim, natija, narx jadvali, shartlar, «nima uchun biz» va keyingi qadam. Har bo'limda maslahat bor.\n\n💡 [ ] ichini to'ldirasiz va PDF qilib yuborasiz.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#fayl",
+  "photo": "paid/img/file_Tijorat_taklifi_shablon.jpg",
+  "file_src": "gh:paid/files/Tijorat_taklifi_shablon.docx",
+  "file_name": "Tijorat_taklifi_shablon.docx",
+  "ord": 440
+ },
+ {
+  "cat": "code",
+  "title": "Shaxsiy xarajatlar hisobchisi (bitta HTML fayl)",
+  "body": "💻 <b>Kod: Shaxsiy xarajatlar hisobchisi (bitta HTML fayl)</b>\n\nTelefon yoki kompyuterda ishlaydigan ilova: xarajatlarni toifa bilan yozasiz, oy bo'yicha jami, kunlik o'rtacha va toifalar diagrammasini ko'rasiz.\n\n<b>Ichida:</b>\n✅ Internet va ro'yxatdan o'tish kerak emas\n✅ Ma'lumot faqat sizning brauzeringizda\n✅ Excel uchun CSV yuklab olish\n\n🛠 <b>Til:</b> HTML + JavaScript. Kod va izohlar asl (inglizcha) holida, yo'riqnoma (README.md) o'zbekcha.\n▶️ <b>Ishga tushirish:</b> <code>index.html</code> ni brauzerda oching. Telefonda «Bosh ekranga qo'shish» qilsangiz, ilova kabi ishlaydi.\n🧪 Kanalga qo'yishdan oldin sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#kod",
+  "photo": "paid/img/code_xarajat.jpg",
+  "file_src": "gh:paid/zip/xarajat-hisobchi.zip",
+  "file_name": "xarajat-hisobchi.zip",
+  "ord": 450
+ },
+ {
+  "cat": "link",
+  "title": "remove.bg: rasm fonini 5 soniyada olib tashlash",
+  "body": "🌐 <b>Foydali sayt: remove.bg: rasm fonini 5 soniyada olib tashlash</b>\n\nRasmni yuklaysiz, AI fonni avtomatik olib tashlaydi. Mahsulot rasmlari, profil rasmi va reklama dizayni uchun juda qulay.\n\n🔗 https://www.remove.bg\n\n<b>Qanday ishlatiladi:</b>\n1. Saytga rasm yuklang yoki rasm havolasini qo'ying.\n2. Natijani ko'ring, kerak bo'lsa «Edit» orqali yangi fon qo'ying.\n3. Yuklab oling (bepul versiyada o'lcham kichikroq bo'ladi).\n\n💡 Marketpleys uchun oq fonli mahsulot rasmlari tayyorlashda vaqtni juda tejaydi.\n#sayt #ai",
+  "check_urls": [
+   "https://www.remove.bg"
+  ],
+  "ord": 460
+ },
+ {
+  "cat": "design",
+  "title": "Stories e'lon (1080×1920)",
+  "body": "🎨 <b>Dizayn shabloni: Stories e'lon (1080×1920)</b>\n\nInstagram va Telegram stories uchun yorqin gradientli e'lon: yangi kurs, aksiya, tadbir. Matn, tugma va ranglar o'zgaradi.\n\n✅ Dastur o'rnatish shart emas: <code>index.html</code> ni brauzerda ochasiz\n✅ Chapda maydonlar, o'ngda tayyor dizayn darhol o'zgaradi\n✅ PNG yuklab olish, SVG esa Figma, Canva yoki Inkscape'da erkin tahrirlash uchun\n🧪 PNG va SVG yuklab olish sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#shablon #dizayn",
+  "photo": "paid/img/dizayn-stories.jpg",
+  "file_src": "gh:paid/zip/dizayn-stories.zip",
+  "file_name": "dizayn-stories.zip",
+  "ord": 470
+ },
+ {
+  "cat": "n8n",
+  "slot": true,
+  "ord": 480
+ },
+ {
+  "cat": "prompt",
+  "title": "Mijozga birinchi xabar (Telegram/email) ketma-ketligi",
+  "body": "💬 <b>Prompt: Mijozga birinchi xabar (Telegram/email) ketma-ketligi</b>\n\n<b>Nima qiladi:</b> Begona mijozga yoziladigan birinchi xabar va keyingi 3 ta eslatma xabarini yozadi: qisqa, shaxsiy, bosimsiz. Hamkorlik, B2B sotuv, bloger bilan kelishish, ish izlash uchun ishlaydi.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are an expert in B2B outreach and polite, non-pushy sales.\n\nWho I am: [name, what I do]\nWho I am writing to: [role/type of person or company]\nWhat I offer: [offer]\nWhy it is relevant to them: [specific reason]\nChannel: [Telegram / email / Instagram DM]\n\nWrite a 4-message sequence:\n1. First message (max 450 characters): personal opening, one clear value, a low-commitment question.\n2. Follow-up after 2 days: add a useful insight or example, no guilt-tripping.\n3. Follow-up after 5 days: short case or idea specific to them.\n4. Final polite close after 10 days that keeps the door open.\n\nFor each message give 2 subject line or opening line options. No fake familiarity, no exaggerated claims.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt",
+  "ord": 490
+ },
+ {
+  "cat": "file",
+  "title": "Rezyume (CV) shabloni (Word)",
+  "body": "📄 <b>Fayl: Rezyume (CV) shabloni (Word)</b>\n\nZamonaviy, ish beruvchilar o'qiydigan tuzilma: qisqacha ma'lumot, natijali tajriba, ko'nikmalar jadvali, tillar va sertifikatlar.\n\n💡 Har bo'limda qanday yozish maslahati bor. Tayyor bo'lgach PDF qilib saqlang.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#fayl",
+  "photo": "paid/img/file_Rezyume_shablon.jpg",
+  "file_src": "gh:paid/files/Rezyume_shablon.docx",
+  "file_name": "Rezyume_shablon.docx",
+  "ord": 500
+ },
+ {
+  "cat": "apklink",
+  "title": "Claude",
+  "body": "📲 <b>Rasmiy ilova: Claude</b>\n\nAnthropic'ning rasmiy ilovasi. Uzun matn yozish, tahrirlash, hujjat va kod bilan ishlashda kuchli.\n\n🤖 Android (Google Play, rasmiy): https://play.google.com/store/apps/details?id=com.anthropic.claude\n🍏 iPhone: App Store'da «Claude» deb qidiring\n🌐 Sayt: https://claude.ai\n\n⚠️ AI ilovalarini faqat rasmiy do'kondan o'rnating. Noma'lum saytlardagi «Pro/Mod» APK'lar ko'pincha virus yoki akkaunt o'g'irlaydigan dastur bo'ladi.\n#ilova #ai",
+  "check_urls": [
+   "https://play.google.com/store/apps/details?id=com.anthropic.claude",
+   "https://claude.ai"
+  ],
+  "ord": 510
+ },
+ {
+  "cat": "code",
+  "title": "«Yuklab olinganlar» papkasini avtomatik tartiblash",
+  "body": "💻 <b>Kod: «Yuklab olinganlar» papkasini avtomatik tartiblash</b>\n\nYuzlab aralash faylni turiga qarab papkalarga ajratadi: Rasmlar, Videolar, Hujjatlar, Jadvallar, Arxivlar, Dasturlar va boshqalar.\n\n<b>Ichida:</b>\n✅ Avval sinov rejimi (--dry-run): hech narsa ko'chirilmaydi\n✅ Bir xil nomli faylni ustidan yozmaydi\n✅ --undo bilan hammasi joyiga qaytadi\n\n🛠 <b>Til:</b> Python. Kod va izohlar asl (inglizcha) holida, yo'riqnoma (README.md) o'zbekcha.\n▶️ <b>Ishga tushirish:</b> <code>python organize.py \"C:/Users/Ism/Downloads\" --dry-run</code>, keyin shu buyruqni --dry-run'siz.\n🧪 Kanalga qo'yishdan oldin sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#kod",
+  "photo": null,
+  "file_src": "gh:paid/zip/fayl-saralash.zip",
+  "file_name": "fayl-saralash.zip",
+  "ord": 520
+ },
+ {
+  "cat": "apk",
+  "title": "Fossify File Manager: fayl menejeri",
+  "body": "📲 <b>Ilova (APK): Fossify File Manager: fayl menejeri</b>\n\nReklamasiz, tez fayl menejeri: zip ochish, papkalarni parol bilan himoyalash, xotira tahlili, fayllarni qidirish.\n\n📦 Versiya: 1.6.3 · Hajmi: 10 MB\n🔓 Bepul, ochiq kodli, reklamasiz\n🔗 Rasmiy manba: https://github.com/FossifyOrg/File-Manager\n\n<b>O'rnatish:</b>\n1. Pastdagi tugma orqali APK'ni botdan oling.\n2. Faylni bosing → «Noma'lum manbalardan o'rnatishga ruxsat» so'ralsa, shu safar uchun ruxsat bering.\n3. «O'rnatish» ni bosing.\n🛡 Fayl dasturchining rasmiy GitHub relizidan olingan, o'zgartirilmagan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#ilova #apk",
+  "file_src": "url:https://github.com/FossifyOrg/File-Manager/releases/download/1.6.3/file-manager-15-foss-release.apk",
+  "file_name": "Fossify-File-Manager-1.6.3.apk",
+  "check_urls": [
+   "https://github.com/FossifyOrg/File-Manager"
+  ],
+  "ord": 530
+ },
+ {
+  "cat": "prompt",
+  "title": "Marketpleys (Uzum, Wildberries) uchun mahsulot kartochkasi",
+  "body": "💬 <b>Prompt: Marketpleys (Uzum, Wildberries) uchun mahsulot kartochkasi</b>\n\n<b>Nima qiladi:</b> Mahsulotingiz uchun qidiruvda chiqadigan sarlavha, kalit so'zlar, xususiyatlar ro'yxati va xaridorni ishontiradigan tavsif yozadi. Rasmlar uchun 6 ta slayd g'oyasini ham beradi.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are an e-commerce SEO specialist for marketplaces like Uzum Market, Wildberries and Ozon.\n\nProduct: [name, brand, model]\nKey specs: [size, material, color, etc.]\nWho buys it and why: [customer and use case]\nPrice segment: [budget / mid / premium]\nCompetitor advantages I know: [optional]\n\nCreate:\n1. 3 product title options (max 100 characters) with the main search keywords first.\n2. 15 search keywords and phrases buyers actually type, in Uzbek and Russian.\n3. A characteristics list in \"parameter: value\" format.\n4. A product description (900-1200 characters): benefits first, then specs, then care/usage, then what is in the box.\n5. 6 image slide ideas (what to show, short text on each slide).\n6. 5 answers to typical buyer questions.\n\nNo false claims or invented certificates.\nReply in Uzbek (Latin script); give the Russian keywords in Russian.</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt",
+  "ord": 540
+ },
+ {
+  "cat": "file",
+  "title": "Biznes reja shabloni (Word)",
+  "body": "📄 <b>Fayl: Biznes reja shabloni (Word)</b>\n\n10 bo'limli to'liq tuzilma: bozor, raqobatchilar jadvali, marketing, boshlang'ich xarajatlar, 3 stsenariyli moliyaviy reja, xavflar va 90 kunlik reja.\n\n💡 Har bo'limdagi savollarga javob yozasiz. Bank yoki investor uchun asos.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#fayl",
+  "photo": "paid/img/file_Biznes_reja_shablon.jpg",
+  "file_src": "gh:paid/files/Biznes_reja_shablon.docx",
+  "file_name": "Biznes_reja_shablon.docx",
+  "ord": 550
+ },
+ {
+  "cat": "code",
+  "title": "Markaziy bank valyuta kursi + konvertor",
+  "body": "💻 <b>Kod: Markaziy bank valyuta kursi + konvertor</b>\n\ncbu.uz'dan rasmiy kurslarni oladi, istalgan summani o'giradi (100 USD → so'm, so'm → EUR) va kurslar tarixini CSV'ga yig'adi.\n\n<b>Ichida:</b>\n✅ Qo'shimcha kutubxona kerak emas\n✅ Nominali 10 yoki 100 bo'lgan valyutalar ham to'g'ri hisoblanadi\n✅ Internetsiz test fayli bilan\n\n🛠 <b>Til:</b> Python. Kod va izohlar asl (inglizcha) holida, yo'riqnoma (README.md) o'zbekcha.\n▶️ <b>Ishga tushirish:</b> <code>python rates.py 100 USD</code>. cbu.uz O'zbekiston ichidan ishonchli ochiladi.\n🧪 Kanalga qo'yishdan oldin sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#kod",
+  "photo": null,
+  "file_src": "gh:paid/zip/valyuta-kursi.zip",
+  "file_name": "valyuta-kursi.zip",
+  "ord": 560
+ },
+ {
+  "cat": "prompt",
+  "title": "Uchrashuv yoki ovozli xabardan aniq xulosa",
+  "body": "💬 <b>Prompt: Uchrashuv yoki ovozli xabardan aniq xulosa</b>\n\n<b>Nima qiladi:</b> Uzun uchrashuv yozuvi, ovozli xabar matni yoki chatni tartibli xulosaga aylantiradi: asosiy qarorlar, kim nima qiladi va qachongacha, ochiq savollar. Natijani jamoaga yuboriladigan qisqa xabar ko'rinishida ham beradi.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are an executive assistant. Below is a raw transcript/notes of a meeting or voice message.\n\nContext: [what the meeting was about, who attended]\nTranscript:\n[paste text here]\n\nProduce:\n1. TL;DR in 3 sentences.\n2. Key decisions made (bullet list).\n3. Action items table: task | owner | deadline | priority. If owner or deadline is missing, mark it \"not assigned\".\n4. Open questions and risks that need follow-up.\n5. A short message I can send to the team in Telegram summarizing the above (max 700 characters).\n\nDo not add information that is not in the transcript.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt",
+  "ord": 570
+ },
+ {
+  "cat": "file",
+  "title": "AI bilan ishlash: 30 ta tayyor prompt (PDF)",
+  "body": "📄 <b>Fayl: AI bilan ishlash: 30 ta tayyor prompt (PDF)</b>\n\nIsh, marketing, sotuv, biznes, o'qish, kontent, dasturlash va shaxsiy rejalashtirish uchun 30 ta prompt. Avval yaxshi prompt yozish qoidalari.\n\n💡 Promptlar asl inglizcha holida (AI ularni aniqroq tushunadi), tavsiflari o'zbekcha.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#fayl",
+  "photo": "paid/img/file_AI_bilan_ishlash_30_prompt.jpg",
+  "file_src": "gh:paid/files/AI_bilan_ishlash_30_prompt.pdf",
+  "file_name": "AI_bilan_ishlash_30_prompt.pdf",
+  "ord": 580
+ },
+ {
+  "cat": "code",
+  "title": "Test (quiz) yaratuvchi: o'qituvchilar uchun",
+  "body": "💻 <b>Kod: Test (quiz) yaratuvchi: o'qituvchilar uchun</b>\n\nSavollarni oddiy matn qilib yozasiz, bir tugma bilan vaqtli, aralashtirilgan test tayyor bo'ladi. Oxirida ball, foiz va xato javoblar tahlili chiqadi.\n\n<b>Ichida:</b>\n✅ To'g'ri javob oldiga * qo'yish kifoya\n✅ Taymer va aralashtirish\n✅ ChatGPT'dan formatga mos savollar olish maslahati README'da\n\n🛠 <b>Til:</b> HTML + JavaScript. Kod va izohlar asl (inglizcha) holida, yo'riqnoma (README.md) o'zbekcha.\n▶️ <b>Ishga tushirish:</b> <code>index.html</code> ni oching, savollarni yozing, «Testni boshlash».\n🧪 Kanalga qo'yishdan oldin sinab ko'rilgan.\n\n📥 <b>Faylni olish:</b> pastdagi tugmani bosing, bot faylni shaxsiy chatga yuboradi.\n#kod",
+  "photo": "paid/img/code_test.jpg",
+  "file_src": "gh:paid/zip/test-yaratuvchi.zip",
+  "file_name": "test-yaratuvchi.zip",
+  "ord": 590
+ },
+ {
+  "cat": "apklink",
+  "title": "Perplexity",
+  "body": "📲 <b>Rasmiy ilova: Perplexity</b>\n\nInternetdan qidirib, manbalari bilan javob beradigan AI. Yangiliklar, narxlar va faktlarni tekshirish uchun qulay.\n\n🤖 Android (Google Play, rasmiy): https://play.google.com/store/apps/details?id=ai.perplexity.app.android\n🍏 iPhone: App Store'da «Perplexity» deb qidiring\n🌐 Sayt: https://www.perplexity.ai\n\n⚠️ AI ilovalarini faqat rasmiy do'kondan o'rnating. Noma'lum saytlardagi «Pro/Mod» APK'lar ko'pincha virus yoki akkaunt o'g'irlaydigan dastur bo'ladi.\n#ilova #ai",
+  "check_urls": [
+   "https://play.google.com/store/apps/details?id=ai.perplexity.app.android",
+   "https://www.perplexity.ai"
+  ],
+  "ord": 600
+ }
+]

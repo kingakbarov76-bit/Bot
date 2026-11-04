@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GadgetUz: aksessuarlar internet do'koni</title>
+<meta name="description" content="Telefon aksessuarlari, quloqchinlar, zaryadlovchilar. Yetkazib berish butun O'zbekiston bo'ylab.">
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<nav class="nav"><div class="container">
+  <a class="logo" href="#">🛍 Gadget<span style="color:var(--accent)">Uz</span></a>
+  <div class="menu"><a href="#katalog">Katalog</a><a href="#yetkazish">Yetkazib berish</a></div>
+  <div style="display:flex;gap:8px;align-items:center"><button class="btn cartbtn" onclick="toggleCart(true)">🛒<span id="cartCount">0</span></button><button class="burger" aria-label="menyu">☰</button></div>
+</div></nav>
+<header class="hero"><div class="container">
+  <h1 style="font-size:clamp(30px,5vw,46px)">Aksessuarlar: arzon, sifatli, <span style="color:var(--accent)">bugun yetkaziladi</span></h1>
+  <p class="lead">Toshkent bo'ylab 3 soatda, viloyatlarga 1–3 kunda. Tanlang va bir tugma bilan buyurtma bering.</p>
+</div></header>
+<section id="katalog" style="padding-top:10px"><div class="container">
+  <div class="bar"><input id="q" placeholder="Qidirish: quloqchin, kabel..."><select id="cat"></select><select id="sort"><option value="pop">Ommabop</option><option value="asc">Avval arzon</option><option value="desc">Avval qimmat</option></select></div>
+  <div class="grid products" id="products"></div>
+</div></section>
+<section id="yetkazish" style="background:#fff"><div class="container grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+  <div class="card"><b>🚚 Toshkent</b><p class="muted">3 soat ichida, 20 000 so'm. 300 000 so'mdan bepul.</p></div>
+  <div class="card"><b>📦 Viloyatlar</b><p class="muted">Pochta orqali 1–3 kun.</p></div>
+  <div class="card"><b>💳 To'lov</b><p class="muted">Naqd, Click, Payme yoki karta orqali.</p></div>
+  <div class="card"><b>🔄 Qaytarish</b><p class="muted">Nuqsonli mahsulot 14 kun ichida almashtiriladi.</p></div>
+</div></section>
+<footer><div class="container">© 2026 GadgetUz · +998 90 123 45 67</div></footer>
+<aside class="drawer" id="drawer">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h3>Savat</h3><button class="btn ghost" onclick="toggleCart(false)">✕</button></div>
+  <div id="cartItems"></div>
+  <b>Jami: <span id="cartTotal">0</span></b>
+  <input id="cName" placeholder="Ismingiz"><input id="cPhone" placeholder="Telefon" inputmode="tel"><input id="cAddr" placeholder="Shahar, manzil">
+  <button class="btn" onclick="sendTelegram()">Telegram orqali buyurtma</button>
+  <button class="btn ghost" onclick="sendWhatsApp()">WhatsApp orqali buyurtma</button>
+</aside>
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+</body></html>

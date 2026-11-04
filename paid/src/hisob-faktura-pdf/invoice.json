@@ -1,0 +1,14 @@
+{
+  "number": "2026-041",
+  "date": "04.11.2026",
+  "currency": "so'm",
+  "vat_percent": 12,
+  "seller": {"name": "\"Sizning kompaniya\" MChJ", "address": "Toshkent sh., Yunusobod t., 12-uy", "phone": "+998 90 000 00 00", "tin": "300000000"},
+  "buyer": {"name": "Mijoz MChJ", "address": "Samarqand sh., Registon ko'chasi 1", "phone": "+998 91 111 11 11"},
+  "items": [
+    {"name": "Veb-sayt yaratish (landing page)", "qty": 1, "price": 3500000},
+    {"name": "Telegram bot sozlash", "qty": 1, "price": 1500000},
+    {"name": "Oylik texnik qo'llab-quvvatlash", "qty": 3, "price": 400000}
+  ],
+  "note": "To'lov 5 bank kuni ichida amalga oshirilishi so'raladi. Rahmat!"
+}

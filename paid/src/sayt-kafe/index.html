@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lazzat kafe: mazali taomlar, tez yetkazib berish</title>
+<meta name="description" content="Milliy va fast-food taomlar. Onlayn buyurtma, 40 daqiqada yetkazib berish.">
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<nav class="nav"><div class="container">
+  <a class="logo" href="#">🍽 Lazzat</a>
+  <div class="menu"><a href="#menyu">Menyu</a><a href="#info">Manzil</a><a href="#aloqa">Aloqa</a></div>
+  <div style="display:flex;gap:8px;align-items:center"><button class="btn cartbtn" onclick="toggleCart(true)">🛒<span id="cartCount">0</span></button><button class="burger" aria-label="menyu">☰</button></div>
+</div></nav>
+<header class="hero"><div class="container">
+  <div><h1>Issiq, mazali va <span style="color:var(--accent)">40 daqiqada</span> eshigingizda</h1>
+  <p class="lead">Milliy taomlar, lavash, burger va shirinliklar. Saytda tanlang, bir tugma bilan buyurtma bering.</p>
+  <a class="btn" href="#menyu">Menyuni ko'rish</a> <a class="btn ghost" href="#info">Manzil va ish vaqti</a></div>
+  <div class="plate">🍜</div>
+</div></header>
+<section id="menyu"><div class="container">
+  <h2>Menyu</h2><p class="muted">Narxlar so'mda. Savatga qo'shing va buyurtma bering.</p>
+  <div class="tabs" id="tabs"></div>
+  <div class="grid menu-grid" id="dishes"></div>
+</div></section>
+<section id="info" style="background:#fff"><div class="container">
+  <h2>Biz haqimizda</h2>
+  <div class="grid info" style="margin-top:18px">
+    <div class="card"><b>📍 Manzil</b><p class="muted">Toshkent, Chilonzor 9-kvartal, 12-uy</p></div>
+    <div class="card"><b>🕘 Ish vaqti</b><p class="muted">Har kuni 09:00 – 23:00</p></div>
+    <div class="card"><b>🚚 Yetkazib berish</b><p class="muted">150 000 so'mdan bepul, aks holda 10 000 so'm</p></div>
+  </div>
+</div></section>
+<section id="aloqa"><div class="container card" style="text-align:center">
+  <h2>Savolingiz bormi?</h2><p class="muted">Qo'ng'iroq qiling yoki yozing</p>
+  <p style="margin-top:14px"><a class="btn" href="tel:+998901234567">📞 +998 90 123 45 67</a></p>
+</div></section>
+<footer><div class="container">© 2026 Lazzat kafe</div></footer>
+<aside class="drawer" id="drawer">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h3>Savat</h3><button class="btn ghost" onclick="toggleCart(false)">✕</button></div>
+  <div id="cartItems"></div>
+  <b>Jami: <span id="cartTotal">0</span></b>
+  <input id="cName" placeholder="Ismingiz"><input id="cPhone" placeholder="Telefon" inputmode="tel"><input id="cAddr" placeholder="Manzil">
+  <button class="btn" onclick="sendTelegram()">Telegram orqali buyurtma</button>
+  <button class="btn ghost" onclick="sendWhatsApp()">WhatsApp orqali buyurtma</button>
+</aside>
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+</body></html>

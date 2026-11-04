@@ -1,0 +1,128 @@
+[
+ {
+  "cat": "prompt",
+  "title": "Biznes g'oyani 10 daqiqada tekshirish",
+  "body": "💬 <b>Prompt: Biznes g'oyani 10 daqiqada tekshirish</b>\n\n<b>Nima qiladi:</b> G'oyangizni talab, raqobat, foyda, xarajat bo'yicha baholaydi, 5 ta asosiy xavfni va ularni 7 kunda arzon sinash yo'lini, 14 kunda ishga tushadigan kichik versiyani va oddiy hisob-kitobni beradi. Oxirida aniq xulosa: boshlash, o'zgartirish yoki to'xtatish.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are a pragmatic startup advisor who has evaluated 500+ small businesses in Central Asia.\n\nMy idea: [describe your business idea in 2-3 sentences]\nCity/market: [e.g., Tashkent]\nBudget: [e.g., $2,000]\nMy skills: [e.g., sales, design, no coding]\nTarget monthly income: [e.g., $1,000]\n\nDo the following:\n1. Restate the idea in one sentence: the exact customer and their pain.\n2. Score it 1-10 on demand, competition, profit margin, startup cost and my fit. One line of reasoning per score.\n3. List the 5 biggest risks and how to test each one in under 7 days for under $50.\n4. Design a minimum version I can launch in 14 days: what to sell, the price, where to find the first 10 customers.\n5. Unit economics table: price, cost per unit, margin, customers needed per month to reach my target income.\n6. Verdict: GO / CHANGE / STOP, plus the single most important next step.\n\nBe honest and specific. If information is missing, state your assumptions.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt"
+ },
+ {
+  "cat": "prompt",
+  "title": "Reels/TikTok uchun 3 xil ssenariy",
+  "body": "💬 <b>Prompt: Reels/TikTok uchun 3 xil ssenariy</b>\n\n<b>Nima qiladi:</b> Mavzuingiz bo'yicha 3 xil qisqa video ssenariysini yozadi: birinchi 2 soniyadagi «ilmoq», sahna-sahna jadval (nima ko'rinadi, nima aytiladi, ekrandagi yozuv), tomoshabinni ushlab turadigan burilish nuqtasi, chaqiriq, izoh matni va heshteglar.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>Act as a short-form video strategist who writes high-retention Instagram Reels and TikTok scripts.\n\nTopic: [your topic or product]\nAudience: [who watches: age, interests]\nGoal: [followers / sales / DMs]\nLength: [15 / 30 / 60] seconds\n\nWrite 3 different script options. For each one:\n- Hook (first 2 seconds): one spoken line that stops the scroll + the on-screen text.\n- Scene-by-scene table: time | what we see | what is said | on-screen text.\n- One pattern-interrupt moment to keep people watching.\n- A call to action that matches the goal.\n- Caption (max 300 characters) and 5 relevant hashtags.\n\nRules: simple spoken language, no clichés like \"In today's video\", every line must earn its place, nothing that cannot be filmed with a phone.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt"
+ },
+ {
+  "cat": "prompt",
+  "title": "Ideal mijoz portreti (persona)",
+  "body": "💬 <b>Prompt: Ideal mijoz portreti (persona)</b>\n\n<b>Nima qiladi:</b> Mahsulotingizni kim, nima uchun va qanday holatda sotib olishini aniqlaydi: 3 ta mijoz turi, ularning og'riqlari, e'tirozlari, qayerda vaqt o'tkazishi va har biriga mos reklama gaplari. Reklama sozlash va post yozishdan oldin juda foydali.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are a senior marketing researcher.\n\nProduct/service: [what you sell]\nPrice: [price]\nWhere I sell: [Instagram / Telegram / shop / marketplace]\nWhat I know about my current customers: [anything you know]\n\nCreate 3 distinct customer personas. For each persona give:\n1. Name, age, job, income level, city type.\n2. The moment they start looking for a product like mine (trigger situation).\n3. Top 3 pains and top 3 desired outcomes, in their own words.\n4. Top 3 objections before buying and the best honest answer to each.\n5. Where they spend time online and offline; which content formats they trust.\n6. 3 ad headlines and 1 short ad text written specifically for them.\n\nFinish with: which persona to target first and why, and 3 questions I should ask real customers to verify these personas.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt"
+ },
+ {
+  "cat": "prompt",
+  "title": "Sotadigan sayt (landing) matni",
+  "body": "💬 <b>Prompt: Sotadigan sayt (landing) matni</b>\n\n<b>Nima qiladi:</b> Mahsulot yoki xizmatingiz uchun bir sahifali saytning to'liq matnini yozadi: sarlavha, muammo, yechim, foydalar, ishonch bloki, savol-javob, chaqiriq tugmalari. 2 xil variant beradi: biri qisqa, biri batafsil.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are a conversion copywriter. Write landing page copy for:\n\nOffer: [product/service]\nCustomer: [who it is for]\nMain result the customer gets: [result]\nPrice and terms: [price, delivery, guarantee if any]\nProof I have: [reviews, numbers, experience; write \"none\" if none]\n\nDeliver two versions:\nA) Short page (for mobile ads)\nB) Long page (for warm traffic)\n\nEach version must include: headline + subheadline, problem section, solution, 5 benefits (outcome-focused, not features), how it works in 3 steps, trust section, FAQ with 6 real objections, and 3 call-to-action button texts.\n\nRules: no fake reviews, no invented numbers, no exaggerated promises. If I gave no proof, suggest what proof I could collect.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt"
+ },
+ {
+  "cat": "prompt",
+  "title": "Har qanday mavzuni tez o'rganish (shaxsiy ustoz)",
+  "body": "💬 <b>Prompt: Har qanday mavzuni tez o'rganish (shaxsiy ustoz)</b>\n\n<b>Nima qiladi:</b> AI'ni shaxsiy ustozga aylantiradi: darajangizni aniqlaydi, 14 kunlik reja tuzadi, har mavzuni oddiy misol bilan tushuntiradi va savollar bilan tekshiradi. Dasturlash, til, marketing, matematika, istalgan narsa uchun.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>Be my personal tutor for: [topic, e.g., Excel / Python / English grammar / digital marketing]\nMy current level: [beginner / intermediate]\nTime per day: [e.g., 40 minutes]\nMy goal in 14 days: [concrete goal]\n\nProcess:\n1. First ask me 5 short diagnostic questions to check my real level. Wait for my answers.\n2. Then build a 14-day plan: daily topic, 20-minute explanation, 15-minute practice task, 5-minute self-check.\n3. When I say \"start day N\", teach that day: explain simply with an everyday analogy, give one worked example, then give me a practice task and wait for my answer.\n4. Check my answer, point out mistakes kindly, and give one harder follow-up.\n5. Every 3 days give a short mixed quiz on previous days.\n\nNever give the answer to a practice task before I try. Keep explanations short.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt"
+ },
+ {
+  "cat": "prompt",
+  "title": "Kod xatosini topish va tuzatish",
+  "body": "💬 <b>Prompt: Kod xatosini topish va tuzatish</b>\n\n<b>Nima qiladi:</b> Ishlamayotgan kodingizni tajribali dasturchi kabi ko'rib chiqadi: xato sababini, tuzatilgan kodni, nima uchun shunday ekanini tushuntiradi va kelajakda shu xato qaytarilmasligi uchun maslahat beradi. Python, JavaScript, PHP va boshqa tillar uchun.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are a senior software engineer and patient mentor.\n\nLanguage/framework: [e.g., Python 3.12, aiogram 3 / JavaScript, React]\nWhat the code should do: [expected behavior]\nWhat happens instead: [actual behavior]\nError message (full): [paste error or write \"no error\"]\nCode:\n[paste your code here]\n\nPlease:\n1. Explain the root cause in 2-3 simple sentences.\n2. Give the corrected code (full function or file, not fragments), with comments only where something changed.\n3. Explain why the fix works.\n4. Point out any other bugs, security issues or bad practices you see, ranked by importance.\n5. Suggest one small test I can run to confirm it works.\n\nIf something is unclear, ask me before guessing.\nReply in Uzbek (Latin script), but keep the code and code comments in English.</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt"
+ },
+ {
+  "cat": "prompt",
+  "title": "Excel va Google Sheets formulalari ustasi",
+  "body": "💬 <b>Prompt: Excel va Google Sheets formulalari ustasi</b>\n\n<b>Nima qiladi:</b> Jadval bilan ishlaganda kerakli formulani yozib beradi va qadamma-qadam tushuntiradi: VLOOKUP/XLOOKUP, SUMIFS, sana bilan ishlash, takrorlarni topish, avtomatik hisobotlar. Xato chiqqan formulani ham tuzatadi.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are an Excel and Google Sheets expert.\n\nProgram: [Excel 365 / Excel 2016 / Google Sheets]\nMy table: [describe columns, e.g., A: date, B: product, C: quantity, D: price; data in rows 2-500]\nWhat I want: [e.g., total sales per product per month / find duplicates / auto status if overdue]\n\nGive me:\n1. The exact formula ready to paste (tell me which cell to put it in).\n2. A step-by-step explanation of each part of the formula.\n3. An alternative formula for older Excel versions if needed.\n4. Common mistakes that cause errors (#N/A, #VALUE!) with this formula and how to fix them.\n5. If a pivot table, conditional formatting or a chart would be better, explain how to do it in 5 steps.\n\nUse comma or semicolon separators as appropriate and tell me which one my program likely needs.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt"
+ },
+ {
+  "cat": "prompt",
+  "title": "Mijozga birinchi xabar (Telegram/email) ketma-ketligi",
+  "body": "💬 <b>Prompt: Mijozga birinchi xabar (Telegram/email) ketma-ketligi</b>\n\n<b>Nima qiladi:</b> Begona mijozga yoziladigan birinchi xabar va keyingi 3 ta eslatma xabarini yozadi: qisqa, shaxsiy, bosimsiz. Hamkorlik, B2B sotuv, bloger bilan kelishish, ish izlash uchun ishlaydi.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are an expert in B2B outreach and polite, non-pushy sales.\n\nWho I am: [name, what I do]\nWho I am writing to: [role/type of person or company]\nWhat I offer: [offer]\nWhy it is relevant to them: [specific reason]\nChannel: [Telegram / email / Instagram DM]\n\nWrite a 4-message sequence:\n1. First message (max 450 characters): personal opening, one clear value, a low-commitment question.\n2. Follow-up after 2 days: add a useful insight or example, no guilt-tripping.\n3. Follow-up after 5 days: short case or idea specific to them.\n4. Final polite close after 10 days that keeps the door open.\n\nFor each message give 2 subject line or opening line options. No fake familiarity, no exaggerated claims.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt"
+ },
+ {
+  "cat": "prompt",
+  "title": "Marketpleys (Uzum, Wildberries) uchun mahsulot kartochkasi",
+  "body": "💬 <b>Prompt: Marketpleys (Uzum, Wildberries) uchun mahsulot kartochkasi</b>\n\n<b>Nima qiladi:</b> Mahsulotingiz uchun qidiruvda chiqadigan sarlavha, kalit so'zlar, xususiyatlar ro'yxati va xaridorni ishontiradigan tavsif yozadi. Rasmlar uchun 6 ta slayd g'oyasini ham beradi.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are an e-commerce SEO specialist for marketplaces like Uzum Market, Wildberries and Ozon.\n\nProduct: [name, brand, model]\nKey specs: [size, material, color, etc.]\nWho buys it and why: [customer and use case]\nPrice segment: [budget / mid / premium]\nCompetitor advantages I know: [optional]\n\nCreate:\n1. 3 product title options (max 100 characters) with the main search keywords first.\n2. 15 search keywords and phrases buyers actually type, in Uzbek and Russian.\n3. A characteristics list in \"parameter: value\" format.\n4. A product description (900-1200 characters): benefits first, then specs, then care/usage, then what is in the box.\n5. 6 image slide ideas (what to show, short text on each slide).\n6. 5 answers to typical buyer questions.\n\nNo false claims or invented certificates.\nReply in Uzbek (Latin script); give the Russian keywords in Russian.</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt"
+ },
+ {
+  "cat": "prompt",
+  "title": "Uchrashuv yoki ovozli xabardan aniq xulosa",
+  "body": "💬 <b>Prompt: Uchrashuv yoki ovozli xabardan aniq xulosa</b>\n\n<b>Nima qiladi:</b> Uzun uchrashuv yozuvi, ovozli xabar matni yoki chatni tartibli xulosaga aylantiradi: asosiy qarorlar, kim nima qiladi va qachongacha, ochiq savollar. Natijani jamoaga yuboriladigan qisqa xabar ko'rinishida ham beradi.\n\n📋 <b>Prompt (bosing, nusxa olinadi):</b>\n<pre>You are an executive assistant. Below is a raw transcript/notes of a meeting or voice message.\n\nContext: [what the meeting was about, who attended]\nTranscript:\n[paste text here]\n\nProduce:\n1. TL;DR in 3 sentences.\n2. Key decisions made (bullet list).\n3. Action items table: task | owner | deadline | priority. If owner or deadline is missing, mark it \"not assigned\".\n4. Open questions and risks that need follow-up.\n5. A short message I can send to the team in Telegram summarizing the above (max 700 characters).\n\nDo not add information that is not in the transcript.\nReply in Uzbek (Latin script).</pre>\n\n✏️ <b>Ishlatish:</b> prompt ustiga bosing (nusxa olinadi), [ ] ichini o'zingiznikiga almashtiring, ChatGPT, Claude yoki Gemini'ga yuboring. [ ] ichini o'zbekcha yozsangiz ham bo'ladi. Oxiridagi «Reply in Uzbek» qatori javobni o'zbekcha qiladi.\n#prompt"
+ },
+ {
+  "cat": "link",
+  "title": "Google AI Studio: Gemini'ning eng kuchli modellari bepul",
+  "body": "🌐 <b>Foydali sayt: Google AI Studio: Gemini'ning eng kuchli modellari bepul</b>\n\nGoogle'ning rasmiy sayti. Gemini'ning eng yangi modellari bilan bepul ishlash, uzun PDF va videolarni tahlil qilish, rasm yaratish, hamda o'z dasturingiz uchun bepul API kalit olish mumkin.\n\n🔗 https://aistudio.google.com\n\n<b>Qanday ishlatiladi:</b>\n1. Google akkaunt bilan kiring.\n2. Chapdagi «Chat» bo'limida savol yozing yoki fayl yuklang (PDF, rasm, video).\n3. O'ng tomonda modelni tanlang; kod yozadiganlar uchun «Get API key» tugmasi bor.\n\n💡 n8n, bot yoki sayt uchun bepul AI kerak bo'lsa, API kalitni shu yerdan olasiz.\n#sayt #ai",
+  "check_urls": [
+   "https://aistudio.google.com"
+  ]
+ },
+ {
+  "cat": "link",
+  "title": "NotebookLM: hujjatlaringizdan shaxsiy AI yordamchi",
+  "body": "🌐 <b>Foydali sayt: NotebookLM: hujjatlaringizdan shaxsiy AI yordamchi</b>\n\nGoogle'ning bepul vositasi. PDF, Word, sayt havolasi yoki YouTube videoni yuklaysiz, u faqat shu manbalar asosida javob beradi, xulosa, test savollari va hatto audio-podkast tayyorlaydi.\n\n🔗 https://notebooklm.google.com\n\n<b>Qanday ishlatiladi:</b>\n1. Google akkaunt bilan kiring, «New notebook» ni bosing.\n2. Kitob, ma'ruza, shartnoma yoki video havolasini qo'shing.\n3. Savol bering yoki «Audio Overview» bilan audio xulosa yarating.\n\n💡 O'qish, imtihonga tayyorlanish va katta hujjatlarni tez tushunish uchun eng yaxshi vositalardan biri.\n#sayt #ai",
+  "check_urls": [
+   "https://notebooklm.google.com"
+  ]
+ },
+ {
+  "cat": "link",
+  "title": "Gamma: taqdimotni 1 daqiqada yaratish",
+  "body": "🌐 <b>Foydali sayt: Gamma: taqdimotni 1 daqiqada yaratish</b>\n\nMavzuni yozasiz, AI tayyor dizaynli taqdimot, hujjat yoki bir sahifali sayt yaratadi. Matn va rasmlarni keyin o'zingiz tahrirlaysiz, PDF yoki PowerPoint qilib yuklab olasiz.\n\n🔗 https://gamma.app\n\n<b>Qanday ishlatiladi:</b>\n1. Ro'yxatdan o'ting (bepul limit bor).\n2. «Create new» → «Generate» → mavzu va slaydlar sonini yozing.\n3. Tayyor bo'lgach, matnni tahrirlang va «Export» orqali PDF/PPTX yuklang.\n\n💡 Mijozga taklif, o'quv taqdimoti yoki biznes reja slaydlari uchun juda tez yechim.\n#sayt #ai",
+  "check_urls": [
+   "https://gamma.app"
+  ]
+ },
+ {
+  "cat": "link",
+  "title": "Photopea: brauzerdagi bepul «Photoshop»",
+  "body": "🌐 <b>Foydali sayt: Photopea: brauzerdagi bepul «Photoshop»</b>\n\nO'rnatmasdan ishlaydigan professional rasm muharriri. PSD fayllarni ochadi, qatlamlar, maska, filtrlar bor. Kuchsiz kompyuterda ham ishlaydi.\n\n🔗 https://www.photopea.com\n\n<b>Qanday ishlatiladi:</b>\n1. Saytni oching, ro'yxatdan o'tish shart emas.\n2. File → Open orqali rasm yoki PSD shablonni oching.\n3. Tayyor ishni File → Export as → PNG/JPG qilib saqlang.\n\n💡 Instagram post, banner va vizitka shablonlarini tahrirlash uchun qulay.\n#sayt #ai",
+  "check_urls": [
+   "https://www.photopea.com"
+  ]
+ },
+ {
+  "cat": "link",
+  "title": "remove.bg: rasm fonini 5 soniyada olib tashlash",
+  "body": "🌐 <b>Foydali sayt: remove.bg: rasm fonini 5 soniyada olib tashlash</b>\n\nRasmni yuklaysiz, AI fonni avtomatik olib tashlaydi. Mahsulot rasmlari, profil rasmi va reklama dizayni uchun juda qulay.\n\n🔗 https://www.remove.bg\n\n<b>Qanday ishlatiladi:</b>\n1. Saytga rasm yuklang yoki rasm havolasini qo'ying.\n2. Natijani ko'ring, kerak bo'lsa «Edit» orqali yangi fon qo'ying.\n3. Yuklab oling (bepul versiyada o'lcham kichikroq bo'ladi).\n\n💡 Marketpleys uchun oq fonli mahsulot rasmlari tayyorlashda vaqtni juda tejaydi.\n#sayt #ai",
+  "check_urls": [
+   "https://www.remove.bg"
+  ]
+ },
+ {
+  "cat": "apklink",
+  "title": "ChatGPT",
+  "body": "📲 <b>Rasmiy ilova: ChatGPT</b>\n\nOpenAI'ning rasmiy ilovasi. Ovozli suhbat, rasmni tahlil qilish, fayl bilan ishlash va rasm yaratish bor. Bepul versiyasi ham kuchli.\n\n🤖 Android (Google Play, rasmiy): https://play.google.com/store/apps/details?id=com.openai.chatgpt\n🍏 iPhone: App Store'da «ChatGPT» deb qidiring\n🌐 Sayt: https://chatgpt.com\n\n⚠️ AI ilovalarini faqat rasmiy do'kondan o'rnating. Noma'lum saytlardagi «Pro/Mod» APK'lar ko'pincha virus yoki akkaunt o'g'irlaydigan dastur bo'ladi.\n#ilova #ai",
+  "check_urls": [
+   "https://play.google.com/store/apps/details?id=com.openai.chatgpt",
+   "https://chatgpt.com"
+  ]
+ },
+ {
+  "cat": "apklink",
+  "title": "Gemini",
+  "body": "📲 <b>Rasmiy ilova: Gemini</b>\n\nGoogle'ning rasmiy AI yordamchisi. Gmail, Drive, YouTube bilan bog'lanadi, kamera orqali atrofni tushuntiradi.\n\n🤖 Android (Google Play, rasmiy): https://play.google.com/store/apps/details?id=com.google.android.apps.bard\n🍏 iPhone: App Store'da «Gemini» deb qidiring\n🌐 Sayt: https://gemini.google.com\n\n⚠️ AI ilovalarini faqat rasmiy do'kondan o'rnating. Noma'lum saytlardagi «Pro/Mod» APK'lar ko'pincha virus yoki akkaunt o'g'irlaydigan dastur bo'ladi.\n#ilova #ai",
+  "check_urls": [
+   "https://play.google.com/store/apps/details?id=com.google.android.apps.bard",
+   "https://gemini.google.com"
+  ]
+ },
+ {
+  "cat": "apklink",
+  "title": "Claude",
+  "body": "📲 <b>Rasmiy ilova: Claude</b>\n\nAnthropic'ning rasmiy ilovasi. Uzun matn yozish, tahrirlash, hujjat va kod bilan ishlashda kuchli.\n\n🤖 Android (Google Play, rasmiy): https://play.google.com/store/apps/details?id=com.anthropic.claude\n🍏 iPhone: App Store'da «Claude» deb qidiring\n🌐 Sayt: https://claude.ai\n\n⚠️ AI ilovalarini faqat rasmiy do'kondan o'rnating. Noma'lum saytlardagi «Pro/Mod» APK'lar ko'pincha virus yoki akkaunt o'g'irlaydigan dastur bo'ladi.\n#ilova #ai",
+  "check_urls": [
+   "https://play.google.com/store/apps/details?id=com.anthropic.claude",
+   "https://claude.ai"
+  ]
+ },
+ {
+  "cat": "apklink",
+  "title": "Perplexity",
+  "body": "📲 <b>Rasmiy ilova: Perplexity</b>\n\nInternetdan qidirib, manbalari bilan javob beradigan AI. Yangiliklar, narxlar va faktlarni tekshirish uchun qulay.\n\n🤖 Android (Google Play, rasmiy): https://play.google.com/store/apps/details?id=ai.perplexity.app.android\n🍏 iPhone: App Store'da «Perplexity» deb qidiring\n🌐 Sayt: https://www.perplexity.ai\n\n⚠️ AI ilovalarini faqat rasmiy do'kondan o'rnating. Noma'lum saytlardagi «Pro/Mod» APK'lar ko'pincha virus yoki akkaunt o'g'irlaydigan dastur bo'ladi.\n#ilova #ai",
+  "check_urls": [
+   "https://play.google.com/store/apps/details?id=ai.perplexity.app.android",
+   "https://www.perplexity.ai"
+  ]
+ }
+]

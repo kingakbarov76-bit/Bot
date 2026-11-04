@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Instagram aksiya posti (1080×1080)</title>
+<style>
+*{box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+body{margin:0;background:#eef1f5;color:#111}
+.app{display:grid;grid-template-columns:330px 1fr;min-height:100vh}
+.side{background:#fff;padding:18px;border-right:1px solid #e3e6ec;overflow:auto}
+.side h1{font-size:18px;margin:0 0 4px} .side p{color:#667;font-size:13px;margin:0 0 14px}
+label{display:block;font-size:13px;color:#445;margin:10px 0 4px}
+input[type=text],textarea{width:100%;padding:10px;border:1px solid #d5d9e2;border-radius:9px;font-size:14px}
+input[type=color]{width:44px;height:34px;border:0;background:none;padding:0}
+.colors{display:flex;gap:14px;flex-wrap:wrap} .colors label{margin:6px 0}
+.btns{display:grid;gap:8px;margin-top:16px}
+button{padding:12px;border-radius:10px;border:0;background:#111;color:#fff;font-weight:700;cursor:pointer;font-size:14px}
+button.alt{background:#e9ecf2;color:#111}
+.stage{display:grid;place-items:start center;padding:24px;overflow:auto}
+.stage svg{position:sticky;top:24px;width:min(100%,560px);height:auto;box-shadow:0 20px 50px rgba(0,0,0,.15);background:#fff}
+@media(max-width:820px){.app{grid-template-columns:1fr}.side{border-right:0;border-bottom:1px solid #e3e6ec}}
+@media print{body{background:#fff}.side{display:none}.app{display:block}.stage{padding:0}.stage svg{width:100%;box-shadow:none}@page{size:1080px 1080px;margin:0}}
+</style></head>
+<body>
+<div class="app">
+<div class="side">
+<h1>Instagram aksiya posti (1080×1080)</h1><p>Maydonlarni o'zgartiring, o'ngda darhol ko'rinadi. Tayyor bo'lgach yuklab oling.</p>
+<label>Brend / sahifa</label><input type="text" data-text="brand" value="@dokonim"><label>Sarlavha 1-qator</label><input type="text" data-text="t1" value="KATTA"><label>Sarlavha 2-qator</label><input type="text" data-text="t2" value="CHEGIRMA"><label>Chegirma</label><input type="text" data-text="pct" value="-50%"><label>Izoh</label><input type="text" data-text="sub" value="Barcha mahsulotlarga"><label>Muddat</label><input type="text" data-text="date" value="1–10 dekabr"><div class="colors"><label>Fon<br><input type="color" data-color="bg" value="#111827"></label><label>Asosiy<br><input type="color" data-color="accent" value="#f97316"></label><label>Qo'shimcha<br><input type="color" data-color="accent2" value="#facc15"></label></div>
+<div class="btns"><button onclick="svgToPng('tpl','aksiya-post.png',1)">⬇ PNG yuklab olish</button><button class="alt" onclick="svgDownload('tpl','aksiya-post.svg')">⬇ SVG (tahrirlash uchun)</button></div>
+<p style="margin-top:14px">💡 SVG faylni Figma, Canva yoki Inkscape'da ochib, yanada erkin tahrirlash mumkin.</p>
+</div>
+<div class="stage"><svg id="tpl" xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" font-family="Segoe UI, Roboto, Arial, sans-serif">
+<rect width="1080" height="1080" data-c="bg" fill="#111827"/>
+<circle cx="900" cy="170" r="300" data-c="accent" fill="#f97316" opacity=".9"/>
+<circle cx="1000" cy="1010" r="230" data-c="accent2" fill="#facc15" opacity=".85"/>
+<text x="80" y="150" font-size="38" font-weight="700" fill="#fff" opacity=".8" data-k="brand">@dokonim</text>
+<text x="80" y="420" font-size="120" font-weight="900" fill="#fff" data-k="t1">KATTA</text>
+<text x="80" y="540" font-size="120" font-weight="900" fill="#fff" data-k="t2">CHEGIRMA</text>
+<rect x="80" y="600" width="520" height="160" rx="28" data-c="accent" fill="#f97316"/>
+<text x="340" y="712" font-size="104" font-weight="900" fill="#111" text-anchor="middle" data-k="pct">-50%</text>
+<text x="80" y="850" font-size="44" fill="#fff" data-k="sub">Barcha mahsulotlarga</text>
+<text x="80" y="910" font-size="36" fill="#fff" opacity=".75" data-k="date">1–10 dekabr</text>
+</svg></div>
+</div>
+<script src="engine.js"></script>
+<script>bindTemplate("tpl");</script>
+</body></html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>USTA barbershop: soch turmagi va soqol</title>
+<meta name="description" content="Erkaklar sartaroshxonasi. Onlayn yozilish, navbatsiz.">
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<nav class="nav"><div class="container">
+  <a class="logo" href="#">✂ USTA</a>
+  <div class="menu"><a href="#xizmatlar">Xizmatlar</a><a href="#ishlar">Ishlar</a><a href="#yozilish">Yozilish</a></div>
+  <div><a class="btn" href="#yozilish">Yozilish</a> <button class="burger" aria-label="menyu">☰</button></div>
+</div></nav>
+<header class="hero"><div class="container">
+  <p class="muted" style="letter-spacing:.2em;font-size:13px">BARBERSHOP · TOSHKENT</p>
+  <h1>Navbatsiz.<br>Aniq. <span>Ustalardan.</span></h1>
+  <p class="lead">Soch turmagi, soqol dizayni va parvarish. Vaqtni onlayn tanlang, kelganingizda kutib o'tirmaysiz.</p>
+  <a class="btn" href="#yozilish">Vaqt tanlash</a> <a class="btn ghost" href="#xizmatlar">Narxlar</a>
+</div></header>
+<section id="xizmatlar"><div class="container">
+  <h2>Xizmatlar va narxlar</h2>
+  <div class="grid svc" id="svcList" style="margin-top:20px"></div>
+</div></section>
+<section id="ishlar"><div class="container">
+  <h2>Ishlarimiz</h2><p class="muted">Bu yerga o'z ishlaringiz rasmlarini qo'ying (README'ga qarang).</p>
+  <div class="grid gal" style="margin-top:20px"><div>Fade</div><div>Klassika</div><div>Soqol dizayni</div><div>Bolalar</div></div>
+</div></section>
+<section id="yozilish"><div class="container">
+  <h2>Onlayn yozilish</h2><p class="muted" style="margin-bottom:16px">Xizmat, kun va vaqtni tanlang.</p>
+  <div class="card book">
+    <select id="bSvc"></select>
+    <input id="bDate" type="date">
+    <div class="slots" id="slots"></div>
+    <input id="bName" placeholder="Ismingiz"><input id="bPhone" placeholder="Telefon" inputmode="tel">
+    <button class="btn" onclick="book()">Telegram orqali yozilish</button>
+  </div>
+</div></section>
+<footer><div class="container">© 2026 USTA barbershop · Har kuni 10:00–21:00 · +998 90 123 45 67</div></footer>
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+</body></html>

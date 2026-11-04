@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test yaratuvchi</title>
+<style>
+  * { box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+  body { margin:0; background:#f1f5f9; color:#0f172a; } .wrap { max-width:760px; margin:0 auto; padding:20px 16px 60px; }
+  .card { background:#fff; border-radius:14px; padding:18px; margin:12px 0; box-shadow:0 2px 10px rgba(0,0,0,.05); }
+  textarea { width:100%; min-height:220px; padding:12px; border-radius:10px; border:1px solid #cbd5e1; font:14px/1.5 ui-monospace, Menlo, monospace; }
+  button { padding:12px 16px; border:0; border-radius:10px; background:#4f46e5; color:#fff; font-weight:600; cursor:pointer; font-size:15px; }
+  .opt { display:block; padding:12px; margin:8px 0; border:2px solid #e2e8f0; border-radius:10px; cursor:pointer; background:#fff; width:100%; text-align:left; font-size:15px; color:#0f172a; }
+  .opt.right { border-color:#22c55e; background:#f0fdf4; } .opt.wrong { border-color:#ef4444; background:#fef2f2; }
+  .top { display:flex; justify-content:space-between; color:#475569; font-size:14px; } .hidden { display:none; }
+  .big { font-size:40px; font-weight:800; margin:8px 0; } .muted { color:#64748b; font-size:13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="editor" class="card">
+    <h2 style="margin-top:0">📝 Test yaratuvchi</h2>
+    <p class="muted">Har savolni quyidagi formatda yozing. To'g'ri javob oldiga <b>*</b> qo'ying. Savollar orasida bo'sh qator.</p>
+    <textarea id="src">O'zbekiston poytaxti qaysi shahar?
+*Toshkent
+Samarqand
+Buxoro
+Xiva
+
+5 x 6 = ?
+25
+*30
+36
+
+Qaysi biri dasturlash tili?
+*Python
+Photoshop
+Excel</textarea>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center">
+      <label>Vaqt (daqiqa): <input id="mins" type="number" value="5" min="0" style="width:70px;padding:8px"></label>
+      <label><input id="shuffle" type="checkbox" checked> Aralashtirish</label>
+      <button id="start">▶ Testni boshlash</button>
+    </div>
+    <p id="err" class="muted" style="color:#dc2626"></p>
+  </div>
+  <div id="quiz" class="card hidden">
+    <div class="top"><span id="prog"></span><span id="timer"></span></div>
+    <h3 id="q"></h3><div id="opts"></div>
+  </div>
+  <div id="result" class="card hidden" style="text-align:center">
+    <div>Natija</div><div class="big" id="score"></div><div id="pct" class="muted"></div>
+    <div id="review" style="text-align:left;margin-top:14px"></div>
+    <button onclick="location.reload()" style="margin-top:12px">Qaytadan</button>
+  </div>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+function parse(text) {
+  return text.trim().split(/\n\s*\n/).map((block) => {
+    const lines = block.split("\n").map((l) => l.trim()).filter(Boolean);
+    const q = lines.shift();
+    const opts = lines.map((l) => ({ t: l.replace(/^\*/, "").trim(), ok: l.startsWith("*") }));
+    return { q, opts };
+  }).filter((x) => x.q && x.opts.length >= 2 && x.opts.filter((o) => o.ok).length === 1);
+}
+const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+let qs = [], i = 0, score = 0, answers = [], timerId = null;
+$("start").onclick = () => {
+  qs = parse($("src").value);
+  if (!qs.length) { $("err").textContent = "Savol topilmadi. Har savolda bitta * li to'g'ri javob bo'lsin."; return; }
+  if ($("shuffle").checked) { shuffle(qs); qs.forEach((x) => shuffle(x.opts)); }
+  $("editor").classList.add("hidden"); $("quiz").classList.remove("hidden");
+  const mins = Number($("mins").value);
+  if (mins > 0) {
+    let left = mins * 60;
+    const tick = () => { $("timer").textContent = `⏱ ${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`; if (left-- <= 0) finish(); };
+    tick(); timerId = setInterval(tick, 1000);
+  }
+  show();
+};
+function show() {
+  const x = qs[i];
+  $("prog").textContent = `Savol ${i + 1} / ${qs.length}`; $("q").textContent = x.q; $("opts").innerHTML = "";
+  x.opts.forEach((o, k) => {
+    const b = document.createElement("button"); b.className = "opt"; b.textContent = o.t;
+    b.onclick = () => {
+      [...$("opts").children].forEach((c, n) => { c.disabled = true; if (x.opts[n].ok) c.classList.add("right"); });
+      if (!o.ok) b.classList.add("wrong"); else score++;
+      answers.push({ q: x.q, your: o.t, right: x.opts.find((z) => z.ok).t, ok: o.ok });
+      setTimeout(() => { i++; i < qs.length ? show() : finish(); }, 700);
+    };
+    $("opts").appendChild(b);
+  });
+}
+function finish() {
+  clearInterval(timerId); $("quiz").classList.add("hidden"); $("result").classList.remove("hidden");
+  $("score").textContent = `${score} / ${qs.length}`; $("pct").textContent = `${Math.round((score / qs.length) * 100)}%`;
+  $("review").innerHTML = answers.filter((a) => !a.ok).map((a) => `<p>❌ <b>${a.q.replace(/[<>&]/g, "")}</b><br>Sizniki: ${a.your.replace(/[<>&]/g, "")} · To'g'ri: ${a.right.replace(/[<>&]/g, "")}</p>`).join("");
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bilim+ o'quv markazi: IT, ingliz tili, matematika</title>
+<meta name="description" content="Kichik guruhlar, amaliy darslar, bepul sinov darsi.">
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<nav class="nav"><div class="container">
+  <a class="logo" href="#">🎓 Bilim<span style="color:var(--accent)">+</span></a>
+  <div class="menu"><a href="#kurslar">Kurslar</a><a href="#qanday">Qanday o'qitamiz</a><a href="#yozilish">Yozilish</a></div>
+  <div><a class="btn" href="#yozilish">Bepul sinov darsi</a> <button class="burger" aria-label="menyu">☰</button></div>
+</div></nav>
+<header class="hero"><div class="container">
+  <div><h1>Kasb o'rganing, <span style="color:var(--accent)">natijani</span> ko'ring</h1>
+  <p class="lead">IT, ingliz tili va matematika bo'yicha kichik guruhlarda amaliy darslar. Birinchi dars bepul.</p>
+  <a class="btn" href="#yozilish">Sinov darsiga yozilish</a> <a class="btn ghost" href="#kurslar">Kurslar</a>
+  <div class="stats"><div><b>8–12</b><span class="muted">kishilik guruh</span></div><div><b>3 oy</b><span class="muted">o'rtacha kurs</span></div><div><b>1-dars</b><span class="muted">bepul</span></div></div></div>
+  <div class="board"><div class="ln">&gt; kurs.boshla("Python")</div><div class="ln">&gt; amaliyot: 70%</div><div class="ln">&gt; loyiha: portfolio uchun</div><div class="ln ok">✓ sertifikat tayyor</div></div>
+</div></header>
+<section id="kurslar"><div class="container">
+  <h2>Kurslar</h2><p class="muted">Narxlar oylik. Har kursda amaliy loyiha bor.</p>
+  <div class="grid courses" id="courseList" style="margin-top:20px"></div>
+</div></section>
+<section id="qanday" style="background:#fff"><div class="container">
+  <h2>Qanday o'qitamiz</h2>
+  <div class="grid steps" style="margin-top:20px">
+    <div class="card"><div class="n">1</div><b>Bepul sinov darsi</b><p class="muted">Darajangizni aniqlaymiz</p></div>
+    <div class="card"><div class="n">2</div><b>Kichik guruh</b><p class="muted">Har biriga e'tibor</p></div>
+    <div class="card"><div class="n">3</div><b>Amaliy loyiha</b><p class="muted">Haqiqiy vazifalar</p></div>
+    <div class="card"><div class="n">4</div><b>Sertifikat</b><p class="muted">Yakuniy imtihondan so'ng</p></div>
+  </div>
+</div></section>
+<section id="yozilish"><div class="container">
+  <h2>Sinov darsiga yozilish</h2><p class="muted" style="margin-bottom:16px">Ma'lumotingizni qoldiring, administrator bog'lanadi.</p>
+  <form class="card" id="reg" onsubmit="return register(event)">
+    <input id="rName" placeholder="Ism familiya" required>
+    <input id="rPhone" placeholder="Telefon" inputmode="tel" required>
+    <select id="rCourse"></select>
+    <select id="rTime"><option>Ertalab (09:00–12:00)</option><option>Tushdan keyin (14:00–17:00)</option><option>Kechqurun (18:00–21:00)</option></select>
+    <button class="btn" type="submit">Telegram orqali yuborish</button>
+  </form>
+</div></section>
+<footer><div class="container">© 2026 Bilim+ o'quv markazi · Toshkent, Yunusobod · +998 90 123 45 67</div></footer>
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+</body></html>

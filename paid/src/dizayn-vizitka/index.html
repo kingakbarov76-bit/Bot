@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vizitka shabloni (90×50 mm, chop etishga tayyor)</title>
+<style>
+*{box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+body{margin:0;background:#eef1f5;color:#111}
+.app{display:grid;grid-template-columns:330px 1fr;min-height:100vh}
+.side{background:#fff;padding:18px;border-right:1px solid #e3e6ec;overflow:auto}
+.side h1{font-size:18px;margin:0 0 4px} .side p{color:#667;font-size:13px;margin:0 0 14px}
+label{display:block;font-size:13px;color:#445;margin:10px 0 4px}
+input[type=text],textarea{width:100%;padding:10px;border:1px solid #d5d9e2;border-radius:9px;font-size:14px}
+input[type=color]{width:44px;height:34px;border:0;background:none;padding:0}
+.colors{display:flex;gap:14px;flex-wrap:wrap} .colors label{margin:6px 0}
+.btns{display:grid;gap:8px;margin-top:16px}
+button{padding:12px;border-radius:10px;border:0;background:#111;color:#fff;font-weight:700;cursor:pointer;font-size:14px}
+button.alt{background:#e9ecf2;color:#111}
+.stage{display:grid;place-items:start center;padding:24px;overflow:auto}
+.stage svg{position:sticky;top:24px;width:min(100%,760px);height:auto;box-shadow:0 20px 50px rgba(0,0,0,.15);background:#fff}
+@media(max-width:820px){.app{grid-template-columns:1fr}.side{border-right:0;border-bottom:1px solid #e3e6ec}}
+@media print{body{background:#fff}.side{display:none}.app{display:block}.stage{padding:0}.stage svg{width:100%;box-shadow:none}@page{size:90mm 50mm;margin:0}}
+</style></head>
+<body>
+<div class="app">
+<div class="side">
+<h1>Vizitka shabloni (90×50 mm, chop etishga tayyor)</h1><p>Maydonlarni o'zgartiring, o'ngda darhol ko'rinadi. Tayyor bo'lgach yuklab oling.</p>
+<label>Ism familiya</label><input type="text" data-text="name" value="Aziz Karimov"><label>Lavozim</label><input type="text" data-text="role" value="Marketing menejeri"><label>Bosh harflar / logo</label><input type="text" data-text="ini" value="AK"><label>Kompaniya</label><input type="text" data-text="company" value="KOMPANIYA"><label>Telefon</label><input type="text" data-text="phone" value="📞 +998 90 123 45 67"><label>Email</label><input type="text" data-text="mail" value="✉ aziz@kompaniya.uz"><label>Telegram / sayt</label><input type="text" data-text="tg" value="✈ t.me/aziz_k"><label>Manzil</label><input type="text" data-text="addr" value="📍 Toshkent, Yunusobod"><div class="colors"><label>Asosiy rang<br><input type="color" data-color="side" value="#1e3a8a"></label><label>Ism rangi<br><input type="color" data-color="ink" value="#0f172a"></label></div>
+<div class="btns"><button onclick="svgToPng('tpl','vizitka.png',1)">⬇ PNG yuklab olish</button><button class="alt" onclick="svgDownload('tpl','vizitka.svg')">⬇ SVG (tahrirlash uchun)</button><button class="alt" onclick="window.print()">🖨 PDF / chop etish</button></div>
+<p style="margin-top:14px">💡 SVG faylni Figma, Canva yoki Inkscape'da ochib, yanada erkin tahrirlash mumkin.</p>
+</div>
+<div class="stage"><svg id="tpl" xmlns="http://www.w3.org/2000/svg" width="1063" height="591" viewBox="0 0 1063 591" font-family="Segoe UI, Roboto, Arial, sans-serif">
+<rect width="1063" height="591" fill="#ffffff"/>
+<rect width="330" height="591" data-c="side" fill="#1e3a8a"/>
+<text x="165" y="300" font-size="120" font-weight="900" fill="#fff" text-anchor="middle" data-k="ini">AK</text>
+<text x="165" y="370" font-size="26" fill="#fff" opacity=".8" text-anchor="middle" data-k="company">KOMPANIYA</text>
+<text x="390" y="170" font-size="58" font-weight="800" data-c="ink" fill="#0f172a" data-k="name">Aziz Karimov</text>
+<text x="390" y="225" font-size="32" data-c="side" fill="#1e3a8a" data-k="role">Marketing menejeri</text>
+<rect x="390" y="262" width="90" height="6" rx="3" data-c="side" fill="#1e3a8a"/>
+<text x="390" y="340" font-size="30" fill="#334155" data-k="phone">📞 +998 90 123 45 67</text>
+<text x="390" y="395" font-size="30" fill="#334155" data-k="mail">✉ aziz@kompaniya.uz</text>
+<text x="390" y="450" font-size="30" fill="#334155" data-k="tg">✈ t.me/aziz_k</text>
+<text x="390" y="505" font-size="30" fill="#334155" data-k="addr">📍 Toshkent, Yunusobod</text>
+</svg></div>
+</div>
+<script src="engine.js"></script>
+<script>bindTemplate("tpl");</script>
+</body></html>

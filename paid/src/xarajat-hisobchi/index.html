@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xarajatlar hisobchisi</title>
+<style>
+  * { box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+  body { margin:0; background:#0f172a; color:#e2e8f0; }
+  .wrap { max-width:720px; margin:0 auto; padding:20px 16px 60px; }
+  h1 { font-size:22px; margin:6px 0 16px; }
+  .card { background:#1e293b; border-radius:14px; padding:16px; margin-bottom:14px; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; }
+  input, select, button { padding:11px; border-radius:10px; border:1px solid #334155; background:#0f172a; color:#e2e8f0; font-size:15px; }
+  input[type=number] { width:130px; } input[type=text] { flex:1; min-width:140px; }
+  button { background:#22c55e; color:#052e16; font-weight:700; border:0; cursor:pointer; }
+  .sum { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .sum div { background:#0f172a; border-radius:10px; padding:10px; } .sum b { display:block; font-size:18px; margin-top:4px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; } td, th { padding:8px 6px; border-bottom:1px solid #334155; text-align:left; }
+  td:last-child { text-align:right; } .del { background:none; color:#f87171; padding:2px 6px; }
+  .bar { height:10px; background:#22c55e; border-radius:6px; } .cat { display:grid; grid-template-columns:110px 1fr 110px; gap:8px; align-items:center; margin:6px 0; font-size:14px; }
+  .muted { color:#94a3b8; font-size:13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>💰 Xarajatlar hisobchisi</h1>
+  <div class="card">
+    <div class="row">
+      <input id="amount" type="number" min="0" placeholder="Summa">
+      <select id="cat"><option>Oziq-ovqat</option><option>Transport</option><option>Uy-joy</option><option>Kommunal</option><option>Aloqa</option><option>Kiyim</option><option>Sog'liq</option><option>Ta'lim</option><option>Ko'ngilochar</option><option>Boshqa</option></select>
+      <input id="note" type="text" placeholder="Izoh (ixtiyoriy)">
+      <input id="date" type="date">
+      <button id="add">Qo'shish</button>
+    </div>
+    <p class="muted">Ma'lumotlar faqat shu brauzerda saqlanadi. Internet kerak emas.</p>
+  </div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <input id="month" type="month">
+      <div class="row"><button id="csv" style="background:#38bdf8;color:#082f49">CSV yuklab olish</button></div>
+    </div>
+    <div class="sum" style="margin-top:12px">
+      <div>Shu oy<b id="tMonth">0</b></div><div>Kunlik o'rtacha<b id="tAvg">0</b></div><div>Yozuvlar<b id="tCount">0</b></div>
+    </div>
+  </div>
+  <div class="card"><b>Toifalar bo'yicha</b><div id="cats"></div></div>
+  <div class="card"><table><thead><tr><th>Sana</th><th>Toifa</th><th>Izoh</th><th>Summa</th></tr></thead><tbody id="list"></tbody></table></div>
+</div>
+<script>
+const KEY = "xarajatlar_v1";
+const $ = (id) => document.getElementById(id);
+let items = [];
+try { items = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch { items = []; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(items)); } catch {} };
+const fmt = (n) => Math.round(n).toLocaleString("ru-RU").replace(/\u00a0/g, " ") + " so'm";
+const today = new Date().toISOString().slice(0, 10);
+$("date").value = today; $("month").value = today.slice(0, 7);
+
+function render() {
+  const m = $("month").value;
+  const list = items.filter((x) => x.date.startsWith(m)).sort((a, b) => b.date.localeCompare(a.date));
+  const total = list.reduce((s, x) => s + x.amount, 0);
+  const [y, mm] = m.split("-").map(Number);
+  const days = m === today.slice(0, 7) ? Number(today.slice(8)) : new Date(y, mm, 0).getDate();
+  $("tMonth").textContent = fmt(total); $("tAvg").textContent = fmt(total / days); $("tCount").textContent = list.length;
+  const byCat = {};
+  list.forEach((x) => (byCat[x.cat] = (byCat[x.cat] || 0) + x.amount));
+  const max = Math.max(1, ...Object.values(byCat));
+  $("cats").innerHTML = Object.entries(byCat).sort((a, b) => b[1] - a[1]).map(([c, v]) =>
+    `<div class="cat"><span>${c}</span><div class="bar" style="width:${(v / max) * 100}%"></div><span>${fmt(v)}</span></div>`).join("") || '<p class="muted">Bu oyda yozuv yo\'q.</p>';
+  $("list").innerHTML = list.map((x) =>
+    `<tr><td>${x.date.slice(5)}</td><td>${x.cat}</td><td>${x.note.replace(/[<>&]/g, "")}</td><td>${fmt(x.amount)} <button class="del" data-id="${x.id}">✕</button></td></tr>`).join("");
+}
+$("add").onclick = () => {
+  const amount = Number($("amount").value);
+  if (!(amount > 0)) { $("amount").focus(); return; }
+  items.push({ id: Date.now() + Math.random(), amount, cat: $("cat").value, note: $("note").value.trim(), date: $("date").value || today });
+  save(); $("amount").value = ""; $("note").value = ""; render();
+};
+$("list").onclick = (e) => { const id = e.target.dataset.id; if (id) { items = items.filter((x) => String(x.id) !== id); save(); render(); } };
+$("month").onchange = render;
+$("csv").onclick = () => {
+  const rows = [["date", "category", "note", "amount"], ...items.map((x) => [x.date, x.cat, x.note, x.amount])];
+  const csv = rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv" })); a.download = "xarajatlar.csv"; a.click();
+};
+render();
+</script>
+</body>
+</html>

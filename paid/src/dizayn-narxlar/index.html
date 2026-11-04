@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Narxlar ro'yxati / menyu shabloni (A4)</title>
+<style>
+*{box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+body{margin:0;background:#eef1f5;color:#111}
+.app{display:grid;grid-template-columns:330px 1fr;min-height:100vh}
+.side{background:#fff;padding:18px;border-right:1px solid #e3e6ec;overflow:auto}
+.side h1{font-size:18px;margin:0 0 4px} .side p{color:#667;font-size:13px;margin:0 0 14px}
+label{display:block;font-size:13px;color:#445;margin:10px 0 4px}
+input[type=text],textarea{width:100%;padding:10px;border:1px solid #d5d9e2;border-radius:9px;font-size:14px}
+input[type=color]{width:44px;height:34px;border:0;background:none;padding:0}
+.colors{display:flex;gap:14px;flex-wrap:wrap} .colors label{margin:6px 0}
+.btns{display:grid;gap:8px;margin-top:16px}
+button{padding:12px;border-radius:10px;border:0;background:#111;color:#fff;font-weight:700;cursor:pointer;font-size:14px}
+button.alt{background:#e9ecf2;color:#111}
+.stage{display:grid;place-items:start center;padding:24px;overflow:auto}
+.stage svg{position:sticky;top:24px;width:min(100%,620px);height:auto;box-shadow:0 20px 50px rgba(0,0,0,.15);background:#fff}
+@media(max-width:820px){.app{grid-template-columns:1fr}.side{border-right:0;border-bottom:1px solid #e3e6ec}}
+@media print{body{background:#fff}.side{display:none}.app{display:block}.stage{padding:0}.stage svg{width:100%;box-shadow:none}@page{size:A4;margin:0}}
+</style></head>
+<body>
+<div class="app">
+<div class="side">
+<h1>Narxlar ro'yxati / menyu shabloni (A4)</h1><p>Maydonlarni o'zgartiring, o'ngda darhol ko'rinadi. Tayyor bo'lgach yuklab oling.</p>
+<label>Sarlavha</label><input type="text" data-text="title" value="NARXLAR"><label>Nomi</label><input type="text" data-text="sub" value="USTA BARBERSHOP"><label>Valyuta</label><input type="text" data-text="cur" value="so'm"><div style="display:grid;grid-template-columns:1fr 110px;gap:6px"><div><label>1. Nomi</label><input type="text" data-text="n0" value="Soch turmagi"></div><div><label>Narx</label><input type="text" data-text="p0" value="80 000"></div></div><div style="display:grid;grid-template-columns:1fr 110px;gap:6px"><div><label>2. Nomi</label><input type="text" data-text="n1" value="Soch + soqol"></div><div><label>Narx</label><input type="text" data-text="p1" value="120 000"></div></div><div style="display:grid;grid-template-columns:1fr 110px;gap:6px"><div><label>3. Nomi</label><input type="text" data-text="n2" value="Soqol dizayni"></div><div><label>Narx</label><input type="text" data-text="p2" value="50 000"></div></div><div style="display:grid;grid-template-columns:1fr 110px;gap:6px"><div><label>4. Nomi</label><input type="text" data-text="n3" value="Bolalar soch turmagi"></div><div><label>Narx</label><input type="text" data-text="p3" value="60 000"></div></div><div style="display:grid;grid-template-columns:1fr 110px;gap:6px"><div><label>5. Nomi</label><input type="text" data-text="n4" value="Soch bo'yash"></div><div><label>Narx</label><input type="text" data-text="p4" value="150 000"></div></div><div style="display:grid;grid-template-columns:1fr 110px;gap:6px"><div><label>6. Nomi</label><input type="text" data-text="n5" value="Yuz parvarishi"></div><div><label>Narx</label><input type="text" data-text="p5" value="70 000"></div></div><div style="display:grid;grid-template-columns:1fr 110px;gap:6px"><div><label>7. Nomi</label><input type="text" data-text="n6" value="Massaj (15 daq)"></div><div><label>Narx</label><input type="text" data-text="p6" value="40 000"></div></div><div style="display:grid;grid-template-columns:1fr 110px;gap:6px"><div><label>8. Nomi</label><input type="text" data-text="n7" value="Ukladka"></div><div><label>Narx</label><input type="text" data-text="p7" value="30 000"></div></div><label>Pastki qator</label><input type="text" data-text="foot" value="📞 +998 90 123 45 67  ·  Har kuni 10:00–21:00"><div class="colors"><label>Fon<br><input type="color" data-color="bg" value="#0b0b0d"></label><label>Asosiy rang<br><input type="color" data-color="accent" value="#d4a24c"></label></div>
+<div class="btns"><button onclick="svgToPng('tpl','narxlar.png',1)">⬇ PNG yuklab olish</button><button class="alt" onclick="svgDownload('tpl','narxlar.svg')">⬇ SVG (tahrirlash uchun)</button><button class="alt" onclick="window.print()">🖨 PDF / chop etish</button></div>
+<p style="margin-top:14px">💡 SVG faylni Figma, Canva yoki Inkscape'da ochib, yanada erkin tahrirlash mumkin.</p>
+</div>
+<div class="stage"><svg id="tpl" xmlns="http://www.w3.org/2000/svg" width="1240" height="1754" viewBox="0 0 1240 1754" font-family="Segoe UI, Roboto, Arial, sans-serif">
+<rect width="1240" height="1754" data-c="bg" fill="#0b0b0d"/>
+<text x="620" y="230" font-size="120" font-weight="900" text-anchor="middle" fill="#fff" data-k="title">NARXLAR</text>
+<text x="620" y="310" font-size="40" letter-spacing="8" text-anchor="middle" data-c="accent" fill="#d4a24c" data-k="sub">USTA BARBERSHOP</text>
+<rect x="520" y="350" width="200" height="6" rx="3" data-c="accent" fill="#d4a24c"/>
+<text x="1100" y="470" font-size="30" text-anchor="end" fill="#9ca3af" data-k="cur">so'm</text>
+<text x="140" y="560" font-size="44" fill="#e5e7eb" data-k="n0">Soch turmagi</text><line x1="140" y1="594" x2="1100" y2="594" stroke="#374151" stroke-width="2" stroke-dasharray="6 10"/><text x="1100" y="560" font-size="44" font-weight="800" text-anchor="end" data-c="accent" fill="#d4a24c" data-k="p0">80 000</text><text x="140" y="680" font-size="44" fill="#e5e7eb" data-k="n1">Soch + soqol</text><line x1="140" y1="714" x2="1100" y2="714" stroke="#374151" stroke-width="2" stroke-dasharray="6 10"/><text x="1100" y="680" font-size="44" font-weight="800" text-anchor="end" data-c="accent" fill="#d4a24c" data-k="p1">120 000</text><text x="140" y="800" font-size="44" fill="#e5e7eb" data-k="n2">Soqol dizayni</text><line x1="140" y1="834" x2="1100" y2="834" stroke="#374151" stroke-width="2" stroke-dasharray="6 10"/><text x="1100" y="800" font-size="44" font-weight="800" text-anchor="end" data-c="accent" fill="#d4a24c" data-k="p2">50 000</text><text x="140" y="920" font-size="44" fill="#e5e7eb" data-k="n3">Bolalar soch turmagi</text><line x1="140" y1="954" x2="1100" y2="954" stroke="#374151" stroke-width="2" stroke-dasharray="6 10"/><text x="1100" y="920" font-size="44" font-weight="800" text-anchor="end" data-c="accent" fill="#d4a24c" data-k="p3">60 000</text><text x="140" y="1040" font-size="44" fill="#e5e7eb" data-k="n4">Soch bo'yash</text><line x1="140" y1="1074" x2="1100" y2="1074" stroke="#374151" stroke-width="2" stroke-dasharray="6 10"/><text x="1100" y="1040" font-size="44" font-weight="800" text-anchor="end" data-c="accent" fill="#d4a24c" data-k="p4">150 000</text><text x="140" y="1160" font-size="44" fill="#e5e7eb" data-k="n5">Yuz parvarishi</text><line x1="140" y1="1194" x2="1100" y2="1194" stroke="#374151" stroke-width="2" stroke-dasharray="6 10"/><text x="1100" y="1160" font-size="44" font-weight="800" text-anchor="end" data-c="accent" fill="#d4a24c" data-k="p5">70 000</text><text x="140" y="1280" font-size="44" fill="#e5e7eb" data-k="n6">Massaj (15 daq)</text><line x1="140" y1="1314" x2="1100" y2="1314" stroke="#374151" stroke-width="2" stroke-dasharray="6 10"/><text x="1100" y="1280" font-size="44" font-weight="800" text-anchor="end" data-c="accent" fill="#d4a24c" data-k="p6">40 000</text><text x="140" y="1400" font-size="44" fill="#e5e7eb" data-k="n7">Ukladka</text><line x1="140" y1="1434" x2="1100" y2="1434" stroke="#374151" stroke-width="2" stroke-dasharray="6 10"/><text x="1100" y="1400" font-size="44" font-weight="800" text-anchor="end" data-c="accent" fill="#d4a24c" data-k="p7">30 000</text>
+<text x="620" y="1620" font-size="34" text-anchor="middle" fill="#9ca3af" data-k="foot">📞 +998 90 123 45 67  ·  Har kuni 10:00–21:00</text>
+</svg></div>
+</div>
+<script src="engine.js"></script>
+<script>bindTemplate("tpl");</script>
+</body></html>
