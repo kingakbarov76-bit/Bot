@@ -154,10 +154,24 @@ function welcomeShort(): string {
 }
 const welcomeKb = {
   inline_keyboard: [
+    [{ text: "🎁 Sovg'a: 3 ta tayyor prompt", callback_data: "u:gift" }],
     [{ text: "👥 Bonus: havolamni olish", callback_data: "u:ref" }],
     [{ text: "🔒 Yopiq kanal haqida", callback_data: "u:info" }],
+    [{ text: "🆓 Bepul kanal: kunlik bepul promptlar", url: FREE_CHANNEL_URL }],
   ],
 };
+
+const GIFT =
+  "🎁 <b>Sovg'a: 3 ta tayyor prompt</b>\n" +
+  "Matn ustiga bosing, nusxa olinadi. [ ] ichini o'zingiznikiga almashtirib, ChatGPT, Claude yoki Gemini'ga yuboring.\n\n" +
+  "1️⃣ <b>Mijoz «qimmat» desa</b>\n<code>Sen tajribali sotuv menejerisan. Biznesim: [biznes turi]. Mahsulot: [nomi va narxi]. Mijoz shunday e'tiroz bildirdi: \"[e'tiroz matni]\". Menga 3 xil javob yoz: 1) yumshoq, 2) faktlarga asoslangan, 3) qisqa va do'stona. O'zbek tilida, 3-5 gap, bosimsiz, yolg'on va'dasiz.</code>\n\n" +
+  "2️⃣ <b>1 haftalik post rejasi</b>\n<code>Sen ijtimoiy tarmoq mutaxassisisan. Biznesim: [biznes turi, shahar]. Auditoriya: [yosh, qiziqish]. Maqsad: [yangi mijoz jalb qilish]. 7 kunlik kontent reja tuz, jadvalda: kun, post turi, mavzu, 2 gaplik g'oya, chaqiriq. Sotuv postlari 2 tadan oshmasin.</code>\n\n" +
+  "3️⃣ <b>Sotuv matni</b>\n<code>Sen reklama matnlari mutaxassisisan. Mahsulot: [nomi]. Xususiyatlari: [3-5 ta]. Narxi: [narx]. Kim uchun: [mijoz]. Telegram uchun sotuv matni yoz: sarlavha, muammo, yechim, 3 ta foyda, chaqiriq. 800 belgigacha, mubolag'asiz. 2 ta variant ber.</code>\n\n" +
+  "🆓 Yana 5 ta prompt bepul kanalda (tepada qadalgan post). U yerda har kuni yangilari chiqadi.";
+
+async function logEv(uid: number, ev: string) {
+  try { await sb.from("events").insert({ user_id: uid, event: ev }); } catch (_) { /* jurnal xatosi botni to'xtatmasin */ }
+}
 
 function welcomeText(): string {
   return "👋 <b>Xush kelibsiz!</b>\n\n" +
@@ -278,8 +292,9 @@ async function showReferral(u: A) {
       `Havola orqali kelgan har bir odam to'lov qilib, to'lovi tasdiqlansa, sizga <b>${money(refBonus())}</b> yoziladi` +
       (promoOn() ? " (🔥 aksiya 4-dekabrgacha)" : "") + ".\n" +
       `Yechish: botga kirganingizdan ${WAIT_DAYS} kun o'tgach, istalgan vaqtda, kamida ${money(MIN_WITHDRAW)}.\n` +
-      "Kanalni sotib olmagan bo'lsangiz ham qatnashasiz.\n⚠️ Daromad kafolatlanmaydi: u do'stlaringiz qaroriga bog'liq.",
-    { reply_markup: { inline_keyboard: [[{ text: "📤 Do'stlarga ulashish", url: share }]] } },
+      "Kanalni sotib olmagan bo'lsangiz ham qatnashasiz.\n⚠️ Daromad kafolatlanmaydi: u do'stlaringiz qaroriga bog'liq.\n\n" +
+      "💡 Maslahat: do'stlaringizga bepul kanaldagi foydali postlarni ham yuboring. Ular kanal qanday ekanini ko'rib, ishonch bilan qaror qiladi.",
+    { reply_markup: { inline_keyboard: [[{ text: "📤 Do'stlarga ulashish", url: share }], [{ text: "🆓 Bepul kanal (ulashish uchun postlar)", url: FREE_CHANNEL_URL }]] } },
   );
 }
 
@@ -404,6 +419,7 @@ async function handleMessage(m: A) {
   const u = await upsertUser(m.from, ref);
 
   if (text.startsWith("/start")) {
+    await logEv(uid, "start");
     await setState(uid, "");
     await send(uid, welcomeShort(), { reply_markup: welcomeKb });
     return send(uid, `🆓 Avval bepul namunalarni ko'ring: ${FREE_CHANNEL_URL}\nMenyu pastda 👇`, { reply_markup: menuKb });
@@ -413,10 +429,10 @@ async function handleMessage(m: A) {
     await setState(uid, "");
     return send(uid, "Bekor qilindi.", { reply_markup: menuKb });
   }
-  if (text === BTN_BUY) { await setState(uid, ""); return showBuy(u); }
-  if (text === BTN_BAL) { await setState(uid, ""); return showBalance(u); }
-  if (text === BTN_REF) { await setState(uid, ""); return showReferral(u); }
-  if (text === BTN_WD) { await setState(uid, ""); return startWithdraw(u); }
+  if (text === BTN_BUY) { await logEv(uid, "m_buy"); await setState(uid, ""); return showBuy(u); }
+  if (text === BTN_BAL) { await logEv(uid, "m_bal"); await setState(uid, ""); return showBalance(u); }
+  if (text === BTN_REF) { await logEv(uid, "m_ref"); await setState(uid, ""); return showReferral(u); }
+  if (text === BTN_WD) { await logEv(uid, "m_wd"); await setState(uid, ""); return startWithdraw(u); }
 
   if (u.state === "fb_text" && text) {
     await setState(uid, "");
@@ -428,7 +444,7 @@ async function handleMessage(m: A) {
   if (u.state === "wd_amount" && text) return withdrawAmount(u, text);
 
   const isImage = m.photo || (m.document?.mime_type ?? "").startsWith("image/");
-  if (isImage && !u.state) return receipt(u, m);
+  if (isImage && !u.state) { await logEv(uid, "receipt"); return receipt(u, m); }
 
   if (text) return send(uid, "Menyudan tanlang 👇", { reply_markup: menuKb });
 }
@@ -472,7 +488,13 @@ async function handleCallback(q: A) {
   if (String(q.data ?? "").startsWith("u:")) {
     await answer();
     const u = await upsertUser(q.from, null);
+    await logEv(u.user_id, String(q.data).slice(2));
     if (String(q.data).startsWith("u:fb:")) return handleFeedback(u, String(q.data).slice(5));
+    if (q.data === "u:gift") {
+      return send(u.user_id, GIFT, {
+        reply_markup: { inline_keyboard: [[{ text: "🆓 Bepul kanalga o'tish", url: FREE_CHANNEL_URL }], [{ text: "👥 Bonus: havolamni olish", callback_data: "u:ref" }]] },
+      });
+    }
     if (q.data === "u:ref") return showReferral(u);
     if (q.data === "u:pay") return showBuy(u);
     if (q.data === "u:info") {
@@ -654,7 +676,9 @@ Deno.serve(async (req: Request) => {
       else if (update.my_chat_member?.chat?.type === "private") {
         // foydalanuvchi botni bloklagan/qaytarganini yozib boramiz (voronka tahlili uchun)
         const blocked = update.my_chat_member.new_chat_member?.status === "kicked";
-        await sb.from("users").update({ blocked }).eq("user_id", update.my_chat_member.chat.id);
+        const cid = update.my_chat_member.chat.id;
+        await sb.from("users").update(blocked ? { blocked, blocked_at: new Date().toISOString() } : { blocked }).eq("user_id", cid);
+        await logEv(cid, blocked ? "block" : "unblock");
       }
     } catch (e) {
       console.error("handler error", String(e));
