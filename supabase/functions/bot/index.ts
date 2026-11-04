@@ -396,7 +396,10 @@ async function showBalance(u: A) {
 
 async function showReferral(u: A) {
   const link = `https://t.me/${await getBotUsername()}?start=${u.user_id}`;
-  const share = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent("Yopiq kanalga qo'shiling:")}`;
+  const shareText = "🎁 Tayyor promptlar, kod loyihalari, saytlar, Excel/Word shablonlar: yopiq kanalda hozir 60 ta material bor." +
+    (LAUNCH_LEFT > 0 ? ` Boshlang'ich narx: ${money(CUR_PRICE)} (birinchi a'zolar uchun).` : "") +
+    ` Avval bepul namunani ko'ring: ${FREE_CHANNEL_URL}\nKirish:`;
+  const share = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(shareText)}`;
   return send(
     u.user_id,
     "👥 <b>Sizning referal havolangiz:</b>\n\n" + link + "\n\n" +
