@@ -9,6 +9,26 @@ const CHANNEL_ID = Number(Deno.env.get("CHANNEL_ID") ?? "-1004330179807");
 const CARD_NUMBER = (Deno.env.get("CARD_NUMBER") ?? "5614681804902595").replace(/\D/g, "");
 const CARD_OWNER = Deno.env.get("CARD_OWNER") ?? "Akbarov Shovkatjon";
 const PRICE = Number(Deno.env.get("PRICE") ?? "100000");
+// Boshlang'ich narx: birinchi LAUNCH_MAX ta to'lov (tasdiqlangan + kutilayotgan) uchun. Sozlamalar bot_config da.
+let CUR_PRICE = PRICE;
+let LAUNCH_LEFT = 0;
+async function loadPrice() {
+  try {
+    const { data } = await sb.from("bot_config").select("key,value").in("key", ["LAUNCH_FROM_ID", "LAUNCH_PRICE", "LAUNCH_MAX"]);
+    const c: Record<string, string> = {};
+    for (const r of data ?? []) c[r.key] = r.value;
+    const from = Number(c.LAUNCH_FROM_ID ?? NaN), lp = Number(c.LAUNCH_PRICE ?? NaN), mx = Number(c.LAUNCH_MAX ?? NaN);
+    if (!isFinite(from) || !isFinite(lp) || !isFinite(mx) || mx <= 0) { CUR_PRICE = PRICE; LAUNCH_LEFT = 0; return; }
+    const { count } = await sb.from("payments").select("id", { count: "exact", head: true })
+      .gt("id", from).in("status", ["approved", "pending"]);
+    LAUNCH_LEFT = Math.max(0, mx - (count ?? 0));
+    CUR_PRICE = LAUNCH_LEFT > 0 ? lp : PRICE;
+  } catch (_) { CUR_PRICE = PRICE; LAUNCH_LEFT = 0; }
+}
+const priceLine = () =>
+  LAUNCH_LEFT > 0
+    ? `<b>${money(CUR_PRICE)}</b> <s>${money(PRICE)}</s> (bir martalik). 🔥 Boshlang'ich narx: faqat birinchi ${LAUNCH_LEFT} ta a'zo uchun, keyin ${money(PRICE)}`
+    : `<b>${money(CUR_PRICE)}</b> (bir martalik)`;
 const REF_BONUS_BASE = Number(Deno.env.get("REF_BONUS") ?? "10000");
 const REF_BONUS_PROMO = 20000;
 const PROMO_END = Date.parse("2026-12-04T23:59:59+05:00"); // aksiya: shu vaqtgacha 20 000 so'm
@@ -34,7 +54,7 @@ const BTN_CANCEL = "❌ Bekor qilish";
 
 const REASONS: Record<string, [string, string]> = {
   fake: ["🚫 Soxta chek", "Yuborgan chekingiz soxta yoki haqiqiy emas deb topildi."],
-  amount: ["💵 Summa kam", `Chekdagi summa ${money(PRICE)} dan kam.`],
+  amount: ["💵 Summa kam", "Chekdagi summa kanal narxidan kam."],
   unclear: ["🔍 Chek o'qilmayapti", "Chek rasmi aniq emas, o'qib bo'lmadi. Aniqroq rasm yuboring."],
   other: ["❓ Boshqa sabab", "To'lovingiz tasdiqlanmadi. Savollaringiz bo'lsa, admin bilan bog'laning."],
 };
@@ -243,7 +263,7 @@ async function sendDropFile(uid: number, id: number) {
 
 function welcomeText(): string {
   return "👋 <b>Xush kelibsiz!</b>\n\n" +
-    `🔒 <b>Yopiq kanal</b> narxi: <b>${money(PRICE)}</b> (bir martalik to'lov).\n` +
+    `🔒 <b>Yopiq kanal</b> narxi: ${priceLine()}.\n` +
     "Ichida: har kuni yangi tayyor promptlar (nusxa olib ishlatasiz), n8n shablon fayllari (import qilasiz), ilova va vosita tavsiyalari, kod loyihalari (zip).\n" +
     "Nima uchun kerak: har safar noldan yozish yoki izlash o'rniga tayyor narsani olasiz, vaqt tejaladi.\n" +
     "Kanal materiallarini ko'chirib yoki boshqaga yuborib bo'lmaydi, ular faqat a'zolar uchun.\n\n" +
@@ -285,7 +305,7 @@ async function showBuy(u: A) {
       "Har kuni yangilari qo'shiladi. Promptlar va kodlar tarjima qilinmagan, tushuntirish o'zbekcha.\n\n" +
       "🔎 <b>Avval ko'ring:</b> bepul kanalda namuna bor, to'lashdan oldin sifatini o'zingiz baholang.\n\n" +
       "💳 <b>To'lov ma'lumotlari</b>\n" +
-      `Narxi: <b>${money(PRICE)}</b> (bir martalik, oylik to'lov yo'q)\n` +
+      `Narxi: ${priceLine()}. Oylik to'lov yo'q.\n` +
       `Karta: <code>${fmtCard(CARD_NUMBER)}</code>\n` +
       `Karta egasi: <b>${esc(CARD_OWNER)}</b>\n\n` +
       "<b>Qanday ishlaydi:</b>\n" +
@@ -315,7 +335,7 @@ async function receipt(u: A, m: A) {
   const { count: dup } = await sb.from("payments").select("id", { count: "exact", head: true })
     .eq("file_unique_id", file.file_unique_id).neq("id", pay.id);
 
-  let caption = `🧾 <b>Yangi chek #${pay.id}</b>\n👤 ${who(u)}\n🆔 <code>${uid}</code>\n💵 Kutilayotgan summa: ${money(PRICE)}`;
+  let caption = `🧾 <b>Yangi chek #${pay.id}</b>\n👤 ${who(u)}\n🆔 <code>${uid}</code>\n💵 Kutilayotgan summa: ${money(CUR_PRICE)}`;
   if (u.referrer_id && !u.bonus_given) {
     caption += `\n👥 Taklif qilgan: ${who(await getUser(u.referrer_id))} (tasdiqlansa +${money(refBonus())})`;
   }
@@ -496,6 +516,7 @@ async function cmdStats(uid: number) {
 
 async function handleMessage(m: A) {
   if (!m.from || m.chat?.type !== "private") return;
+  await loadPrice();
   const uid: number = m.from.id;
   const text: string = (m.text ?? "").trim();
 
@@ -580,6 +601,7 @@ async function handleCallback(q: A) {
     tg("answerCallbackQuery", { callback_query_id: q.id, text, show_alert: alert }).catch(() => {});
   if (String(q.data ?? "").startsWith("u:")) {
     await answer();
+    await loadPrice();
     const u = await upsertUser(q.from, null);
     await logEv(u.user_id, String(q.data).slice(2));
     if (String(q.data).startsWith("u:fb:")) return handleFeedback(u, String(q.data).slice(5));
